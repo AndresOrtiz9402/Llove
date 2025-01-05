@@ -6,10 +6,10 @@ CREATE TABLE users (
   id SERIAL PRIMARY KEY,
   name VARCHAR(50),
   email VARCHAR(100) UNIQUE
+  create_at TIMESTAMP
+  deleted_at TIMESTAMP
 );
 
-INSERT INTO users (name, email) VALUES
-  ('hola', 'alpha@example.com'),
-  ('mundo', 'beta@example.com'),
-  ('precioso', 'gamma@example.com');
+INSERT INTO users (name, email, create_at) VALUES
+  ('example', 'alpha@example.com', CURRENT_TIMESTAMP),
 
