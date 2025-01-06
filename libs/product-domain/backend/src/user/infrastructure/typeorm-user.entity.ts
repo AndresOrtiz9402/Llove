@@ -1,13 +1,10 @@
 import { Column, Entity } from 'typeorm';
 
 import { type User } from '@llove/models';
-import { Shared } from '../..';
+import { TypeormBaseEntity } from '../../shared';
 
 @Entity({ name: 'users' })
-export class UserEntity
-  extends Shared.TypeormBaseEntity
-  implements User.UserEntity
-{
+export class UserEntity extends TypeormBaseEntity implements User.UserEntity {
   @Column({ name: 'name', type: 'varchar', unique: true })
   name: string;
 

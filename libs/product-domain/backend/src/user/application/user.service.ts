@@ -1,10 +1,10 @@
-import { IGetByIdParam, IUserDto } from '@llove/models';
-import { UserFindByIdUseCase } from '..';
+import { User } from '@llove/models';
+import { UserFindByIdUseCase } from '.';
 
 export class UserService {
   constructor(private readonly userFindByIdUseCase: UserFindByIdUseCase) {}
 
-  findById(params: IGetByIdParam): Promise<IUserDto> {
+  findById(params: User.GetByIdParam): Promise<User.UserResponse> {
     return this.userFindByIdUseCase.run(params);
   }
 }

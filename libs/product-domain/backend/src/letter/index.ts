@@ -1,1 +1,1 @@
-export * as Entities from './entities';
+export * as Entities from './infrastructure';

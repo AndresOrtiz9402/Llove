@@ -11,6 +11,6 @@ export const CONFIG_DATABASE = (): DynamicModule =>
     username: 'postgres',
     password: 'postgres',
     database: 'users',
-    entities: [Entity.User],
+    entities: [Entity.UserEntity],
     synchronize: true,
   });

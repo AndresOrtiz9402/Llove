@@ -1,14 +1,14 @@
 import { type User } from '@llove/models';
-import { UserNotFoundException } from '../../index';
+import { UserNotFoundException } from '.';
 
 export class UserFindByIdUseCase {
-  constructor(private readonly userRepository: IUserRepository) {}
+  constructor(private readonly userRepository: User.UserRepository) {}
 
-  async run(params: IGetByIdParam): Promise<IUserDto> {
+  async run(params: User.GetByIdParam): Promise<User.UserResponse> {
     const { id } = params;
     const user = (await this.userRepository.getById({
       id,
-    })) as IUserDto | null;
+    })) as User.UserResponse | null;
 
     if (!user) throw new UserNotFoundException({ id });
 
