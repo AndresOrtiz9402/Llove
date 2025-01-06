@@ -12,4 +12,10 @@ export class LetterTypeEntity
 
   @Column({ name: 'occasion', type: 'varchar' })
   occasion: string;
+
+  @Column({ name: 'relationship', type: 'varchar' })
+  relationship: string;
+
+  @Column({ name: 'tone', type: 'varchar' })
+  tone: string;
 }
