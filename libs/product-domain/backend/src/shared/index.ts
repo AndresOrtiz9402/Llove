@@ -1,1 +1,1 @@
-export * from './base/typeorm-base.entity';
+export * from './typeorm-base.entity';
