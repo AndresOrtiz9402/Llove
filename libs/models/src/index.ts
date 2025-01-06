@@ -1,3 +1,3 @@
-export * as letter from './letter';
-export * as shared from './shared';
-export * as user from './user';
+export * as Letter from './letter';
+export * as Shared from './shared';
+export * as User from './user';

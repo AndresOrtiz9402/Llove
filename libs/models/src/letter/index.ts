@@ -1,1 +1,1 @@
-export * as entities from './entities';
+export * as Entities from './entities';

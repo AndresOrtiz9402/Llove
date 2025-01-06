@@ -4,4 +4,4 @@ export interface UserResponse {
   email: string;
 }
 
-export type IOmitUserDto = 'id' | 'name' | 'email';
+export type OmitUserResponse = 'id' | 'name' | 'email';

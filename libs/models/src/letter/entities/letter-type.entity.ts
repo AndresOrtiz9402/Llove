@@ -1,6 +1,6 @@
-import { type shared } from '../..';
+import { type Shared } from '../..';
 
-type Base = shared.Base;
+type Base = Shared.Base;
 
 export interface LetterType extends Base {
   for: string;
