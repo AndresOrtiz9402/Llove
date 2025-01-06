@@ -1,2 +1,2 @@
-export * from './letter/letter.entity';
-export * from './letter-type/letter-type.entity';
+export * from './letter.entity';
+export * from './letter-type.entity';

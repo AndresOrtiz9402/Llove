@@ -7,13 +7,10 @@ services:
       - postgres-data:/var/lib/postgresql/data
 
       # Persistent server data
-      - ./postgres.conf/postgres.conf:/etc/postgresql/postgresql.conf
+      - ./tools/postgres/postgres.conf/postgres.conf:/etc/postgresql/postgresql.conf
 
       # Persistent logs data
-      - ./logs:/logs
-
-      # Persistent postgres container initialization scripts
-      - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+      - ./tools/postgres/logs:/logs
 
     environment:
       POSTGRES_DB: 'user'

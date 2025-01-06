@@ -1,5 +1,5 @@
 import { IGetByIdParam, IUserDto, IUserRepository } from '@llove/models';
-import { UserNotFoundException } from '../..';
+import { UserNotFoundException } from '../../../index';
 
 export class UserFindByIdUseCase {
   constructor(private readonly userRepository: IUserRepository) {}
