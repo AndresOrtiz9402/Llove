@@ -1,8 +1,6 @@
 import { type Shared } from '../..';
 
-type Base = Shared.Base;
-
-export interface LetterType extends Base {
+export interface LetterTypeEntity extends Shared.BaseEntity {
   for: string;
   occasion: string;
 }

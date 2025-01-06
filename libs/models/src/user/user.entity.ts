@@ -1,8 +1,6 @@
 import { type Shared } from '..';
 
-type Base = Shared.Base;
-
-export interface UserEntity extends Base {
+export interface UserEntity extends Shared.BaseEntity {
   name: string;
   email: string;
 }

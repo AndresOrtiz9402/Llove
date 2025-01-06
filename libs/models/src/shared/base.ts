@@ -1,7 +1,7 @@
-export interface Base {
+export interface BaseEntity {
   id: number;
-  createAt: Date;
-  deletedAt: Date;
+  createdAt: Date;
+  deletedAt: Date | null;
 }
 
-export type OmitBase = 'id' | 'createAt' | 'deletedAt';
+export type OmitBaseEntity = 'id' | 'createAt' | 'deletedAt';
