@@ -1,1 +1,1 @@
-export * from './domain';
+export * as Entities from './entities';

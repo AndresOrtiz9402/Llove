@@ -1,2 +1,2 @@
-export * from './service/user.service';
-export * from './use-case/find-by-id.use-case';
+export * from './user.service';
+export * from './find-by-id.use-case';

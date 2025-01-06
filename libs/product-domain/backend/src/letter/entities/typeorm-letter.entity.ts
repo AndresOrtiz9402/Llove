@@ -1,12 +1,13 @@
-import { type Letter } from '@llove/models';
 import { Column, Entity } from 'typeorm';
 
-import { TypeormBaseEntity } from '../../../shared';
-
-type Letter = Letter.Entities.Letter;
+import { type Letter } from '@llove/models';
+import { Shared } from '../../..';
 
 @Entity('letters')
-export class LetterEntity extends TypeormBaseEntity implements Letter {
+export class LetterEntity
+  extends Shared.TypeormBaseEntity
+  implements Letter.Entities.LetterEntity
+{
   @Column({ type: 'varchar' })
   title: string;
 

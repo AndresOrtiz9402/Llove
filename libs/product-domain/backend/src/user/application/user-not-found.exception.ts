@@ -1,7 +1,7 @@
-import { IGetByIdParam } from '@llove/models';
+import { User } from '@llove/models';
 
 export class UserNotFoundException extends Error {
-  constructor(params: IGetByIdParam) {
+  constructor(params: User.GetByIdParam) {
     const { id } = params;
     super(`User ${id} not found.`);
   }

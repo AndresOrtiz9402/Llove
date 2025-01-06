@@ -1,7 +1,7 @@
 import { DynamicModule } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { User } from '../..';
+import { Entity } from '..';
 
 export const CONFIG_DATABASE = (): DynamicModule =>
   TypeOrmModule.forRoot({
@@ -11,6 +11,6 @@ export const CONFIG_DATABASE = (): DynamicModule =>
     username: 'postgres',
     password: 'postgres',
     database: 'users',
-    entities: [User],
+    entities: [Entity.User],
     synchronize: true,
   });

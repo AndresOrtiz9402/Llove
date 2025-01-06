@@ -1,2 +1,2 @@
-export * from './database/nestjs-typeorm-db.c.config';
-export * from './mock/user-collection';
+export * from './nestjs-typeorm-db.c.config';
+export * from './user-collection';

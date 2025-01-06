@@ -1,5 +1,5 @@
 import { IGetByIdParam, IUserDto } from '@llove/models';
-import { UserFindByIdUseCase } from '../..';
+import { UserFindByIdUseCase } from '..';
 
 export class UserService {
   constructor(private readonly userFindByIdUseCase: UserFindByIdUseCase) {}
