@@ -1,1 +1,2 @@
-export * as Entities from './entities';
+export * from './letter.entity';
+export * from './letter-type.entity';

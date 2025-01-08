@@ -1,4 +1,4 @@
-import { type Shared } from '../..';
+import { type Shared } from '..';
 
 export interface LetterEntity extends Shared.BaseEntity {
   title: string;
