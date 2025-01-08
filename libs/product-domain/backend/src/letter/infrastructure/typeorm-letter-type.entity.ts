@@ -6,7 +6,7 @@ import { TypeormBaseEntity } from '../../shared';
 @Entity('letter_type')
 export class LetterTypeEntity
   extends TypeormBaseEntity
-  implements Letter.Entities.LetterTypeEntity
+  implements Letter.LetterTypeEntity
 {
   @Column({ name: 'for', type: 'varchar' })
   for: string;

@@ -6,17 +6,17 @@ import { TypeormBaseEntity } from '../../shared';
 @Entity('letters')
 export class LetterEntity
   extends TypeormBaseEntity
-  implements Letter.Entities.LetterEntity
+  implements Letter.LetterEntity
 {
-  @Column({ type: 'varchar' })
+  @Column({ name: 'title', type: 'varchar' })
   title: string;
 
-  @Column({ type: 'varchar' })
+  @Column({ name: 'content', type: 'varchar' })
   content: string;
 
-  @Column({ type: 'int' })
+  @Column({ name: 'userId', type: 'int' })
   userId: number;
 
-  @Column({ type: 'int' })
+  @Column({ name: 'letter-type-id', type: 'int' })
   letterTypeId: number;
 }
