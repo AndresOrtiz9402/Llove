@@ -1,7 +1,9 @@
 import { Column, Entity } from 'typeorm';
 
 import { type Letter } from '@llove/models';
-import { TypeormBaseEntity } from '../../shared';
+import { Shared } from '../../..';
+
+const { TypeormBaseEntity } = Shared.infrastructure.typeorm;
 
 @Entity('letters')
 export class LetterEntity
@@ -14,9 +16,9 @@ export class LetterEntity
   @Column({ name: 'content', type: 'varchar' })
   content: string;
 
-  @Column({ name: 'userId', type: 'int' })
+  @Column({ name: 'user_id', type: 'int' })
   userId: number;
 
-  @Column({ name: 'letter-type-id', type: 'int' })
+  @Column({ name: 'letter_type_id', type: 'int' })
   letterTypeId: number;
 }

@@ -1,7 +1,9 @@
 import { Column, Entity } from 'typeorm';
 
 import { type User } from '@llove/models';
-import { TypeormBaseEntity } from '../../shared';
+import { Shared } from '../../..';
+
+const { TypeormBaseEntity } = Shared.infrastructure.typeorm;
 
 @Entity({ name: 'users' })
 export class UserEntity extends TypeormBaseEntity implements User.UserEntity {

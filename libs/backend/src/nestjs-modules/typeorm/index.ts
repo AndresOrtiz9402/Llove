@@ -1,2 +1,2 @@
-export * from './typeorm.interface';
-export * from './nest-postgres-typeorm-module.config';
+export * from './interface';
+export * from './module.config';

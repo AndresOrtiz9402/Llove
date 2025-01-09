@@ -1,7 +1,9 @@
 import { Column, Entity } from 'typeorm';
 
 import { type Letter } from '@llove/models';
-import { TypeormBaseEntity } from '../../shared';
+import { Shared } from '../../..';
+
+const { TypeormBaseEntity } = Shared.infrastructure.typeorm;
 
 @Entity('letter_type')
 export class LetterTypeEntity
