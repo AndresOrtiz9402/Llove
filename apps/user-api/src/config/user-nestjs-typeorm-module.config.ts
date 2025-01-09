@@ -24,7 +24,7 @@ const connectionOptions = {
 const dataSourceOptions =
   nestModules.typeorm.dataSourceOptions(connectionOptions);
 
-export const userTypeOrmModule =
+export const UserTypeOrmModule =
   nestModules.typeorm.AsyncUserTypeOrmModule(dataSourceOptions);
 
 export default new DataSource(dataSourceOptions);
