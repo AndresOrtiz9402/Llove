@@ -1,16 +1,16 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { AppService } from './app.service';
 
-import { IUserDto } from '@llove/models';
+import { User } from '@llove/models';
 
-import { ReqFindByIdDto } from './dto';
+import { UserDto } from './user.dto';
 
 @Controller()
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @Post()
-  findUserById(@Body() reqFindByIdDto: ReqFindByIdDto): Promise<IUserDto> {
+  findUserById(@Body() reqFindByIdDto: UserDto): Promise<User.UserResponse> {
     const { id } = reqFindByIdDto;
     return this.appService.findById({ id });
   }
