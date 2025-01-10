@@ -1,1 +1,2 @@
-export * from './typeorm';
+export * as Dtos from './dtos';
+export * as Typeorm from './typeorm';

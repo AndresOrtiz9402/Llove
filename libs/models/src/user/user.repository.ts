@@ -1,4 +1,4 @@
-import { UserResponse } from '.';
+import { UserResponse } from './infrastructure';
 
 export interface GetByIdParam {
   id: number;

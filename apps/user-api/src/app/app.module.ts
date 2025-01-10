@@ -2,7 +2,9 @@ import { Module } from '@nestjs/common';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { UserTypeOrmModule } from '../config';
+import { config } from '..';
+
+const { UserTypeOrmModule } = config;
 
 @Module({
   imports: [UserTypeOrmModule],

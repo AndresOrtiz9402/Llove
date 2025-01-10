@@ -1,5 +1,5 @@
 {
   "aws.telemetry": false,
   "material-icon-theme.activeIconPack": "nest",
-  "cSpell.words": ["initdb", "llove", "nestjs"]
+  "cSpell.words": ["Dtos", "initdb", "isfor", "llove", "nestjs"]
 }

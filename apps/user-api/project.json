@@ -42,17 +42,9 @@
     "migration-create": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "npx typeorm migration:create ./apps/user-api/src/migrations/migrations/ -o"
+        "command": "node ../../../../tools/typeorm/make-new-migration-file.script.mjs",
+        "cwd": "apps/user-api/src/config/"
       }
-    },
-    "migration-generate": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": [
-          "npx typeorm migration:run ./apps/user-api/src/migrations/migration -d ./dist/libs/product-domain/backend/src/user/infrastructure/config/nest-typeorm.ds.config.js"
-        ]
-      },
-      "dependsOn": ["build"]
     }
   }
 }

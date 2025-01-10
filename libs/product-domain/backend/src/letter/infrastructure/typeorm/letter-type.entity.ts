@@ -1,17 +1,17 @@
 import { Column, Entity } from 'typeorm';
 
 import { type Letter } from '@llove/models';
-import { Shared } from '../../..';
+import { infrastructure } from '../../../shared';
 
-const { TypeormBaseEntity } = Shared.infrastructure.typeorm;
+const { TypeormBaseEntity } = infrastructure.typeorm;
 
 @Entity('letter_type')
 export class LetterTypeEntity
   extends TypeormBaseEntity
   implements Letter.LetterTypeEntity
 {
-  @Column({ name: 'for', type: 'varchar' })
-  for: string;
+  @Column({ name: 'is_for', type: 'varchar' })
+  isfor: string;
 
   @Column({ name: 'occasion', type: 'varchar' })
   occasion: string;

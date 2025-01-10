@@ -10,7 +10,9 @@ export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @Post()
-  findUserById(@Body() reqFindByIdDto: UserDto): Promise<User.UserResponse> {
+  findUserById(
+    @Body() reqFindByIdDto: UserDto
+  ): Promise<User.infrastructure.UserResponse> {
     const { id } = reqFindByIdDto;
     return this.appService.findById({ id });
   }

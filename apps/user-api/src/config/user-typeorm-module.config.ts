@@ -1,4 +1,4 @@
-import { nestModules } from '@llove/backend';
+import { NestModules } from '@llove/backend';
 
 import { USER_ENV } from '.';
 import { DataSource } from 'typeorm';
@@ -22,9 +22,9 @@ const connectionOptions = {
 };
 
 const dataSourceOptions =
-  nestModules.typeorm.dataSourceOptions(connectionOptions);
+  NestModules.Typeorm.dataSourceOptions(connectionOptions);
 
 export const UserTypeOrmModule =
-  nestModules.typeorm.AsyncUserTypeOrmModule(dataSourceOptions);
+  NestModules.Typeorm.AsyncUserTypeOrmModule(dataSourceOptions);
 
 export default new DataSource(dataSourceOptions);
