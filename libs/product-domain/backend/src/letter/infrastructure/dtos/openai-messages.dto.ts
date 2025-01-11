@@ -1,6 +1,6 @@
-import { IsArray } from 'class-validator';
+import { IsString } from 'class-validator';
 
 export class OpenaiCompletionsDto {
-  @IsArray()
-  messages: string;
+  @IsString()
+  message: string;
 }

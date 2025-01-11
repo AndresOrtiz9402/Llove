@@ -9,7 +9,7 @@ export class LetterService {
     })
   ) {}
 
-  openaiMessage(messages: string) {
-    return UseCase.openaiCompletions(messages, this.openai);
+  openaiMessage(message: string) {
+    return UseCase.openaiMessage(message, this.openai);
   }
 }
