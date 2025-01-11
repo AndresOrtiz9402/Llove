@@ -1,2 +1,2 @@
-export * from './completions.module';
+export * from './Openai.module';
 export * from './interface';
