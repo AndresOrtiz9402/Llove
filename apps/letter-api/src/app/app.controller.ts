@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Post } from '@nestjs/common';
 import { AppService } from './app.service';
 
 import { Letter } from '@llove/product-domain/backend';
@@ -7,17 +7,12 @@ import { Letter } from '@llove/product-domain/backend';
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
-  @Get()
-  getData() {
-    return this.appService.getData();
-  }
-
   @Post('/openai-messages')
   getOpenaiMessages(
     @Body() req: Letter.Infrastructure.Dtos.OpenaiCompletionsDto
   ) {
-    const messages = req.messages;
+    const { message } = req;
 
-    return this.appService.openaiMessage(messages);
+    return this.appService.openaiMessage(message);
   }
 }
