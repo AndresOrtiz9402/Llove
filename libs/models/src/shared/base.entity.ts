@@ -4,4 +4,4 @@ export interface BaseEntity {
   deletedAt: Date | null;
 }
 
-export type OmitBaseEntity = 'id' | 'createAt' | 'deletedAt';
+export type OmitBaseEntity = 'id' | 'createdAt' | 'deletedAt';
