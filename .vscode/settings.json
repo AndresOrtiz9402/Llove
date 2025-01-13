@@ -1,5 +1,18 @@
 {
   "aws.telemetry": false,
   "material-icon-theme.activeIconPack": "nest",
-  "cSpell.words": ["Dtos", "initdb", "isfor", "llove", "nestjs"]
+  "cSpell.words": [
+    "ÁÉÍÓ",
+    "dtos",
+    "Dtos",
+    "initdb",
+    "isfor",
+    "llove",
+    "nestjs",
+    "openai",
+    "postgres",
+    "spanish",
+    "Záéíóú"
+  ],
+  "cSpell.language": "en,es"
 }
