@@ -9,17 +9,19 @@ import {
   LloveTypeOrmModule,
 } from '.';
 
-/* function pathToMigrations(param: string) {
+function pathToMigrations(param: string) {
   const outputA = param.split('\\dist');
   const output = outputA[0] + outputA[1] + '\\src\\migrations\\**\\*.js';
 
   return output;
-} */
+}
 
 export const dataSourceOptions: LloveDataSourceConfig = (
   connectionOptions: LloveDataSourceOptions
 ) => {
-  const migrations = [resolve(__dirname + 'migrations\\**\\*.js')];
+  /* const migrations = [resolve(__dirname + 'migrations\\**\\*.js')]; */
+  const migrations = [pathToMigrations(resolve(__dirname))];
+  //TODO: get the migrations files from compiled project folder.
 
   const { database, host, password, port, username } = connectionOptions;
 

@@ -4,7 +4,6 @@ import { Stream } from 'openai/streaming';
 type ChatCompletion = OpenAI.Chat.ChatCompletion;
 type ChatCompletionChunk = OpenAI.Chat.ChatCompletionChunk;
 type Message = OpenAI.Chat.Completions.ChatCompletionMessageParam;
-type MessageContent = string;
 type NoStreamCompletions = Promise<ChatCompletion & { _request_id?: string }>;
 type StreamCompletionsOutput = Promise<
   Stream<ChatCompletionChunk> & { _request_id?: string }
@@ -18,8 +17,8 @@ export type ChatCompletionCreateParamsStreaming =
 
 export type Messages = Array<Message>;
 
-export interface OpenaiUseCase {
-  (content: MessageContent, openai: OpenAI): Promise<string>;
+export interface OpenaiUseCase<T> {
+  (content: T, openai: OpenAI): Promise<string>;
 }
 
 export interface OpenaiNoStreamCompletions {

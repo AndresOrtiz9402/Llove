@@ -1,14 +1,16 @@
-import { HttpRequest } from '.';
+import { Request } from '.';
 
-export const request: HttpRequest = async (req, url) => {
+export const postRequest: Request = async (req, url) => {
+  const body = JSON.stringify({
+    ...req,
+  });
+
   const res = await fetch(url, {
     method: 'post',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({
-      ...req,
-    }),
+    body,
   });
 
   return res.json();
