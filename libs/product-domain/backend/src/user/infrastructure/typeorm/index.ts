@@ -1,2 +1,1 @@
-export * from './user.repository';
-export * from './user.entity';
+export * as Entities from './entities';
