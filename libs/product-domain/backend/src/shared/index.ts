@@ -1,1 +1,1 @@
-export * as infrastructure from './infrastructure';
+export * as Infrastructure from './infrastructure';
