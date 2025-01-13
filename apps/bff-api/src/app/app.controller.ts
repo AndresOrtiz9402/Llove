@@ -1,7 +1,7 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { AppService } from './app.service';
 
-import { Letter } from '@llove/product-domain/backend';
+import { Letter, Shared } from '@llove/product-domain/backend';
 
 @Controller()
 export class AppController {
@@ -9,7 +9,7 @@ export class AppController {
 
   @Post('letter-generate')
   letterGeneratePetition(
-    @Body(Letter.Infrastructure.Pipes.NestjsLetterDtoTransformerPipe)
+    @Body(Shared.Infrastructure.Pipes.NestjsSpaceCleanPipe)
     letterDto: Letter.Infrastructure.Dtos.LetterDto
   ) {
     return this.appService.letterGeneratePetition(letterDto);

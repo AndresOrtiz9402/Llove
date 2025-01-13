@@ -5,13 +5,13 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 
-import { LetterDtoTransformerPipe } from '.';
+import { SpaceCleanPipe } from '.';
 
 @Injectable()
-export class NestjsLetterDtoTransformerPipe implements PipeTransform {
+export class NestjsSpaceCleanPipe implements PipeTransform {
   transform(value: unknown) {
     if (typeof value === 'object') {
-      const newValue = new LetterDtoTransformerPipe(Object.entries(value));
+      const newValue = new SpaceCleanPipe(Object.entries(value));
 
       return { ...newValue };
     }

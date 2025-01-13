@@ -1,6 +1,6 @@
 //Responsibility: Transform.
 
-export class LetterDtoTransformerPipe {
+export class SpaceCleanPipe {
   [keys: string]: unknown;
   constructor(set: [string, unknown][]) {
     set.forEach((array) => {
