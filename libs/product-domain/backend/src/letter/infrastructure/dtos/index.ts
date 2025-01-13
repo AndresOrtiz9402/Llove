@@ -1,1 +1,1 @@
-export * from './openai-messages.dto';
+export * from './Letter.dto';
