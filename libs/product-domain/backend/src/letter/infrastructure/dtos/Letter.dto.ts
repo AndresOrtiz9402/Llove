@@ -1,10 +1,10 @@
 import { IsEnum, IsNotEmpty, IsString, Matches } from 'class-validator';
 
-import { Letter } from '@llove/models';
+import { Letter, Shared } from '@llove/models';
 
 //Responsibility: Validation.
 
-type ILetterDto = Letter.LetterDto;
+type ILetterDto = Omit<Letter.LetterTypeEntity, Shared.OmitBaseEntity>;
 
 const { LetterTone } = Letter;
 

@@ -1,8 +1,16 @@
 import { type Shared } from '..';
 
+export enum LetterTone {
+  friendly = 'friendly',
+  romantic = 'romantic',
+  family = 'family',
+}
+
+export type LetterToneType = typeof LetterTone;
+
 export interface LetterTypeEntity extends Shared.BaseEntity {
-  isfor: string;
+  isFor: string;
   occasion: string;
   relationship: string;
-  tone: string;
+  tone: LetterToneType;
 }
