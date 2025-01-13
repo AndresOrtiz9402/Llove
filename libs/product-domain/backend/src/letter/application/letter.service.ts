@@ -1,15 +1,12 @@
 import OpenAI from 'openai';
 
+import { type Infrastructure } from '..';
 import { UseCase } from '.';
 
 export class LetterService {
-  constructor(
-    private openai = new OpenAI({
-      apiKey: process.env.OPENAI_API_KEY,
-    })
-  ) {}
+  constructor(private openai: OpenAI) {}
 
-  openaiMessage(message: string) {
-    return UseCase.openaiMessage(message, this.openai);
+  LetterGenerate(letterDto: Infrastructure.Dtos.LetterDto) {
+    return UseCase.openaiLetterGenerate(letterDto, this.openai);
   }
 }
