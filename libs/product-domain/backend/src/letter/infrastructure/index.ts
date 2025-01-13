@@ -1,2 +1,3 @@
 export * as Dtos from './dtos';
-export * as Typeorm from './typeorm';
+export * as Pipes from './pipes';
+export * as Typeorm from './typeorm/entities';
