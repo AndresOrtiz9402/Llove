@@ -1,7 +1,7 @@
 import { NestModules } from '@llove/backend';
+import { DataSource } from 'typeorm';
 
 import { USER_ENV } from '.';
-import { DataSource } from 'typeorm';
 
 const {
   DB: database,
