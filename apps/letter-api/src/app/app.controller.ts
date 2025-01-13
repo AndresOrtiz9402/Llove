@@ -6,13 +6,11 @@ import { Letter } from '@llove/product-domain/backend';
 @Controller()
 export class AppController {
   constructor(private readonly appService: AppService) {}
-
-  @Post('/openai-messages')
-  getOpenaiMessages(
-    @Body() req: Letter.Infrastructure.Dtos.OpenaiCompletionsDto
+  @Post('/letter-generate')
+  createLetter(
+    @Body(Letter.Infrastructure.Pipes.NestjsLetterDtoTransformerPipe)
+    letterDto: Letter.Infrastructure.Dtos.LetterDto
   ) {
-    const { message } = req;
-
-    return this.appService.openaiMessage(message);
+    return this.appService.LetterGenerate(letterDto);
   }
 }
