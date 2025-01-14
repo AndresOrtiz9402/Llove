@@ -1,57 +1,32 @@
 import { IsEnum, IsNotEmpty, IsString, Matches } from 'class-validator';
 
 import { Letter, Shared } from '@llove/models';
+import { Infrastructure } from '../../../shared';
 
-//Responsibility: Validation.
+const { isEnumMessage, isNotEmptyMessage, isStringMessage, MatchesHelper } =
+  Infrastructure.ClassValidatorHelpers;
+
+type IMachesHelper = Infrastructure.ClassValidatorHelpers.MatchesHelper;
 
 type ILetterDto = Omit<Letter.LetterTypeEntity, Shared.OmitBaseEntity>;
 
 const { LetterTone } = Letter;
 
-const letterToneString = Object.values(LetterTone).join("' | '");
-
-const isNotEmptyMessage = (field: string): object => {
-  return { message: `The '${field}' field cannot be empty.` };
-};
-
-const isStringMessage = (field: string): object => {
-  return { message: `The '${field}' field must be a string` };
-};
-
-const matchesNotEmptyStringPattern =
-  /^[a-zA-ZáéíóúÁÉÍÓÚñÑ][a-zA-ZáéíóúÁÉÍÓÚñÑ\s]*$/;
-
-const matchesMessage = (field: string): object => {
-  return {
-    message: `The '${field}' field cannot contain special characters or start empty.`,
-  };
-};
-
-const isEnumMessage = (field: string): object => {
-  return {
-    message: `The ${field} field must be '${letterToneString}'.`,
-  };
-};
-
-class DtosMatches {
-  readonly pattern: RegExp;
-  readonly matchesMessage: object;
-
-  constructor(pattern: RegExp, field: string) {
-    this.pattern = pattern;
-    this.matchesMessage = matchesMessage(field);
-  }
-}
+const stringPattern = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ][a-zA-ZáéíóúÁÉÍÓÚñÑ\s]*$/;
 
 class LetterDtoStringFieldsDecoratorsParams {
   readonly isNotEmptyMessage: object;
   readonly isStringMessage: object;
-  readonly matches: DtosMatches;
+  readonly matches: IMachesHelper;
 
   constructor(field: string, pattern: RegExp) {
     this.isNotEmptyMessage = isNotEmptyMessage(field);
     this.isStringMessage = isStringMessage(field);
-    this.matches = new DtosMatches(pattern, field);
+    this.matches = new MatchesHelper(
+      pattern,
+      field,
+      'field cannot contain special characters or start empty'
+    );
   }
 }
 
@@ -59,7 +34,7 @@ class DtoDecoratorsParams {
   [key: string]: LetterDtoStringFieldsDecoratorsParams;
   constructor(
     fields: string[] = ['isFor', 'occasion', 'relationship'],
-    pattern: RegExp = matchesNotEmptyStringPattern
+    pattern: RegExp = stringPattern
   ) {
     fields.forEach((key) => {
       this[key] = new LetterDtoStringFieldsDecoratorsParams(key, pattern);
@@ -93,6 +68,6 @@ export class LetterDto implements ILetterDto {
   readonly relationship: string;
 
   @IsNotEmpty(isNotEmptyMessage('tone'))
-  @IsEnum(LetterTone, isEnumMessage('tone'))
+  @IsEnum(LetterTone, isEnumMessage('tone', LetterTone))
   readonly tone: Letter.LetterToneType;
 }

@@ -11,7 +11,7 @@ export class LetterTypeEntity
   implements Letter.LetterTypeEntity
 {
   @Column({ name: 'is_for', type: 'varchar' })
-  isfor: string;
+  isFor: string;
 
   @Column({ name: 'occasion', type: 'varchar' })
   occasion: string;
@@ -20,5 +20,5 @@ export class LetterTypeEntity
   relationship: string;
 
   @Column({ name: 'tone', type: 'varchar' })
-  tone: string;
+  tone: Letter.LetterToneType;
 }
