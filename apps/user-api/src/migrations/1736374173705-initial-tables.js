@@ -14,6 +14,8 @@ module.exports = class InitialTables1736374173705 {
   }
 
   async down(queryRunner) {
-    await queryRunner.query(``);
+    await queryRunner.query(`
+      DROP TABLE users;
+      `);
   }
 };
