@@ -29,3 +29,28 @@ export class MatchesHelper {
     this.matchesMessage = matchesMessage(field, message);
   }
 }
+
+export class StringFieldsDecoratorsParamsMaker {
+  readonly isNotEmptyMessage: object;
+  readonly isStringMessage: object;
+  readonly matches: MatchesHelper;
+
+  constructor(field: string, pattern: RegExp, matchesMessage: string) {
+    this.isNotEmptyMessage = isNotEmptyMessage(field);
+    this.isStringMessage = isStringMessage(field);
+    this.matches = new MatchesHelper(pattern, field, matchesMessage);
+  }
+}
+
+export class MultiStringFieldsDecoratorsParamsMaker {
+  [key: string]: StringFieldsDecoratorsParamsMaker;
+  constructor(fields: string[], pattern: RegExp, matchesMessage: string) {
+    fields.forEach((key) => {
+      this[key] = new StringFieldsDecoratorsParamsMaker(
+        key,
+        pattern,
+        matchesMessage
+      );
+    });
+  }
+}
