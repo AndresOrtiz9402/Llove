@@ -1,3 +1,16 @@
-import { User } from '@llove/models';
+import { Repository } from 'typeorm';
 
-export class UserService {}
+import { Infrastructure } from '..';
+
+type UserEntity = Infrastructure.Typeorm.Entities.UserEntity;
+type CreateUserDto = Infrastructure.Dtos.CreateUserDto;
+
+export class UserService {
+  constructor(private usersRepository: Repository<UserEntity>) {}
+
+  createUser(createUserDto: CreateUserDto): Promise<UserEntity> {
+    const newUser = this.usersRepository.create(createUserDto);
+
+    return this.usersRepository.save(newUser);
+  }
+}

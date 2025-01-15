@@ -3,10 +3,11 @@ import { IsEnum, IsNotEmpty, IsString, Matches } from 'class-validator';
 import { Letter, Shared } from '@llove/models';
 import { Infrastructure } from '../../../shared';
 
-const { isEnumMessage, isNotEmptyMessage, isStringMessage, MatchesHelper } =
-  Infrastructure.ClassValidatorHelpers;
-
-type IMachesHelper = Infrastructure.ClassValidatorHelpers.MatchesHelper;
+const {
+  isEnumMessage,
+  isNotEmptyMessage,
+  MultiStringFieldsDecoratorsParamsMaker: MultiStringFields,
+} = Infrastructure.ClassValidatorHelpers;
 
 type ILetterDto = Omit<Letter.LetterTypeEntity, Shared.OmitBaseEntity>;
 
@@ -14,42 +15,13 @@ const { LetterTone } = Letter;
 
 const stringPattern = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ][a-zA-ZáéíóúÁÉÍÓÚñÑ\s]*$/;
 
-class LetterDtoStringFieldsDecoratorsParams {
-  readonly isNotEmptyMessage: object;
-  readonly isStringMessage: object;
-  readonly matches: IMachesHelper;
-
-  constructor(field: string, pattern: RegExp) {
-    this.isNotEmptyMessage = isNotEmptyMessage(field);
-    this.isStringMessage = isStringMessage(field);
-    this.matches = new MatchesHelper(
-      pattern,
-      field,
-      'field cannot contain special characters or start empty'
-    );
-  }
-}
-
-class DtoDecoratorsParams {
-  [key: string]: LetterDtoStringFieldsDecoratorsParams;
-  constructor(
-    fields: string[] = ['isFor', 'occasion', 'relationship'],
-    pattern: RegExp = stringPattern
-  ) {
-    fields.forEach((key) => {
-      this[key] = new LetterDtoStringFieldsDecoratorsParams(key, pattern);
-    });
-  }
-}
-
-const LetterDtoDecoratorsPrams = new DtoDecoratorsParams();
+const LetterDtoDecoratorsPrams = new MultiStringFields(
+  ['isFor', 'occasion', 'relationship'],
+  stringPattern,
+  'field cannot contain special characters or start empty'
+);
 
 const { isFor, occasion, relationship } = LetterDtoDecoratorsPrams;
-
-export class OpenaiCompletionsDto {
-  @IsString()
-  message: string;
-}
 
 export class LetterDto implements ILetterDto {
   @IsNotEmpty(isFor.isNotEmptyMessage)
