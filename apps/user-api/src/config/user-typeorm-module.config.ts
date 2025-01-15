@@ -1,5 +1,6 @@
-import { NestModules } from '@llove/backend';
 import { DataSource } from 'typeorm';
+
+import { NestModules } from '@llove/backend';
 
 import { USER_ENV } from '.';
 
