@@ -1,29 +1,21 @@
 import { DynamicModule } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { resolve } from 'path';
 import { DataSourceOptions } from 'typeorm';
 
-import {
-  LloveDataSourceConfig,
-  LloveDataSourceOptions,
-  LloveTypeOrmModule,
-} from '.';
+import { Shared } from '@llove/models';
 
-function pathToMigrations(param: string) {
-  const outputA = param.split('\\dist');
-  const output = outputA[0] + outputA[1] + '\\src\\migrations\\**\\*.js';
+type DbConnectionOptions = Shared.DbConnection.DbConnectionOptions;
+type DbDataSourceOptions = (
+  connectionOptions: DbConnectionOptions
+) => DataSourceOptions;
+type DbConnectionInterface =
+  Shared.DbConnection.DbConnectionInterface<DynamicModule>;
 
-  return output;
-}
-
-export const dataSourceOptions: LloveDataSourceConfig = (
-  connectionOptions: LloveDataSourceOptions
+const dataSourceOptions: DbDataSourceOptions = (
+  connectionOptions: DbConnectionOptions
 ) => {
-  /* const migrations = [resolve(__dirname + 'migrations\\**\\*.js')]; */
-  const migrations = [pathToMigrations(resolve(__dirname))];
-  //TODO: get the migrations files from compiled project folder.
-
-  const { database, host, password, port, username } = connectionOptions;
+  const { database, host, password, port, username, migrations } =
+    connectionOptions;
 
   return {
     synchronize: false,
@@ -39,13 +31,12 @@ export const dataSourceOptions: LloveDataSourceConfig = (
   };
 };
 
-export const SyncUserTypeOrmModule: LloveTypeOrmModule<DynamicModule> = (
-  dataSourceOptions: DataSourceOptions
-) => TypeOrmModule.forRoot(dataSourceOptions);
+export const AsyncUserTypeOrmModule: DbConnectionInterface = (
+  connectionOptions: DbConnectionOptions
+) => {
+  const Options: DataSourceOptions = dataSourceOptions(connectionOptions);
 
-export const AsyncUserTypeOrmModule: LloveTypeOrmModule<DynamicModule> = (
-  dataSourceOptions: DataSourceOptions
-) =>
-  TypeOrmModule.forRootAsync({
-    useFactory: () => dataSourceOptions,
+  return TypeOrmModule.forRootAsync({
+    useFactory: () => Options,
   });
+};
