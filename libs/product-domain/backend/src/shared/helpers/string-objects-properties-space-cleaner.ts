@@ -1,6 +1,6 @@
 //Responsibility: Transform.
 
-export class SpaceCleanPipe {
+export class StringObjectPropertiesSpaceCleaner {
   [keys: string]: unknown;
   constructor(set: [string, unknown][]) {
     set.forEach((array) => {
