@@ -1,25 +1,19 @@
-import {
-  Body,
-  Controller,
-  HttpException,
-  HttpStatus,
-  Post,
-} from '@nestjs/common';
+import { Body, Controller, Post } from '@nestjs/common';
 import { AppService } from './app.service';
 
 import { User } from '@llove/product-domain/backend';
 
-@Controller()
+import { NestModules } from '@llove/backend';
+
+@Controller('user')
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @Post('create')
-  async create(@Body() createUserDto: User.Infrastructure.Dtos.CreateUserDto) {
-    try {
-      return await this.appService.createUser(createUserDto);
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    } catch (error) {
-      throw new HttpException('Bad request.', HttpStatus.BAD_REQUEST);
-    }
+  async create(
+    @Body(NestModules.Pipes.SpaceCleanPipe)
+    createUserDto: User.Infrastructure.Dtos.CreateUserDto
+  ) {
+    return await this.appService.createUser(createUserDto);
   }
 }

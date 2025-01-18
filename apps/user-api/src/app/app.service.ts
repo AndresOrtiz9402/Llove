@@ -1,19 +1,21 @@
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Inject, Injectable } from '@nestjs/common';
 
 import { User } from '@llove/product-domain/backend';
 
-const { Entities } = User.Infrastructure.Typeorm;
-
-type UserEntity = User.Infrastructure.Typeorm.Entities.UserEntity;
+type UserRepository = User.Application.UseCase.UserRepository;
+type CreateUserDto = User.Infrastructure.Dtos.CreateUserDto;
 
 @Injectable()
-export class AppService extends User.Application.UserService {
+export class AppService {
   constructor(
-    @InjectRepository(Entities.UserEntity)
-    private userRepository: Repository<UserEntity>
-  ) {
-    super(userRepository);
+    @Inject('UserRepository') private readonly userRepository: UserRepository
+  ) {}
+
+  async createUser(createUserDto: CreateUserDto) {
+    return await this.userRepository.create(createUserDto);
+  }
+
+  async findUser(id: number) {
+    return await this.userRepository.find({ id });
   }
 }
