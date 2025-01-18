@@ -23,7 +23,7 @@ const LetterDtoDecoratorsPrams = new MultiStringFields(
 
 const { isFor, occasion, relationship } = LetterDtoDecoratorsPrams;
 
-export class LetterDto implements ILetterDto {
+export class CreateLetterDto implements ILetterDto {
   @IsNotEmpty(isFor.isNotEmptyMessage)
   @IsString(isFor.isStringMessage)
   @Matches(isFor.matches.pattern, isFor.matches.matchesMessage)

@@ -4,10 +4,9 @@ import {
   HttpException,
   HttpStatus,
 } from '@nestjs/common';
+import { Helpers } from '../../shared';
 
-import { Shared } from '@llove/product-domain/backend';
-
-const { StringObjectPropertiesSpaceCleaner } = Shared.Helpers;
+const { StringObjectPropertiesSpaceCleaner } = Helpers;
 
 @Injectable()
 export class SpaceCleanPipe implements PipeTransform {

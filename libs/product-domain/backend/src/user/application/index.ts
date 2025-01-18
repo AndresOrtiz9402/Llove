@@ -1,1 +1,1 @@
-export * from './user.service';
+export * as UseCase from './use-case';
