@@ -1,13 +1,18 @@
-import { Injectable } from '@nestjs/common';
-import OpenAI from 'openai';
+import { Inject, Injectable } from '@nestjs/common';
 
 import { Letter } from '@llove/product-domain/backend';
 
-import { Config } from '..';
+type CreateLetterUseCase = Letter.Application.UseCase.CreateLetterUseCase;
+type CreateLetterDto = Letter.Infrastructure.Dtos.CreateLetterDto;
 
 @Injectable()
-export class AppService extends Letter.Application.LetterService {
-  constructor() {
-    super(new OpenAI({ apiKey: Config.OPENAI_API_KEY }));
+export class AppService {
+  constructor(
+    @Inject('CreateLetterUseCase')
+    private readonly UseCase: CreateLetterUseCase
+  ) {}
+
+  createLetter(letterDto: CreateLetterDto) {
+    return this.UseCase.createLetter(letterDto);
   }
 }
