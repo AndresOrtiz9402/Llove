@@ -7,8 +7,9 @@ import {
   OpenaiChatCompletionsProvider,
   OpenaiClientProvider,
 } from '../providers';
+import { LetterTypeOrmModule } from '../config';
 @Module({
-  imports: [],
+  imports: [LetterTypeOrmModule],
   controllers: [AppController],
   providers: [
     { provide: 'OpenAI', useValue: OpenaiClientProvider },
