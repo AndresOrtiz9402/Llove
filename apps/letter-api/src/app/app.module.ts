@@ -1,21 +1,9 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { LetterModule } from './letter/letter.module';
 
-import {
-  CreateLetterUseCaseProvider,
-  OpenaiChatCompletionsProvider,
-  OpenaiClientProvider,
-} from '../providers';
-import { LetterTypeOrmModule } from '../config';
 @Module({
-  imports: [LetterTypeOrmModule],
-  controllers: [AppController],
-  providers: [
-    { provide: 'OpenAI', useValue: OpenaiClientProvider },
-    OpenaiChatCompletionsProvider,
-    { provide: 'CreateLetterUseCase', useClass: CreateLetterUseCaseProvider },
-    AppService,
-  ],
+  imports: [LetterModule],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}

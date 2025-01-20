@@ -8,7 +8,7 @@ type CreateLetterDto = Letter.Infrastructure.Dtos.CreateLetterDto;
 type BFF_ENV = Config.BFF_ENV;
 
 @Injectable()
-export class AppService {
+export class LetterService {
   constructor(@Inject('BFF_ENV') private BFF_ENV: BFF_ENV) {}
 
   createLetter(createLetterDto: CreateLetterDto) {

@@ -9,7 +9,7 @@ const {
   MultiStringFieldsDecoratorsParamsMaker: MultiStringFields,
 } = Infrastructure.ClassValidatorHelpers;
 
-type ILetterDto = Omit<Letter.LetterTypeEntity, Shared.OmitBaseEntity>;
+type ICreateLetterDto = Omit<Letter.LetterTypeEntity, Shared.OmitBaseEntity>;
 
 const { LetterTone } = Letter;
 
@@ -23,7 +23,7 @@ const LetterDtoDecoratorsPrams = new MultiStringFields(
 
 const { isFor, occasion, relationship } = LetterDtoDecoratorsPrams;
 
-export class CreateLetterDto implements ILetterDto {
+export class CreateLetterDto implements ICreateLetterDto {
   @IsNotEmpty(isFor.isNotEmptyMessage)
   @IsString(isFor.isStringMessage)
   @Matches(isFor.matches.pattern, isFor.matches.matchesMessage)

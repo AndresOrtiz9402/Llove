@@ -8,7 +8,7 @@ type CreateUserDto = User.Infrastructure.Dtos.CreateUserDto;
 type BFF_ENV = Config.BFF_ENV;
 
 @Injectable()
-export class AppService {
+export class UserService {
   constructor(@Inject('BFF_ENV') private BFF_ENV: BFF_ENV) {}
 
   userCreate(createUserDto: CreateUserDto) {

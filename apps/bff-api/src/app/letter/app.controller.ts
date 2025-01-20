@@ -1,17 +1,20 @@
 import { Body, Controller, Post } from '@nestjs/common';
-import { AppService } from './app.service';
+import { LetterService } from './app.service';
 
 import { NestModules } from '@llove/backend';
 import { Letter } from '@llove/product-domain/backend';
 
+const SpaceCleanPipe = NestModules.Pipes.SpaceCleanPipe;
+
 @Controller('letter')
-export class AppController {
-  constructor(private readonly appService: AppService) {}
+export class LetterController {
+  constructor(private readonly letterService: LetterService) {}
+
   @Post('create')
   createLetter(
-    @Body(NestModules.Pipes.SpaceCleanPipe)
+    @Body(SpaceCleanPipe)
     createLetterDto: Letter.Infrastructure.Dtos.CreateLetterDto
   ) {
-    return this.appService.createLetter(createLetterDto);
+    return this.letterService.createLetter(createLetterDto);
   }
 }

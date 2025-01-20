@@ -1,9 +1,11 @@
 import { Module } from '@nestjs/common';
+
+import { LetterModule } from './letter/app.module';
 import { UserModule } from './user/user.module';
 
 @Module({
-  imports: [UserModule],
+  imports: [LetterModule, UserModule],
   controllers: [],
   providers: [],
 })
-export class AppModule {}
+export class BffModule {}

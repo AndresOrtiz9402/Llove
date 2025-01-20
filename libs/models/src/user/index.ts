@@ -1,3 +1,2 @@
-export * as Interface from './interface';
-export * as Repository from './repository';
+export * as Repository from './user.repository';
 export * from './user.entity';

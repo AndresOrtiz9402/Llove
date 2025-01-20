@@ -16,7 +16,7 @@ const noStreamCompletions: OpenaiNoStreamCompletions = async (
   return completions;
 };
 
-type IOpenaiChatCompletions<ContentInput> = Shared.Provider.AsyncProvider<
+type IOpenaiChatCompletions<ContentInput> = Shared.Dependency.AsyncDependency<
   {
     userPrompt: ContentInput;
     systemPrompt: string;

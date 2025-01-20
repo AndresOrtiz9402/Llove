@@ -1,3 +1,4 @@
+import { resolve } from 'path';
 import { z } from 'zod';
 
 const letterEnv = z.object({
@@ -11,14 +12,30 @@ const letterEnv = z.object({
 
 export const { OPENAI_API_KEY } = letterEnv.parse(process.env);
 
-const { DB, DB_USER, DB_PASSWORD, DB_HOST, DB_PORT } = letterEnv.parse(
-  process.env
-);
+const {
+  DB: database,
+  DB_USER: username,
+  DB_PASSWORD: password,
+  DB_HOST: host,
+  DB_PORT,
+} = letterEnv.parse(process.env);
+
+const port = parseInt(DB_PORT);
+
+const migrationsPath = () => {
+  const outputA = resolve(__dirname).split('\\dist');
+  const output = outputA[0] + outputA[1] + '\\src\\migrations\\**\\*.js';
+
+  return output;
+};
+
+const migrations = [migrationsPath()];
 
 export const LETTER_DB_ENV = {
-  DB,
-  DB_HOST,
-  DB_PASSWORD,
-  DB_PORT,
-  DB_USER,
+  database,
+  host,
+  password,
+  port,
+  username,
+  migrations,
 };

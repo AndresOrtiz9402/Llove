@@ -31,7 +31,7 @@ const dataSourceOptions: DbDataSourceOptions = (
   };
 };
 
-export const AsyncUserTypeOrmModule: DbConnectionInterface = (
+export const AsyncTypeOrmModule: DbConnectionInterface = (
   connectionOptions: DbConnectionOptions
 ) => {
   const Options: DataSourceOptions = dataSourceOptions(connectionOptions);

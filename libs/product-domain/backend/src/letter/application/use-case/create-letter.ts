@@ -4,7 +4,7 @@ type ICreateLetter = Letter.Interface.ICreateLetter;
 
 type ICreateLetterUseCase = Letter.Interface.ICreateLetterUseCase;
 
-export type CreateLetterAsyncProvider = Shared.Provider.AsyncProvider<
+export type CreateLetterAsyncDependency = Shared.Dependency.AsyncDependency<
   {
     userPrompt: ICreateLetter;
     systemPrompt: string;
@@ -13,7 +13,7 @@ export type CreateLetterAsyncProvider = Shared.Provider.AsyncProvider<
 >;
 
 export class CreateLetterUseCase implements ICreateLetterUseCase {
-  constructor(private dependency: CreateLetterAsyncProvider) {}
+  constructor(private dependency: CreateLetterAsyncDependency) {}
 
   async createLetter(content: Letter.Interface.ICreateLetter): Promise<string> {
     const userPrompt = content;
