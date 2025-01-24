@@ -16,16 +16,15 @@ const noStreamCompletions: OpenaiNoStreamCompletions = async (
   return completions;
 };
 
-type IOpenaiChatCompletions<ContentInput> = Shared.Dependency.AsyncDependency<
-  {
-    userPrompt: ContentInput;
-    systemPrompt: string;
-  },
-  string
->;
-
 export class OpenaiChatCompletions<ContentInput>
-  implements IOpenaiChatCompletions<ContentInput>
+  implements
+    Shared.Dependency.AsyncDependency<
+      {
+        userPrompt: ContentInput;
+        systemPrompt: string;
+      },
+      string
+    >
 {
   constructor(private openai: OpenAI) {}
 

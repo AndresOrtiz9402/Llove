@@ -1,6 +1,6 @@
 import { IsEmail, IsNotEmpty, IsString, Matches } from 'class-validator';
 
-import { type User, Shared as IShared } from '@llove/models';
+import { type User, type Shared } from '@llove/models';
 
 import { Infrastructure } from '../../../shared';
 
@@ -16,7 +16,7 @@ const { name, email } = new MultiStringFields(
 );
 
 export class CreateUserDto
-  implements Omit<User.UserEntity, IShared.OmitBaseEntity>
+  implements Omit<User.UserEntity, Shared.OmitBaseEntity>
 {
   @IsNotEmpty(name.isNotEmptyMessage)
   @IsString(name.isStringMessage)

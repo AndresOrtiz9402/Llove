@@ -6,9 +6,7 @@ import { UserEntity } from './entities';
 export type CreateUserInput = User.Repository.CreateUserInput;
 export type UpdateUserInput = User.Repository.UpdateUserInput;
 
-type IUserRepository = User.Repository.UserRepository;
-
-export class UserRepository implements IUserRepository {
+export class UserRepository implements User.Repository.UserRepository {
   constructor(private readonly userRepository: Repository<UserEntity>) {}
 
   async create(input: CreateUserInput): Promise<object> {

@@ -10,7 +10,7 @@ type CreateLetterDto = Letter.Infrastructure.Dtos.CreateLetterDto;
 export class LetterService {
   constructor(private readonly UseCase: CreateLetterUseCase) {}
 
-  createLetter(letterDto: CreateLetterDto) {
-    return this.UseCase.createLetter(letterDto);
+  createLetter(createLetterDto: CreateLetterDto) {
+    return this.UseCase.createLetter(createLetterDto);
   }
 }

@@ -1,22 +1,15 @@
-import { type Letter, type Shared } from '@llove/models';
+import { type Letter } from '@llove/models';
 
-type ICreateLetter = Letter.Interface.ICreateLetter;
+type CreateLetterInput = Letter.Interface.CreateLetterInput;
+type CreateLetterAsyncDependency = Letter.Interface.CreateLetterAsyncDependency;
 
-type ICreateLetterUseCase = Letter.Interface.ICreateLetterUseCase;
-
-export type CreateLetterAsyncDependency = Shared.Dependency.AsyncDependency<
-  {
-    userPrompt: ICreateLetter;
-    systemPrompt: string;
-  },
-  string
->;
-
-export class CreateLetterUseCase implements ICreateLetterUseCase {
+export class CreateLetterUseCase
+  implements Letter.Interface.CreateLetterUseCase
+{
   constructor(private dependency: CreateLetterAsyncDependency) {}
 
-  async createLetter(content: Letter.Interface.ICreateLetter): Promise<string> {
-    const userPrompt = content;
+  async createLetter(input: CreateLetterInput): Promise<string> {
+    const userPrompt = input;
 
     const systemPrompt = `
       Vas a recibir un JSON con el siguiente formato:
@@ -37,11 +30,11 @@ export class CreateLetterUseCase implements ICreateLetterUseCase {
     //TODO: add emojis option.
     //TODO: add keywords option.
 
-    const input = {
+    const newInput = {
       userPrompt,
       systemPrompt,
     };
 
-    return await this.dependency.execute(input);
+    return await this.dependency.execute(newInput);
   }
 }

@@ -1,8 +1,18 @@
-import { type OmitBaseEntity } from '../shared';
+import { type OmitBaseEntity, Dependency } from '../shared';
 import { type LetterTypeEntity } from '.';
 
-export type ICreateLetter = Omit<LetterTypeEntity, OmitBaseEntity>;
+export type CreateLetterInput = Omit<LetterTypeEntity, OmitBaseEntity>;
 
-export interface ICreateLetterUseCase {
-  createLetter(content: ICreateLetter): Promise<string>;
+export type CreateLetterAsyncDependency = Dependency.AsyncDependency<
+  {
+    userPrompt: CreateLetterInput;
+    systemPrompt: string;
+  },
+  string
+>;
+
+type CreateLetter = (input: CreateLetterInput) => Promise<string>;
+
+export interface CreateLetterUseCase {
+  createLetter: CreateLetter;
 }

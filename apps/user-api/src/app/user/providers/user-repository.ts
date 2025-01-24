@@ -6,13 +6,11 @@ import { User } from '@llove/product-domain/backend';
 
 type UserEntity = User.Infrastructure.Typeorm.Entities.UserEntity;
 
-const { UserRepository: IUserRepository } =
-  User.Infrastructure.Typeorm.Repository;
-
 export const { UserEntity } = User.Infrastructure.Typeorm.Entities;
 
 @Injectable()
-export class UserRepository extends IUserRepository {
+export class UserRepository extends User.Infrastructure.Typeorm.Repository
+  .UserRepository {
   constructor(
     @InjectRepository(UserEntity)
     private readonly repository: Repository<UserEntity>
