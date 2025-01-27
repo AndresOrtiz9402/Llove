@@ -1,6 +1,6 @@
 import { type Letter } from '@llove/models';
 
-type CreateLetterInput = Letter.Interface.CreateLetterInput;
+type CreateLetterOptionsDto = Letter.Interface.CreateLetterOptionsDto;
 type CreateLetterAsyncDependency = Letter.Interface.CreateLetterAsyncDependency;
 
 export class CreateLetterUseCase
@@ -8,7 +8,7 @@ export class CreateLetterUseCase
 {
   constructor(private dependency: CreateLetterAsyncDependency) {}
 
-  async createLetter(input: CreateLetterInput): Promise<string> {
+  async createLetter(input: CreateLetterOptionsDto): Promise<string> {
     const userPrompt = input;
 
     const systemPrompt = `

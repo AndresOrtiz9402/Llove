@@ -1,11 +1,7 @@
-import { Shared } from '..';
-import { UserEntity } from './user.entity';
+import { type BaseRepository } from '../shared';
+import { type Interface } from '.';
 
-type OmitBaseEntity = Shared.OmitBaseEntity;
-export type CreateUserInput = Omit<UserEntity, OmitBaseEntity>;
-export type UpdateUserInput = Partial<CreateUserInput>;
-
-export type UserRepository = {} & Shared.BaseRepository<
-  CreateUserInput,
-  UpdateUserInput
+export type UserRepository = {} & BaseRepository<
+  Interface.CreateUserDto,
+  Interface.UpdateUserDto
 >;

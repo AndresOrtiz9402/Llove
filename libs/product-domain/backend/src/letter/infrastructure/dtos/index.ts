@@ -1,1 +1,1 @@
-export * from './Letter.dto';
+export * from './create-letter.dto';

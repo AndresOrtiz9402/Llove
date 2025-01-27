@@ -6,9 +6,9 @@ import { Infrastructure } from '../../../../shared';
 const { TypeormBaseEntity } = Infrastructure.Typeorm.Entities;
 
 @Entity('letter_type')
-export class LetterTypeEntity
+export class LetterOptionsEntity
   extends TypeormBaseEntity
-  implements Letter.LetterTypeEntity
+  implements Letter.LetterOptionsEntity
 {
   @Column({ name: 'is_for', type: 'varchar' })
   isFor: string;
@@ -20,5 +20,5 @@ export class LetterTypeEntity
   relationship: string;
 
   @Column({ name: 'tone', type: 'varchar' })
-  tone: Letter.LetterToneType;
+  tone: Letter.LetterToneOptions;
 }

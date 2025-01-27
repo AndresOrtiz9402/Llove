@@ -20,37 +20,33 @@ export const matchesMessage = (field: string, message: string): object => {
   };
 };
 
-export class MatchesHelper {
+export class MatchesDecoratorParams {
   readonly pattern: RegExp;
-  readonly matchesMessage: object;
+  readonly message: object;
 
   constructor(pattern: RegExp, field: string, message: string) {
     this.pattern = pattern;
-    this.matchesMessage = matchesMessage(field, message);
+    this.message = matchesMessage(field, message);
   }
 }
 
-export class StringFieldsDecoratorsParamsMaker {
+export class IsStringDecoratorParams {
   readonly isNotEmptyMessage: object;
   readonly isStringMessage: object;
-  readonly matches: MatchesHelper;
+  readonly matches: MatchesDecoratorParams;
 
   constructor(field: string, pattern: RegExp, matchesMessage: string) {
     this.isNotEmptyMessage = isNotEmptyMessage(field);
     this.isStringMessage = isStringMessage(field);
-    this.matches = new MatchesHelper(pattern, field, matchesMessage);
+    this.matches = new MatchesDecoratorParams(pattern, field, matchesMessage);
   }
 }
 
-export class MultiStringFieldsDecoratorsParamsMaker {
-  [key: string]: StringFieldsDecoratorsParamsMaker;
+export class MultiIsStringDecoratorParams {
+  [key: string]: IsStringDecoratorParams;
   constructor(fields: string[], pattern: RegExp, matchesMessage: string) {
     fields.forEach((key) => {
-      this[key] = new StringFieldsDecoratorsParamsMaker(
-        key,
-        pattern,
-        matchesMessage
-      );
+      this[key] = new IsStringDecoratorParams(key, pattern, matchesMessage);
     });
   }
 }

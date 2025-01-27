@@ -1,0 +1,16 @@
+import { type BaseEntity } from '../shared';
+
+export enum LetterTone {
+  friendly = 'friendly',
+  romantic = 'romantic',
+  family = 'family',
+}
+
+export type LetterToneOptions = typeof LetterTone;
+
+export interface LetterOptionsEntity extends BaseEntity {
+  isFor: string;
+  occasion: string;
+  relationship: string;
+  tone: LetterToneOptions;
+}

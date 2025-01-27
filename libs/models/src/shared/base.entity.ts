@@ -1,5 +1,10 @@
-export interface BaseEntity {
-  id: number;
+export type Id = number;
+
+export interface BaseId {
+  id: Id;
+}
+
+export interface BaseEntity extends BaseId {
   createdAt: Date;
   deletedAt: Date | null;
 }
