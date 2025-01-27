@@ -13,7 +13,7 @@ module.exports = class LetterDbInit1737312627594 {
             "deleted_at" timestamp DEFAULT (NULL)
         );
 
-        CREATE TABLE "letters_configs" (
+        CREATE TABLE "letters_options" (
             "id" SERIAL PRIMARY KEY,
             "title" varchar(100) NOT NULL,
             "content" varchar NOT NULL,

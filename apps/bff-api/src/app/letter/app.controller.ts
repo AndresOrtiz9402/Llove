@@ -13,8 +13,8 @@ export class LetterController {
   @Post('create')
   createLetter(
     @Body(SpaceCleanPipe)
-    createLetterDto: Letter.Infrastructure.Dtos.CreateLetterDto
+    createLetterOptionsDto: Letter.Infrastructure.Dtos.CreateLetterOptionsDto
   ) {
-    return this.letterService.createLetter(createLetterDto);
+    return this.letterService.createLetter(createLetterOptionsDto);
   }
 }

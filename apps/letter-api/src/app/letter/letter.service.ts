@@ -1,16 +1,27 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 
-import { Letter } from '@llove/product-domain/backend';
+import { type Letter } from '@llove/product-domain/backend';
 
-import { CreateLetterUseCase } from './providers';
+import {
+  CreateLetterUseCase,
+  LetterOptionsRepository,
+  LetterRepository,
+} from './providers';
 
-type CreateLetterDto = Letter.Infrastructure.Dtos.CreateLetterDto;
+type CreateLetterOptionsDto = Letter.Infrastructure.Dtos.CreateLetterOptionsDto;
 
 @Injectable()
 export class LetterService {
-  constructor(private readonly UseCase: CreateLetterUseCase) {}
+  constructor(
+    @Inject(CreateLetterUseCase)
+    private readonly UseCase: CreateLetterUseCase,
+    @Inject(LetterOptionsRepository)
+    private readonly letterOptionsRepository: LetterOptionsRepository,
+    @Inject(LetterRepository)
+    private readonly letterRepository: LetterRepository
+  ) {}
 
-  createLetter(createLetterDto: CreateLetterDto) {
+  createLetter(createLetterDto: CreateLetterOptionsDto) {
     return this.UseCase.createLetter(createLetterDto);
   }
 }

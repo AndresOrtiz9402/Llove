@@ -10,7 +10,7 @@ export class LetterController {
   @Post('create')
   createLetter(
     @Body(NestModules.Pipes.SpaceCleanPipe)
-    createLetterDto: Letter.Infrastructure.Dtos.CreateLetterDto
+    createLetterDto: Letter.Infrastructure.Dtos.CreateLetterOptionsDto
   ) {
     return this.letterService.createLetter(createLetterDto);
   }
