@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { LetterController } from './app.controller';
-import { LetterService } from './app.service';
+import { LetterController } from './letter.controller';
+import { LetterService } from './letter.service';
 
 import { BFF_ENV } from '../../config';
 

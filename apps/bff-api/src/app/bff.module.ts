@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 
-import { LetterModule } from './letter/app.module';
+import { LetterModule } from './letter/letter.module';
 import { UserModule } from './user/user.module';
 
 @Module({

@@ -1,5 +1,5 @@
 import { Body, Controller, Post } from '@nestjs/common';
-import { LetterService } from './app.service';
+import { LetterService } from './letter.service';
 
 import { NestModules } from '@llove/backend';
 import { Letter } from '@llove/product-domain/backend';
