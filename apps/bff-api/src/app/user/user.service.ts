@@ -12,9 +12,9 @@ export class UserService {
   constructor(@Inject('BFF_ENV') private BFF_ENV: BFF_ENV) {}
 
   userCreate(createUserDto: CreateUserDto) {
-    return Shared.Http.post(
+    return Shared.Infrastructure.Http.post(
       createUserDto,
-      this.BFF_ENV.USER_API_URL + '/create'
+      this.BFF_ENV.USER_API_URL
     );
   }
 }

@@ -1,5 +1,6 @@
-import { resolve } from 'path';
 import { z } from 'zod';
+
+import { NestModules } from '@llove/backend';
 
 const userEnv = z.object({
   DB: z.string(),
@@ -21,14 +22,12 @@ const {
 
 const port = parseInt(DB_PORT);
 
-const migrationsPath = () => {
-  const outputA = resolve(__dirname).split('\\dist');
-  const output = outputA[0] + outputA[1] + '\\src\\migrations\\**\\*.js';
-
-  return output;
+export const migrationsPath = () => {
+  const migrationsPath = NestModules.Typeorm.migrationsPath('user');
+  return migrationsPath;
 };
 
-const migrations = [migrationsPath()];
+const migrations = migrationsPath();
 
 export const USER_DB_ENV = {
   database,

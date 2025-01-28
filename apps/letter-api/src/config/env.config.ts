@@ -1,5 +1,6 @@
-import { resolve } from 'path';
 import { z } from 'zod';
+
+import { NestModules } from '@llove/backend';
 
 const letterEnv = z.object({
   OPENAI_API_KEY: z.string(),
@@ -23,13 +24,11 @@ const {
 const port = parseInt(DB_PORT);
 
 const migrationsPath = () => {
-  const outputA = resolve(__dirname).split('\\dist');
-  const output = outputA[0] + outputA[1] + '\\src\\migrations\\**\\*.js';
-
-  return output;
+  const migrationsPath = NestModules.Typeorm.migrationsPath('letter');
+  return migrationsPath;
 };
 
-const migrations = [migrationsPath()];
+const migrations = migrationsPath();
 
 export const LETTER_DB_ENV = {
   database,

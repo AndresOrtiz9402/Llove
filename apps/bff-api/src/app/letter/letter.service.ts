@@ -12,9 +12,9 @@ export class LetterService {
   constructor(@Inject('BFF_ENV') private BFF_ENV: BFF_ENV) {}
 
   createLetter(createLetterOptionsDto: CreateLetterOptionsDto) {
-    return Shared.Http.post(
+    return Shared.Infrastructure.Http.post(
       createLetterOptionsDto,
-      this.BFF_ENV.LETTER_API_URL + '/create'
+      this.BFF_ENV.LETTER_API_URL
     );
   }
 }

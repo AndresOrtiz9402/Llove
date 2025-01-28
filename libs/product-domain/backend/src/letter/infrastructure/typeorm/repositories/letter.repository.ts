@@ -18,7 +18,8 @@ export class LetterRepository implements Letter.LetterRepository {
 
     return res;
   }
-  async getById(input: { id: Shared.Id }): Promise<object> {
+
+  async getById(input: Shared.BaseId): Promise<object> {
     const { id } = input;
     return await this.LetterOptionsRepository.findOne({
       where: {
@@ -26,18 +27,19 @@ export class LetterRepository implements Letter.LetterRepository {
       },
     });
   }
+
   async getAll(): Promise<object> {
     return await this.LetterOptionsRepository.find();
   }
-  async updateById(input: {
-    id: Shared.Id;
-    updateInput: UpdateLetterDto;
-  }): Promise<object> {
-    const { id, updateInput } = input;
+
+  async updateById(input: UpdateLetterDto): Promise<object> {
+    const { id, ...updateInput } = input;
 
     return await this.LetterOptionsRepository.update({ id }, updateInput);
   }
-  async deletedById(input: { id: Shared.Id }): Promise<object> {
-    return await this.LetterOptionsRepository.delete(input);
+
+  async deletedById(input: Shared.BaseId): Promise<object> {
+    const { id } = input;
+    return await this.LetterOptionsRepository.delete(id);
   }
 }

@@ -42,7 +42,7 @@
     "migration-create": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "node ../../../../tools/typeorm/make-new-migration-file.script.mjs",
+        "command": "ts-node --project ../../../../tools/typeorm/tsconfig.json ../../../../tools/typeorm/make-new-migration-file.script.ts letter",
         "cwd": "apps/letter-api/src/config/"
       }
     }

@@ -13,7 +13,7 @@ import {
   LetterOptionsEntity,
   LetterOptionsRepository,
   LetterRepository,
-} from './providers';
+} from '../../dependency-injection';
 
 const { database, host, password, port, username, migrations } = LETTER_DB_ENV;
 

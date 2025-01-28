@@ -1,11 +1,11 @@
-import { type OmitBaseEntity, type Dependency, type Id } from '../shared';
+import { type OmitBaseEntity, type Dependency, type BaseId } from '../shared';
 import { type LetterEntity, type LetterOptionsEntity } from '.';
 
 //INPUTS INTERFACES
 export type CreateLetterOptionsDto = Omit<LetterOptionsEntity, OmitBaseEntity>;
-export type UpdateLetterOptionsDto = Partial<CreateLetterOptionsDto> & Id;
+export type UpdateLetterOptionsDto = Partial<CreateLetterOptionsDto> & BaseId;
 export type CreateLetterDto = Omit<LetterEntity, OmitBaseEntity>;
-export type UpdateLetterDto = Partial<CreateLetterDto> & Id;
+export type UpdateLetterDto = Partial<CreateLetterDto> & BaseId;
 
 //DEPENDENCY INJECTION INTERFACES
 export type CreateLetterAsyncDependency = Dependency.AsyncDependency<

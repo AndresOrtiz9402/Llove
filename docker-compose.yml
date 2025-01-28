@@ -1,54 +1,20 @@
 services:
-  letter-db:
+  postgres:
     image: postgres:15.2
 
     volumes:
       # Persistent data storage
-      - letter-db:/var/lib/postgresql/data
-
-      # Persistent server data
-      - ./tools/postgres/postgres.conf/postgres.conf:/etc/postgresql/letter-db:.conf
-
-      # Persistent logs data
-      - ./tools/postgres/logs:/logs
+      - postgres:/var/lib/postgresql/data
 
     environment:
-      POSTGRES_DB: 'letter'
+      POSTGRES_DB: 'postgres'
       POSTGRES_USER: 'postgres'
       POSTGRES_PASSWORD: 'postgres'
 
     ports:
-      - '5434:5432'
-
-    command: postgres -c 'config_file=/etc/postgresql/letter-db:.conf'
-
-    restart: always
-
-  user-db:
-    image: postgres:15.2
-
-    volumes:
-      # Persistent data storage
-      - user-db:/var/lib/postgresql/data
-
-      # Persistent server data
-      - ./tools/postgres/postgres.conf/postgres.conf:/etc/postgresql/user-db:.conf
-
-      # Persistent logs data
-      - ./tools/postgres/logs:/logs
-
-    environment:
-      POSTGRES_DB: 'user'
-      POSTGRES_USER: 'postgres'
-      POSTGRES_PASSWORD: 'postgres'
-
-    ports:
-      - '5435:5432'
-
-    command: postgres -c 'config_file=/etc/postgresql/user-db:.conf'
+      - '5432:5432'
 
     restart: always
 
 volumes:
-  letter-db:
-  user-db:
+  postgres:

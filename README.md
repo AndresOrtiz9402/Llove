@@ -79,3 +79,12 @@ And join the Nx community:
 - [Follow us on X](https://twitter.com/nxdevtools) or [LinkedIn](https://www.linkedin.com/company/nrwl)
 - [Our Youtube channel](https://www.youtube.com/@nxdevtools)
 - [Our blog](https://nx.dev/blog?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+
+## Set up the databases
+
+- Docker: Use the docker-compose.yml to build the container.
+- Postgresql: Use the following command to create the databases of user_db and letter_db.
+
+```sh
+psql -U postgres -c 'CREATE DATABASE letter_db;' -c 'CREATE DATABASE user_db;'
+```

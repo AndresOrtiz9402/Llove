@@ -3,20 +3,20 @@ import { Repository } from 'typeorm';
 import { type Shared, type User } from '@llove/models';
 import { UserEntity } from '../entities';
 
-export type CreateUserInput = User.Interface.CreateUserDto;
-export type UpdateUserInput = User.Interface.UpdateUserDto;
+export type CreateUserDto = User.Interface.CreateUserDto;
+export type UpdateUserDto = User.Interface.UpdateUserDto;
 
 export class UserRepository implements User.UserRepository {
   constructor(private readonly userRepository: Repository<UserEntity>) {}
 
-  async create(input: CreateUserInput): Promise<object> {
+  async create(input: CreateUserDto): Promise<object> {
     const newUser = this.userRepository.create(input);
 
     const res = await this.userRepository.save(newUser);
 
     return res;
   }
-  async getById(input: { id: Shared.Id }): Promise<object> {
+  async getById(input: Shared.BaseId): Promise<object> {
     const { id } = input;
     return await this.userRepository.findOne({
       where: {
@@ -24,18 +24,18 @@ export class UserRepository implements User.UserRepository {
       },
     });
   }
+
   async getAll(): Promise<object> {
     return await this.userRepository.find();
   }
-  async updateById(input: {
-    id: Shared.Id;
-    updateInput: UpdateUserInput;
-  }): Promise<object> {
-    const { id, updateInput } = input;
+
+  async updateById(input: UpdateUserDto): Promise<object> {
+    const { id, ...updateInput } = input;
 
     return await this.userRepository.update({ id }, updateInput);
   }
-  async deletedById(input: { id: Shared.Id }): Promise<object> {
+
+  async deletedById(input: Shared.BaseId): Promise<object> {
     return await this.userRepository.delete(input);
   }
 }

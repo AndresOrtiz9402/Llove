@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 
 import { User } from '@llove/product-domain/backend';
 
-import { UserRepository } from './providers';
+import { UserRepository } from '../../dependency-injection';
 
 type CreateUserDto = User.Infrastructure.Dtos.CreateUserDto;
 

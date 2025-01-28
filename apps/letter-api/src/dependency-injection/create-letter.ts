@@ -2,12 +2,12 @@ import { Injectable } from '@nestjs/common';
 import OpenAI from 'openai';
 
 import { Letter, Shared } from '@llove/product-domain/backend';
-import { OPENAI_API_KEY } from '../../../config';
+import { OPENAI_API_KEY } from '../config';
 
 type CreateLetterOptionsDto = Letter.Infrastructure.Dtos.CreateLetterOptionsDto;
 
 @Injectable()
-export class CreateLetterAsyncDependency extends Shared.Openai
+export class CreateLetterAsyncDependency extends Shared.Infrastructure.Openai
   .OpenaiChatCompletions<CreateLetterOptionsDto> {
   constructor() {
     super(

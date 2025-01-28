@@ -10,7 +10,7 @@ const SpaceCleanPipe = NestModules.Pipes.SpaceCleanPipe;
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Post('create')
+  @Post('')
   createUser(
     @Body(SpaceCleanPipe)
     createUserDto: User.Infrastructure.Dtos.CreateUserDto

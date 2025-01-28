@@ -1,7 +1,4 @@
 import { type BaseRepository } from '../shared';
-import { type Interface } from '.';
+import { type LetterOptionsEntity } from '.';
 
-export type LetterOptionsRepository = {} & BaseRepository<
-  Interface.CreateLetterOptionsDto,
-  Interface.UpdateLetterOptionsDto
->;
+export type LetterOptionsRepository = BaseRepository<LetterOptionsEntity>;

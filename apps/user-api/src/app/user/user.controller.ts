@@ -9,7 +9,7 @@ import { NestModules } from '@llove/backend';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Post('create')
+  @Post('')
   async create(
     @Body(NestModules.Pipes.SpaceCleanPipe)
     createUserDto: User.Infrastructure.Dtos.CreateUserDto
@@ -17,7 +17,7 @@ export class UserController {
     return await this.userService.createUser(createUserDto);
   }
 
-  @Get('find-all')
+  @Get('all')
   async findAll() {
     return await this.userService.findUsers();
   }

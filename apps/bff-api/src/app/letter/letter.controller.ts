@@ -10,7 +10,7 @@ const SpaceCleanPipe = NestModules.Pipes.SpaceCleanPipe;
 export class LetterController {
   constructor(private readonly letterService: LetterService) {}
 
-  @Post('create')
+  @Post('')
   createLetter(
     @Body(SpaceCleanPipe)
     createLetterOptionsDto: Letter.Infrastructure.Dtos.CreateLetterOptionsDto

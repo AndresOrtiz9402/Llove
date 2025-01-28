@@ -1,7 +1,4 @@
 import { type BaseRepository } from '../shared';
-import { type Interface } from '.';
+import { type UserEntity } from '.';
 
-export type UserRepository = {} & BaseRepository<
-  Interface.CreateUserDto,
-  Interface.UpdateUserDto
->;
+export type UserRepository = BaseRepository<UserEntity>;

@@ -1,9 +1,12 @@
-import { type Id } from '.';
+import { type OmitBaseEntity, type BaseId } from '.';
 
-export type BaseRepository<CreateInput, UpdateInput> = {
-  create(input: CreateInput): Promise<object>;
-  getById(input: { id: Id; updateInput: UpdateInput }): Promise<object>;
+type CreateInput<Entity> = Omit<Entity, OmitBaseEntity>;
+type UpdateInput<Entity> = Partial<CreateInput<Entity>> & BaseId;
+
+export type BaseRepository<Entity> = {
+  create(input: CreateInput<Entity>): Promise<object>;
   getAll(): Promise<object>;
-  updateById(input: { id: Id }): Promise<object>;
-  deletedById(input: { id: Id }): Promise<object>;
+  getById(input: BaseId): Promise<object>;
+  updateById(input: UpdateInput<Entity>): Promise<object>;
+  deletedById(input: BaseId): Promise<object>;
 };

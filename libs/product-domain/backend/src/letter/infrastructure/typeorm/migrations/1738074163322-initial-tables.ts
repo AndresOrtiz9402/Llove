@@ -1,5 +1,7 @@
-module.exports = class LetterDbInit1737312627594 {
-  async up(queryRunner) {
+import { MigrationInterface, QueryRunner } from 'typeorm';
+
+export class InitialTables1738074163322 implements MigrationInterface {
+  public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`
         CREATE TABLE "letters_options"(
             "id" SERIAL PRIMARY KEY,
@@ -23,9 +25,9 @@ module.exports = class LetterDbInit1737312627594 {
         `);
   }
 
-  async down(queryRunner) {
+  public async down(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`
         DROP TABLE letters, letters_options;
         `);
   }
-};
+}
