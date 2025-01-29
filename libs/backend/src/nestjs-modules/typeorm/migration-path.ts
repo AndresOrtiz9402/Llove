@@ -11,6 +11,5 @@ export const migrationsPath = (projectName: string) => {
       basePathByEnv[process.env.NODE_ENV]
     }/libs/product-domain/backend/src/${projectName}/infrastructure/typeorm/migrations/*.js`
   );
-  console.log(path);
   return [path];
 };

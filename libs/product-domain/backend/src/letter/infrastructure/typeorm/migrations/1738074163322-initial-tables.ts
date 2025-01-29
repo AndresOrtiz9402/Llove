@@ -18,7 +18,7 @@ export class InitialTables1738074163322 implements MigrationInterface {
             "title" varchar(100) NOT NULL,
             "content" varchar NOT NULL,
             "user_id" int NOT NULL,
-            "letter_options_id" int NOT NULL,
+            "letter_options_id" int NOT NULL REFERENCES "letters_options" ("id"),
             "created_at" timestamp NOT NULL DEFAULT (CURRENT_TIMESTAMP),
             "deleted_at" timestamp DEFAULT (NULL)
         );
