@@ -13,9 +13,8 @@ const { name } =
     'field cannot contain special characters or start empty'
   );
 
-export type UpdateUserDto = User.Interface.UpdateUserDto;
-
-export class UpdateInputDto implements Omit<UpdateUserDto, 'id'> {
+export class UpdateUserDto implements User.Interface.UpdateUserDto {
+  @IsOptional()
   @IsString(name.isStringMessage)
   @Matches(name.matches.pattern, name.matches.message)
   name?: string;

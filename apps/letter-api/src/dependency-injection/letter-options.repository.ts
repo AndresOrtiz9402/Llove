@@ -14,8 +14,8 @@ export class LetterOptionsRepository extends Letter.Infrastructure.Typeorm
   .Repository.LetterOptionsRepository {
   constructor(
     @InjectRepository(LetterOptionsEntity)
-    private readonly repository: Repository<LetterOptionsEntity>
+    private readonly injectedRepository: Repository<LetterOptionsEntity>
   ) {
-    super(repository);
+    super(injectedRepository);
   }
 }

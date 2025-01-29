@@ -20,14 +20,14 @@ export class UserService {
   }
 
   async findUser(id: number) {
-    return await this.userRepository.getById({ id });
+    return await this.userRepository.getById(id);
   }
 
-  async updateUser(input: UpdateUserDto) {
-    return await this.userRepository.updateById(input);
+  async updateUser(id: number, updateInput: UpdateUserDto) {
+    return await this.userRepository.updateById({ id, updateInput });
   }
 
   async deleteUser(id: number) {
-    return await this.userRepository.deletedById({ id });
+    return await this.userRepository.deletedById(id);
   }
 }

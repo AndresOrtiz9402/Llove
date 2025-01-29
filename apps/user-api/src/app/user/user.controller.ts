@@ -44,9 +44,8 @@ export class UserController {
   @Patch(':id')
   async patch(
     @Param('id', ParseIntPipe) id: number,
-    @Body() updateInput: User.Infrastructure.Dtos.UpdateInputDto
+    @Body() updateInput: User.Infrastructure.Dtos.UpdateUserDto
   ) {
-    const updateUserDto = { id, ...updateInput };
-    return this.userService.updateUser(updateUserDto);
+    return this.userService.updateUser(id, updateInput);
   }
 }

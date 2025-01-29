@@ -13,8 +13,8 @@ export class LetterRepository extends Letter.Infrastructure.Typeorm.Repository
   .LetterRepository {
   constructor(
     @InjectRepository(LetterEntity)
-    private readonly repository: Repository<LetterEntity>
+    private readonly injectedRepository: Repository<LetterEntity>
   ) {
-    super(repository);
+    super(injectedRepository);
   }
 }

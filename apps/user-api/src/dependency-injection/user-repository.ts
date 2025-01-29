@@ -13,8 +13,8 @@ export class UserRepository extends User.Infrastructure.Typeorm.Repository
   .UserRepository {
   constructor(
     @InjectRepository(UserEntity)
-    private readonly repository: Repository<UserEntity>
+    private readonly injectedRepository: Repository<UserEntity>
   ) {
-    super(repository);
+    super(injectedRepository);
   }
 }
