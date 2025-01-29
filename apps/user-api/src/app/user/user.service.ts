@@ -5,6 +5,7 @@ import { User } from '@llove/product-domain/backend';
 import { UserRepository } from '../../dependency-injection';
 
 type CreateUserDto = User.Infrastructure.Dtos.CreateUserDto;
+type UpdateUserDto = User.Infrastructure.Dtos.UpdateUserDto;
 
 @Injectable()
 export class UserService {
@@ -16,5 +17,17 @@ export class UserService {
 
   async findUsers() {
     return await this.userRepository.getAll();
+  }
+
+  async findUser(id: number) {
+    return await this.userRepository.getById({ id });
+  }
+
+  async updateUser(input: UpdateUserDto) {
+    return await this.userRepository.updateById(input);
+  }
+
+  async deleteUser(id: number) {
+    return await this.userRepository.deletedById({ id });
   }
 }
