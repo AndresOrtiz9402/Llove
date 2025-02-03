@@ -7,11 +7,11 @@ import { Letter } from '@llove/product-domain/backend';
 @Controller('letter')
 export class LetterController {
   constructor(private readonly letterService: LetterService) {}
-  @Post('')
-  createLetter(
+  @Post('generate')
+  generate(
     @Body(NestModules.Pipes.SpaceCleanPipe)
     createLetterDto: Letter.Infrastructure.Dtos.CreateLetterOptionsDto
   ) {
-    return this.letterService.createLetter(createLetterDto);
+    return this.letterService.generateLetter(createLetterDto);
   }
 }

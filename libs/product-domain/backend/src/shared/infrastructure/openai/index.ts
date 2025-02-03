@@ -1,2 +1,2 @@
-export * from './dependency';
+export * from './service';
 export * from './interface';

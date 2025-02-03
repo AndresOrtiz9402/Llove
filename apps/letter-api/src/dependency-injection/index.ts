@@ -1,3 +1,2 @@
-export * from './create-letter';
-export * from './letter.repository';
-export * from './letter-options.repository';
+export * as Repositories from './repositories';
+export * as UseCases from './UseCases';

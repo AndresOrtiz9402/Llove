@@ -1,12 +1,16 @@
-export type Id = number;
+type CreateAt = Date;
+
+type DeleteAt = Date | null;
 
 export interface BaseId {
-  id: Id;
+  readonly id: Id;
 }
 
 export interface BaseEntity extends BaseId {
-  createdAt: Date;
-  deletedAt: Date | null;
+  readonly createdAt: CreateAt;
+  deletedAt: DeleteAt;
 }
+
+export type Id = number;
 
 export type OmitBaseEntity = 'id' | 'createdAt' | 'deletedAt';

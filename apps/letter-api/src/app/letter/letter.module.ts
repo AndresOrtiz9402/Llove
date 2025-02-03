@@ -1,27 +1,23 @@
+/* import { NestModules } from '@llove/backend'; */
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
+/* import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { NestModules } from '@llove/backend';
-
-import { LETTER_DB_ENV } from '../../config';
+import { LETTER_DB_ENV } from '../../config'; */
+import { UseCases /* , Repositories  */ } from '../../dependency-injection';
 import { LetterController } from './letter.controller';
 import { LetterService } from './letter.service';
-import {
-  CreateLetterUseCase,
-  CreateLetterAsyncDependency,
-  LetterEntity,
-  LetterOptionsEntity,
-  LetterOptionsRepository,
-  LetterRepository,
-} from '../../dependency-injection';
+
+const LetterUseCases = UseCases.LetterUseCases;
+
+/* const { LetterEntity, LetterOptionsEntity } = Repositories;
 
 const { database, host, password, port, username, migrations } = LETTER_DB_ENV;
 
-const { AsyncTypeOrmModule } = NestModules.Typeorm;
+const { AsyncTypeOrmModule } = NestModules.Typeorm; */
 
 @Module({
   imports: [
-    AsyncTypeOrmModule({
+    /* AsyncTypeOrmModule({
       database,
       host,
       migrations,
@@ -29,15 +25,9 @@ const { AsyncTypeOrmModule } = NestModules.Typeorm;
       port,
       username,
     }),
-    TypeOrmModule.forFeature([LetterEntity, LetterOptionsEntity]),
+    TypeOrmModule.forFeature([LetterEntity, LetterOptionsEntity]), */
   ],
   controllers: [LetterController],
-  providers: [
-    CreateLetterAsyncDependency,
-    CreateLetterUseCase,
-    LetterOptionsRepository,
-    LetterRepository,
-    LetterService,
-  ],
+  providers: [LetterUseCases, LetterService],
 })
 export class LetterModule {}
