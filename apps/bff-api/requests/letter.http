@@ -1,0 +1,15 @@
+@url = http://localhost:3003/bff-api
+
+###
+Get {{url}}/health
+
+###
+Post {{url}}/letter
+Content-Type: application/json
+
+{
+    "isFor":"Pepe",
+    "occasion": "Cumpleaños",
+    "relationship": "Amigo",
+    "tone": "friendly"
+}

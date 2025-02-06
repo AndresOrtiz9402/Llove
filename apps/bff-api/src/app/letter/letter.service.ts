@@ -14,7 +14,7 @@ export class LetterService {
   createLetter(createLetterOptionsDto: CreateLetterOptionsDto) {
     return Shared.Infrastructure.Http.post(
       createLetterOptionsDto,
-      this.BFF_ENV.LETTER_API_URL
+      this.BFF_ENV.LETTER_API_URL + '/generate'
     );
   }
 }
