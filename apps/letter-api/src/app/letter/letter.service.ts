@@ -5,7 +5,6 @@ import { UseCases } from '../../dependency-injection';
 
 type LetterUseCases = UseCases.LetterUseCases;
 type CreateLetterOptionsDto = Letter.Infrastructure.Dtos.CreateLetterOptionsDto;
-type InputObj = Letter.Application.UseCase.InputObj;
 
 const LetterUseCases = UseCases.LetterUseCases;
 
@@ -16,15 +15,7 @@ export class LetterService {
     private readonly letterUseCases: LetterUseCases
   ) {}
 
-  createLetter(inputObj: InputObj) {
-    return this.letterUseCases.createLetter(inputObj);
-  }
-
   generateLetter(createLetterOptionsDto: CreateLetterOptionsDto) {
     return this.letterUseCases.generateLetter(createLetterOptionsDto);
-  }
-
-  getAll() {
-    return this.letterUseCases.getAll();
   }
 }

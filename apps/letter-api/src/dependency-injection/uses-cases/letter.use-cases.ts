@@ -12,7 +12,7 @@ type LetterRepository = LetterModels.LetterRepository;
 const { LetterOptionsRepository, LetterRepository } = Repositories;
 
 const chatCompletionsService = Shared.Infrastructure.Openai.chatCompletionsService;
-const { letterCreator, letterGenerator } = Letter.Application.UseCase;
+const { letterGenerator } = Letter.Application.UseCase;
 
 @Injectable()
 export class LetterUseCases {
@@ -26,11 +26,4 @@ export class LetterUseCases {
   readonly generateLetter = letterGenerator(
     chatCompletionsService(new OpenAI({ apiKey: OPENAI_API_KEY }))
   );
-
-  readonly createLetter = letterCreator(this.letterRepository, this.letterOptionsRepository);
-
-  readonly getAll = async () => ({
-    letter: await this.letterRepository.getAll(),
-    letterOptions: await this.letterOptionsRepository.getAll(),
-  });
 }
