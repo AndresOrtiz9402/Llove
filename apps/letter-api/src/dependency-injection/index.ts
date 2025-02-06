@@ -1,2 +1,2 @@
 export * as Repositories from './repositories';
-export * as UseCases from './UseCases';
+export * as UseCases from './uses-cases';

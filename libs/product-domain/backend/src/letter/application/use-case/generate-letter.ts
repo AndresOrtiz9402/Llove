@@ -50,7 +50,6 @@ export const letterGenerator = (
       .returnType<LetterGeneratorResponse>()
       .with({ status: 'success', content: P.string }, data => data)
       .with({ status: 'error', error: P._ }, data => data)
-      .with(P._, data => ({ status: 'invalid', error: badResponseMessage, data }))
-      .exhaustive();
+      .otherwise(data => ({ status: 'invalid', error: badResponseMessage, data }));
   };
 };

@@ -9,7 +9,7 @@ const noStreamCompletions: OpenaiNoStreamCompletions = async (openai, body) => {
   return await openai.chat.completions.create(body);
 };
 
-export const ChatCompletionsService =
+export const chatCompletionsService =
   (openai: OpenAI) =>
   (systemContent: string) =>
   async <UserContent>(userContent: UserContent) => {
