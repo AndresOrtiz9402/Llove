@@ -28,6 +28,8 @@ export const letterGenerator = (
 
       La carta debe tener un membrete, un cuerpo y una despedida.
 
+      El membrete debe incluir un título y el nombre de la persona a quien va dirigida la carta.
+
       Debes retornar un JSON con el siguiente formato:
 
       {
