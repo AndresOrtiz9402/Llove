@@ -88,3 +88,9 @@ And join the Nx community:
 ```sh
 psql -U postgres -c 'CREATE DATABASE letter_db;' -c 'CREATE DATABASE user_db;'
 ```
+
+## bring up all the apps
+
+```sh
+ npx nx run-many --target=serve --all --parallel=10
+```
