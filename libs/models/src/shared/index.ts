@@ -1,3 +1,5 @@
 export * from './base.entity';
-export * as DbConnection from './db-connection.interface';
+export * from './base.input';
 export * from './base.repository';
+
+export * as DbConnection from './db-connection.interface';

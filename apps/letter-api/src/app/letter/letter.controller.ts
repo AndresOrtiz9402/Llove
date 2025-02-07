@@ -1,12 +1,21 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { LetterService } from './letter.service';
 
+import { ILetter } from '@llove/models';
 import { NestModules } from '@llove/backend';
 import { Letter } from '@llove/product-domain/backend';
 
 @Controller('letter')
 export class LetterController {
   constructor(private readonly letterService: LetterService) {}
+
+  @Post('')
+  create(
+    @Body(NestModules.Pipes.SpaceCleanPipe)
+    createLetterDto: ILetter.Infrastructure.SaveLetterInput
+  ) {
+    return this.letterService.saveLetter(createLetterDto);
+  }
 
   @Post('generate')
   generate(

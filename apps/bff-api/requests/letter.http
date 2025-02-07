@@ -1,10 +1,10 @@
 @url = http://localhost:3003/bff-api
 
-###
+### BFF-API Health
 Get {{url}}/health
 
-###
-Post {{url}}/letter
+### Generate letter
+Post {{url}}/letter/generate
 Content-Type: application/json
 
 {
@@ -12,4 +12,24 @@ Content-Type: application/json
     "occasion": "Cumpleaños",
     "relationship": "Amigo",
     "tone": "friendly"
+}
+
+
+### Save Letter
+POST {{url}}/letter
+Content-Type: application/json
+
+{
+    "options":{
+        "isFor":"Pepe",
+        "occasion": "Cumpleaños",
+        "relationship": "Amigo",
+        "tone": "friendly"
+    }, 
+    "letter":{
+        "title": "Querido Pepe",
+        "content": "Estimado Pepe,\n\n¡Feliz cumpleaños! En este día tan especial, quiero que sepas cuánto valoro nuestra amistad. Cada momento que hemos compartido ha sido una aventura y estoy agradecido de tenerte en mi vida.\n\nEspero que este nuevo año venga cargado de felicidad, salud y muchas más memorias juntas. ¡Celebremos a lo grande!\n\nCon cariño,\n\n[Tu Nombre]",
+        "userId": 1,
+        "letterOptionId": 1
+    }
 }

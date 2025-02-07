@@ -1,12 +1,11 @@
 import { IsEnum, IsNotEmpty, IsString, Matches } from 'class-validator';
 
-import { Letter } from '@llove/models';
+import { ILetter } from '@llove/models';
 import { Infrastructure } from '../../../shared';
 
-const { isEnumMessage, isNotEmptyMessage } =
-  Infrastructure.ClassValidator.Helpers;
+const { isEnumMessage, isNotEmptyMessage } = Infrastructure.ClassValidator.Helpers;
 
-const { LetterTone } = Letter;
+const { LetterTone } = ILetter;
 
 const stringPattern = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ][a-zA-ZáéíóúÁÉÍÓÚñÑ\s]*$/;
 
@@ -17,9 +16,7 @@ const { isFor, occasion, relationship } =
     'field cannot contain special characters or start empty'
   );
 
-export class CreateLetterOptionsDto
-  implements Letter.Interface.CreateLetterOptionsDto
-{
+export class CreateLetterOptionsDto implements ILetter.Infrastructure.CreateLetterOptionsDto {
   @IsNotEmpty(isFor.isNotEmptyMessage)
   @IsString(isFor.isStringMessage)
   @Matches(isFor.matches.pattern, isFor.matches.message)
@@ -37,5 +34,5 @@ export class CreateLetterOptionsDto
 
   @IsNotEmpty(isNotEmptyMessage('tone'))
   @IsEnum(LetterTone, isEnumMessage('tone', LetterTone))
-  readonly tone: Letter.LetterToneOptions;
+  readonly tone: ILetter.LetterToneOptions;
 }

@@ -1,4 +1,4 @@
 import { type BaseRepository } from '../shared';
-import { type LetterEntity } from '.';
+import { type Letter } from '.';
 
-export type LetterRepository = BaseRepository<LetterEntity>;
+export type LetterRepository = BaseRepository<Letter>;

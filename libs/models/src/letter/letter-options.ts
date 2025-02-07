@@ -8,7 +8,7 @@ export enum LetterTone {
 
 export type LetterToneOptions = typeof LetterTone;
 
-export interface LetterOptionsEntity extends BaseEntity {
+export interface LetterOptions extends BaseEntity {
   isFor: string;
   occasion: string;
   relationship: string;

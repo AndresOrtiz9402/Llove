@@ -1,10 +1,12 @@
 import { Inject, Injectable } from '@nestjs/common';
 
-import { type Letter } from '@llove/product-domain/backend';
+import { type ILetter } from '@llove/models';
+import { Letter } from '@llove/product-domain/backend';
+
 import { UseCases } from '../../dependency-injection';
 
 type LetterUseCases = UseCases.LetterUseCases;
-type CreateLetterOptionsDto = Letter.Infrastructure.Dtos.CreateLetterOptionsDto;
+type SaveLetterInput = ILetter.Infrastructure.SaveLetterInput;
 
 const LetterUseCases = UseCases.LetterUseCases;
 
@@ -15,7 +17,11 @@ export class LetterService {
     private readonly letterUseCases: LetterUseCases
   ) {}
 
-  generateLetter(createLetterOptionsDto: CreateLetterOptionsDto) {
+  saveLetter(createLetterDto: SaveLetterInput) {
+    return this.letterUseCases.createLetter(createLetterDto);
+  }
+
+  generateLetter(createLetterOptionsDto: Letter.Infrastructure.Dtos.CreateLetterOptionsDto) {
     return this.letterUseCases.generateLetter(createLetterOptionsDto);
   }
 }

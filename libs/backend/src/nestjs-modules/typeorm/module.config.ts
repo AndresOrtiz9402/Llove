@@ -2,20 +2,14 @@ import { DynamicModule } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSourceOptions } from 'typeorm';
 
-import { Shared } from '@llove/models';
+import { IShared } from '@llove/models';
 
-type DbConnectionOptions = Shared.DbConnection.DbConnectionOptions;
-type DbDataSourceOptions = (
-  connectionOptions: DbConnectionOptions
-) => DataSourceOptions;
-type DbConnectionInterface =
-  Shared.DbConnection.DbConnectionInterface<DynamicModule>;
+type DbConnectionOptions = IShared.DbConnection.DbConnectionOptions;
+type DbDataSourceOptions = (connectionOptions: DbConnectionOptions) => DataSourceOptions;
+type DbConnectionInterface = IShared.DbConnection.DbConnectionInterface<DynamicModule>;
 
-const dataSourceOptions: DbDataSourceOptions = (
-  connectionOptions: DbConnectionOptions
-) => {
-  const { database, host, password, port, username, migrations } =
-    connectionOptions;
+const dataSourceOptions: DbDataSourceOptions = (connectionOptions: DbConnectionOptions) => {
+  const { database, host, password, port, username, migrations } = connectionOptions;
 
   return {
     synchronize: false,

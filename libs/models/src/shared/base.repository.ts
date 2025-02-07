@@ -7,9 +7,6 @@ export type BaseRepository<Entity> = {
   create(input: CreateInput<Entity>): Promise<object>;
   getAll(): Promise<object>;
   getById(input: Id): Promise<object>;
-  updateById(input: {
-    id: Id;
-    updateInput: UpdateInput<Entity>;
-  }): Promise<object>;
+  updateById(input: { id: Id; updateInput: UpdateInput<Entity> }): Promise<object>;
   deletedById(input: Id): Promise<object>;
 };

@@ -1,14 +1,9 @@
-import {
-  CreateDateColumn,
-  DeleteDateColumn,
-  Entity,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { CreateDateColumn, DeleteDateColumn, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
-import { type Shared } from '@llove/models';
+import { type IShared } from '@llove/models';
 
 @Entity()
-export abstract class TypeormBaseEntity implements Shared.BaseEntity {
+export abstract class TypeormBaseEntity implements IShared.BaseEntity {
   @PrimaryGeneratedColumn({ name: 'id' })
   id: number;
 

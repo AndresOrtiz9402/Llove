@@ -1,5 +1,5 @@
 import { type OmitBaseEntity } from '../shared';
-import { type UserEntity } from '.';
+import { type User } from '.';
 
-export type CreateUserDto = Omit<UserEntity, OmitBaseEntity>;
+export type CreateUserDto = Omit<User, OmitBaseEntity>;
 export type UpdateUserDto = Partial<CreateUserDto>;

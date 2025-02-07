@@ -1,8 +1,8 @@
 import { match, P } from 'ts-pattern';
 
-import { type Letter } from '@llove/models';
+import { type ILetter } from '@llove/models';
 
-type CreateLetterOptionsDto = Letter.Interface.CreateLetterOptionsDto;
+type CreateLetterOptionsDto = ILetter.Infrastructure.CreateLetterOptionsDto;
 
 export type LetterGeneratorResponse =
   | { status: 'error'; error: Error }
