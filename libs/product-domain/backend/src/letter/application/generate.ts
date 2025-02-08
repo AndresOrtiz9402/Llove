@@ -30,6 +30,9 @@ export const letterGenerator = (
 
       El membrete debe incluir un título y el nombre de la persona a quien va dirigida la carta.
 
+      La carta solo puede contener los caracteres que cumplan con la siguiente regular expression
+      /^[a-zA-ZáéíóúÁÉÍÓÚñÑ][a-zA-ZáéíóúÁÉÍÓÚñÑ\\;,.!¡¿?]*$/
+
       Debes retornar un JSON con el siguiente formato:
 
       {
