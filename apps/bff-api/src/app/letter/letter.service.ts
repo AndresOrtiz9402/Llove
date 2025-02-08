@@ -22,4 +22,8 @@ export class LetterService {
       this.BFF_ENV.LETTER_API_URL + '/letter/generate'
     );
   }
+
+  async getById(id: number) {
+    return (await fetch(this.BFF_ENV.LETTER_API_URL + `/letter/${id}`)).json();
+  }
 }

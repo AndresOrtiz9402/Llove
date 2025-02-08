@@ -28,8 +28,10 @@ Content-Type: application/json
     }, 
     "letter":{
         "title": "Querido Pepe",
-        "content": "Estimado Pepe,\n\n¡Feliz cumpleaños! En este día tan especial, quiero que sepas cuánto valoro nuestra amistad. Cada momento que hemos compartido ha sido una aventura y estoy agradecido de tenerte en mi vida.\n\nEspero que este nuevo año venga cargado de felicidad, salud y muchas más memorias juntas. ¡Celebremos a lo grande!\n\nCon cariño,\n\n[Tu Nombre]",
-        "userId": 1,
-        "letterOptionId": 1
+        "content": "Estimado Pepe,\n\n¡Feliz cumpleaños! En este día tan especial, quiero que sepas cuánto valoro nuestra amistad. Cada momento que hemos compartido ha sido una aventura y estoy agradecido de tenerte en mi vida.\n\nEspero que este nuevo año venga cargado de felicidad, salud y muchas más memorias juntas. ¡Celebremos a lo grande!\n\nCon cariño,\n\nTu Nombre.",
+        "userId": 1
     }
 }
+
+### Get letter by id
+GET {{url}}/letter/8

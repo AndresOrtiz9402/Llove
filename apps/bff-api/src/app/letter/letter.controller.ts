@@ -1,23 +1,26 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, ParseIntPipe, Post } from '@nestjs/common';
 import { LetterService } from './letter.service';
 
 import { NestModules } from '@llove/backend';
 import { Letter } from '@llove/product-domain/backend';
-import { ILetter } from '@llove/models';
 
 const SpaceCleanPipe = NestModules.Pipes.SpaceCleanPipe;
 
 // TODO: Change for DTO
-type CreateLetterOptionsDto = ILetter.Infrastructure.SaveLetterInput;
 
 @Controller('letter')
 export class LetterController {
   constructor(private readonly letterService: LetterService) {}
 
+  @Get(':id')
+  getLetterById(@Param('id', ParseIntPipe) id: number) {
+    return this.letterService.getById(id);
+  }
+
   @Post('')
   saveLetter(
     @Body(SpaceCleanPipe)
-    createLetterOptionsDto: CreateLetterOptionsDto
+    createLetterOptionsDto: Letter.Infrastructure.Dtos.SaveLetterDto
   ) {
     return this.letterService.saveLetter(createLetterOptionsDto);
   }

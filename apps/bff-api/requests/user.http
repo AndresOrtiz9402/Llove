@@ -1,0 +1,32 @@
+@url = http://localhost:3003/bff-api
+
+### BFF-API Health
+Get {{url}}/health
+
+### Create user
+Post {{url}}/user
+Content-Type: application/json
+
+{
+    "name":"Example name",
+    "email": "example@email.com"
+}
+
+### get users
+GET {{url}}/user/all
+
+### get user by id
+GET {{url}}/user/3
+
+
+### delete user by id
+DELETE {{url}}/user/9
+
+
+### update user by id
+PATCH {{url}}/user/9
+Content-Type: application/json
+
+{
+    "name":"Another example name"
+}
