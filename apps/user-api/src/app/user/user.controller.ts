@@ -1,13 +1,4 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  ParseIntPipe,
-  Patch,
-  Post,
-} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post } from '@nestjs/common';
 import { UserService } from './user.service';
 
 import { User } from '@llove/product-domain/backend';
@@ -23,22 +14,22 @@ export class UserController {
     @Body(NestModules.Pipes.SpaceCleanPipe)
     createUserDto: User.Infrastructure.Dtos.CreateUserDto
   ) {
-    return this.userService.createUser(createUserDto);
+    return this.userService.create(createUserDto);
   }
 
   @Get('all')
   async findAll() {
-    return this.userService.findUsers();
+    return this.userService.getAll();
   }
 
   @Get(':id')
   async find(@Param('id', ParseIntPipe) id: number) {
-    return this.userService.findUser(id);
+    return this.userService.getById(id);
   }
 
   @Delete(':id')
   async delete(@Param('id', ParseIntPipe) id: number) {
-    return this.userService.deleteUser(id);
+    return this.userService.deleteById(id);
   }
 
   @Patch(':id')
@@ -46,6 +37,6 @@ export class UserController {
     @Param('id', ParseIntPipe) id: number,
     @Body() updateInput: User.Infrastructure.Dtos.UpdateUserDto
   ) {
-    return this.userService.updateUser(id, updateInput);
+    return this.userService.updateById(id, updateInput);
   }
 }

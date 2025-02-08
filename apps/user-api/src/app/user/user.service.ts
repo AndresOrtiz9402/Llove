@@ -11,23 +11,23 @@ type UpdateUserDto = User.Infrastructure.Dtos.UpdateUserDto;
 export class UserService {
   constructor(private readonly userRepository: UserRepository) {}
 
-  async createUser(createUserDto: CreateUserDto) {
+  async create(createUserDto: CreateUserDto) {
     return await this.userRepository.create(createUserDto);
   }
 
-  async findUsers() {
+  async getAll() {
     return await this.userRepository.getAll();
   }
 
-  async findUser(id: number) {
+  async getById(id: number) {
     return await this.userRepository.getById(id);
   }
 
-  async updateUser(id: number, updateInput: UpdateUserDto) {
+  async updateById(id: number, updateInput: UpdateUserDto) {
     return await this.userRepository.updateById(id, updateInput);
   }
 
-  async deleteUser(id: number) {
+  async deleteById(id: number) {
     return await this.userRepository.deletedById(id);
   }
 }
