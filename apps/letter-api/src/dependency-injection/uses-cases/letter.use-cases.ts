@@ -12,8 +12,7 @@ type LetterRepository = ILetter.LetterRepository;
 const { LetterOptionsRepository, LetterRepository } = Repositories;
 
 const chatCompletionsService = Shared.Infrastructure.Openai.chatCompletionsService;
-const { letterGenerator, makeSaveLetterUseCase: makeCreateLetterUseCase } =
-  Letter.Application.UseCase;
+const { letterGenerator, makeSaveLetterUseCase: makeCreateLetterUseCase } = Letter.Application;
 
 @Injectable()
 export class LetterUseCases {
@@ -32,4 +31,23 @@ export class LetterUseCases {
     letterRepository: this.letterRepository,
     letterOptionsRepository: this.letterOptionsRepository,
   });
+
+  readonly getLetterById = async (id: number) => {
+    try {
+      const letter = await this.letterRepository.getById(id);
+      const options = await this.letterOptionsRepository.getById(
+        letter.status === 'success' ? letter.data.letterOptionId : null
+      );
+
+      return {
+        options,
+        letter,
+      };
+    } catch (error) {
+      return {
+        status: 'fail',
+        error: (error as Error).message,
+      };
+    }
+  };
 }

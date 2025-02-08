@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, ParseIntPipe, Post } from '@nestjs/common';
 import { LetterService } from './letter.service';
 
 import { ILetter } from '@llove/models';
@@ -8,6 +8,11 @@ import { Letter } from '@llove/product-domain/backend';
 @Controller('letter')
 export class LetterController {
   constructor(private readonly letterService: LetterService) {}
+
+  @Get(':id')
+  getById(@Param('id', ParseIntPipe) id: number) {
+    return this.letterService.getById(id);
+  }
 
   @Post('')
   create(

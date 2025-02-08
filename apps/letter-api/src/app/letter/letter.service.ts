@@ -24,4 +24,8 @@ export class LetterService {
   generateLetter(createLetterOptionsDto: Letter.Infrastructure.Dtos.CreateLetterOptionsDto) {
     return this.letterUseCases.generateLetter(createLetterOptionsDto);
   }
+
+  getById(id: number) {
+    return this.letterUseCases.getLetterById(id);
+  }
 }
