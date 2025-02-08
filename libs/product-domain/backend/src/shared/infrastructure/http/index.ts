@@ -1,1 +1,3 @@
-export * from './helpers';
+export * from './delete';
+export * from './patch';
+export * from './post';
