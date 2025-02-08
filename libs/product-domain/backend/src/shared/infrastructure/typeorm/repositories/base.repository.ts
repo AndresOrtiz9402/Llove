@@ -1,17 +1,28 @@
 import { IShared } from '@llove/models';
-import { DeepPartial, FindOptionsWhere, ObjectLiteral, Repository, UpdateResult } from 'typeorm';
+import {
+  DeepPartial,
+  DeleteResult,
+  FindOptionsWhere,
+  ObjectLiteral,
+  Repository,
+  UpdateResult,
+} from 'typeorm';
 
 export class TypeormBaseRepository<Entity> implements IShared.BaseRepository<Entity> {
   constructor(private readonly repository: Repository<Entity & { id: number }>) {}
 
-  async create(input: {
-    [P in Exclude<keyof Entity, IShared.OmitBaseEntity>]: (Entity & { id: number })[P];
-  }): Promise<{ status: 'fail'; error: unknown } | (Entity & { id: number })> {
+  async create(input: { [P in Exclude<keyof Entity, IShared.OmitBaseEntity>]: Entity[P] }): Promise<
+    { status: 'fail'; error: unknown } | { status: 'success'; data: Entity & { id: number } }
+  > {
     try {
       const newLetterOptions = this.repository.create(
         input as DeepPartial<Entity & { id: number }>
       );
-      return await this.repository.save(newLetterOptions);
+      const data = await this.repository.save(newLetterOptions);
+      return {
+        status: 'success',
+        data,
+      };
     } catch (error) {
       return {
         status: 'fail',
@@ -22,18 +33,24 @@ export class TypeormBaseRepository<Entity> implements IShared.BaseRepository<Ent
 
   async deletedById(
     input: IShared.Id
-  ): Promise<{ status: 'success' } | { status: 'fail'; error: unknown }> {
+  ): Promise<{ status: 'success'; data: DeleteResult } | { status: 'fail'; error: unknown }> {
     try {
-      await this.repository.delete(input);
-      return { status: 'success' };
+      const data = await this.repository.delete(input);
+      return { status: 'success', data };
     } catch (error) {
       return { status: 'fail', error };
     }
   }
 
-  async getAll(): Promise<(Entity & { id: number })[] | { status: 'fail'; error: unknown }> {
+  async getAll(): Promise<
+    { status: 'success'; data: (Entity & { id: number })[] } | { status: 'fail'; error: unknown }
+  > {
     try {
-      return await this.repository.find();
+      const data = await this.repository.find();
+      return {
+        status: 'success',
+        data,
+      };
     } catch (error) {
       return { status: 'fail', error };
     }
@@ -41,11 +58,14 @@ export class TypeormBaseRepository<Entity> implements IShared.BaseRepository<Ent
 
   async getById(
     input: IShared.Id
-  ): Promise<{ status: 'fail'; error: unknown } | (Entity & { id: number })> {
+  ): Promise<
+    { status: 'fail'; error: unknown } | { status: 'success'; data: Entity & { id: number } }
+  > {
     try {
-      return await this.repository.findOne({
+      const data = await this.repository.findOne({
         where: { id: input } as FindOptionsWhere<Entity & { id: number }>,
       });
+      return { status: 'success', data };
     } catch (error) {
       return {
         status: 'fail',
