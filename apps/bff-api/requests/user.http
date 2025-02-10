@@ -16,15 +16,15 @@ Content-Type: application/json
 GET {{url}}/user/all
 
 ### get user by id
-GET {{url}}/user/3
+GET {{url}}/user/45
 
 
 ### delete user by id
-DELETE {{url}}/user/9
+DELETE {{url}}/user/45
 
 
 ### update user by id
-PATCH {{url}}/user/9
+PATCH {{url}}/user/47
 Content-Type: application/json
 
 {

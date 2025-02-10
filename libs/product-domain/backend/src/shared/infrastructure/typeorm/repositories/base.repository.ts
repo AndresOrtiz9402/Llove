@@ -10,7 +10,6 @@ import {
 
 export class TypeormBaseRepository<Entity> implements IShared.BaseRepository<Entity> {
   constructor(private readonly repository: Repository<Entity & { id: number }>) {}
-
   async create(input: { [P in Exclude<keyof Entity, IShared.OmitBaseEntity>]: Entity[P] }): Promise<
     { status: 'fail'; error: unknown } | { status: 'success'; data: Entity & { id: number } }
   > {
@@ -19,15 +18,12 @@ export class TypeormBaseRepository<Entity> implements IShared.BaseRepository<Ent
         input as DeepPartial<Entity & { id: number }>
       );
       const data = await this.repository.save(newLetterOptions);
-      return {
-        status: 'success',
-        data,
-      };
+
+      if (!data) return { status: 'fail', error: '404' };
+
+      return { status: 'success', data };
     } catch (error) {
-      return {
-        status: 'fail',
-        error,
-      };
+      return { status: 'fail', error };
     }
   }
 
@@ -36,6 +32,9 @@ export class TypeormBaseRepository<Entity> implements IShared.BaseRepository<Ent
   ): Promise<{ status: 'success'; data: DeleteResult } | { status: 'fail'; error: unknown }> {
     try {
       const data = await this.repository.delete(input);
+
+      if (!data) return { status: 'fail', error: '404' };
+
       return { status: 'success', data };
     } catch (error) {
       return { status: 'fail', error };
@@ -47,10 +46,10 @@ export class TypeormBaseRepository<Entity> implements IShared.BaseRepository<Ent
   > {
     try {
       const data = await this.repository.find();
-      return {
-        status: 'success',
-        data,
-      };
+
+      if (!data) return { status: 'fail', error: '404' };
+
+      return { status: 'success', data };
     } catch (error) {
       return { status: 'fail', error };
     }
@@ -65,20 +64,18 @@ export class TypeormBaseRepository<Entity> implements IShared.BaseRepository<Ent
       const data = await this.repository.findOne({
         where: { id: input } as FindOptionsWhere<Entity & { id: number }>,
       });
+
+      if (!data) return { status: 'fail', error: '404' };
+
       return { status: 'success', data };
     } catch (error) {
-      return {
-        status: 'fail',
-        error,
-      };
+      return { status: 'fail', error };
     }
   }
 
   async updateById(
     id: IShared.Id,
-    updateInput: Partial<{
-      [P in Exclude<keyof Entity, IShared.OmitBaseEntity>]: (Entity & { id: number })[P];
-    }>
+    updateInput: Partial<{ [P in Exclude<keyof Entity, IShared.OmitBaseEntity>]: Entity[P] }>
   ): Promise<{ status: 'success'; data: UpdateResult } | { status: 'fail'; error: unknown }> {
     try {
       const data = await this.repository.update(
@@ -86,15 +83,11 @@ export class TypeormBaseRepository<Entity> implements IShared.BaseRepository<Ent
         updateInput as ObjectLiteral & Entity & { id: number }
       );
 
-      return {
-        status: 'success',
-        data,
-      };
+      if (!data) return { status: 'fail', error: '404' };
+
+      return { status: 'success', data };
     } catch (error) {
-      return {
-        status: 'fail',
-        error,
-      };
+      return { status: 'fail', error };
     }
   }
 }
