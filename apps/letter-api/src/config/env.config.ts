@@ -4,6 +4,7 @@ import { NestModules } from '@llove/backend';
 
 const letterEnv = z.object({
   OPENAI_API_KEY: z.string(),
+  GEMINI_API_KEY: z.string(),
   DB: z.string(),
   DB_USER: z.string(),
   DB_PASSWORD: z.string(),
@@ -11,7 +12,7 @@ const letterEnv = z.object({
   DB_PORT: z.string(),
 });
 
-export const { OPENAI_API_KEY } = letterEnv.parse(process.env);
+export const { OPENAI_API_KEY, GEMINI_API_KEY } = letterEnv.parse(process.env);
 
 const {
   DB: database,

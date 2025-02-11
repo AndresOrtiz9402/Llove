@@ -1,31 +1,37 @@
 import { Inject, Injectable } from '@nestjs/common';
-import OpenAI from 'openai';
+import { GoogleGenerativeAI } from '@google/generative-ai';
 
 import { ILetter } from '@llove/models';
 import { Letter, Shared } from '@llove/product-domain/backend';
-import { OPENAI_API_KEY } from '../../config';
+import { GEMINI_API_KEY } from '../../config';
 import { Repositories } from '..';
 
 type LetterOptionsRepository = ILetter.LetterOptionsRepository;
 type LetterRepository = ILetter.LetterRepository;
+type CreateLetterOptionsDto = Letter.Infrastructure.Dtos.CreateLetterOptionsDto;
+type AiService = Letter.Application.AiService;
 
 const { LetterOptionsRepository, LetterRepository } = Repositories;
-
-const chatCompletionsService = Shared.Infrastructure.Openai.chatCompletionsService;
-const { letterGenerator, makeSaveLetterUseCase: makeCreateLetterUseCase } = Letter.Application;
+const { makeSaveLetterUseCase: makeCreateLetterUseCase, generateLetter } = Letter.Application;
 
 @Injectable()
 export class LetterUseCases {
+  private readonly aiService: AiService;
   constructor(
     @Inject(LetterOptionsRepository)
     private readonly letterOptionsRepository: LetterOptionsRepository,
+
     @Inject(LetterRepository)
     private readonly letterRepository: LetterRepository
-  ) {}
+  ) {
+    this.aiService = new Shared.Infrastructure.Gemini.Service(
+      new GoogleGenerativeAI(GEMINI_API_KEY)
+    ).generate;
+  }
 
-  readonly generateLetter = letterGenerator(
-    chatCompletionsService(new OpenAI({ apiKey: OPENAI_API_KEY }))
-  );
+  readonly generateLetter = (letterOptions: CreateLetterOptionsDto) => {
+    return generateLetter(letterOptions, this.aiService);
+  };
 
   readonly createLetter = makeCreateLetterUseCase({
     letterRepository: this.letterRepository,

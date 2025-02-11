@@ -1,3 +1,4 @@
+export * as Infrastructure from './infrastructure';
 export * from './base.entity';
 export * from './base.input';
 export * from './base.repository';

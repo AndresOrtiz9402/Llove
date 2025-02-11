@@ -15,7 +15,7 @@ export class LetterController {
   }
 
   @Post('')
-  create(
+  async create(
     @Body(NestModules.Pipes.SpaceCleanPipe)
     createLetterDto: ILetter.Infrastructure.SaveLetterInput
   ) {
@@ -23,10 +23,10 @@ export class LetterController {
   }
 
   @Post('generate')
-  generate(
+  async generate(
     @Body(NestModules.Pipes.SpaceCleanPipe)
     createLetterDto: Letter.Infrastructure.Dtos.CreateLetterOptionsDto
   ) {
-    return this.letterService.generateLetter(createLetterDto);
+    return await this.letterService.generateLetter(createLetterDto);
   }
 }

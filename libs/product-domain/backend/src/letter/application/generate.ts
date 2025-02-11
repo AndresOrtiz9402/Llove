@@ -1,60 +1,48 @@
-import { match, P } from 'ts-pattern';
+import { match } from 'ts-pattern';
 
-import { type ILetter } from '@llove/models';
+import type { ILetter, IShared } from '@llove/models';
 
 type CreateLetterOptionsDto = ILetter.Infrastructure.CreateLetterOptionsDto;
 
-export type LetterGeneratorResponse =
-  | { status: 'error'; error: Error }
-  | { status: 'invalid'; error: typeof badResponseMessage }
-  | { status: 'success'; content: string };
+type Letter = Omit<ILetter.Infrastructure.CreateLetterDto, 'userId' | ' letterOptionId'>;
 
-const badResponseMessage = 'The service returned an invalid response.';
+type LetterGeneratorResponse = IShared.Infrastructure.SuccessOrError<
+  string,
+  { letterOptions: CreateLetterOptionsDto; letter: Letter }
+>;
 
-export const letterGenerator = (
-  service: (prompt: string) => (optionsObj: CreateLetterOptionsDto) => Promise<string>
-) => {
+type AiServiceResponse = IShared.Infrastructure.SuccessOrError<string, Letter>;
+
+export type AiService = (prompt: string) => Promise<AiServiceResponse>;
+
+export const generateLetter = async (
+  letterOptions: CreateLetterOptionsDto,
+  aiService: AiService
+): Promise<LetterGeneratorResponse> => {
+  const letterOptionsStringify = JSON.stringify(letterOptions);
+
   const prompt = `
-      Vas a recibir un JSON con el siguiente formato:
+     ${letterOptionsStringify}
 
-      {
-        "isFor": "string" ,
-        "occasion": "string", 
-        "relationship": "string", 
-        "tone": "string",
-      }
-
-      Usaras el JSON que has recibido para generar el contenido de una carta.
+      Usando los datos del JSON anterior genera una carta.
 
       La carta debe tener un membrete, un cuerpo y una despedida.
 
       El membrete debe incluir un título y el nombre de la persona a quien va dirigida la carta.
 
-      La carta solo puede contener los caracteres que cumplan con la siguiente regular expression
-      /^[a-zA-ZáéíóúÁÉÍÓÚñÑ][a-zA-ZáéíóúÁÉÍÓÚñÑ\\;,.!¡¿?]*$/
-
-      Debes retornar un JSON con el siguiente formato:
-
-      {
-      "status": "success",
-      "content": string
-      }
-
-      Si durante la generación de la carta ocurre un error debes retornar un JSON usando el siguiente formato:
-
-      {
-      "status": "error",
-      "error": Error
-      }
+      Debes retornar un JSON usando el siguiente esquema:
+      {title: string;
+      content: string;}
     `;
 
-  return async (optionsObj: CreateLetterOptionsDto) => {
-    const res = JSON.parse(await service(prompt)(optionsObj));
+  const result = await aiService(prompt);
 
-    return match<LetterGeneratorResponse>(res)
-      .returnType<LetterGeneratorResponse>()
-      .with({ status: 'success', content: P.string }, data => data)
-      .with({ status: 'error', error: P._ }, data => data)
-      .otherwise(data => ({ status: 'invalid', error: badResponseMessage, data }));
-  };
+  return match<AiServiceResponse>(result)
+    .returnType<LetterGeneratorResponse>()
+    .with({ status: 'success' }, result => ({
+      status: 'success',
+      data: { letterOptions, letter: result.data },
+    }))
+    .with({ status: 'error' }, data => data)
+    .exhaustive();
 };
