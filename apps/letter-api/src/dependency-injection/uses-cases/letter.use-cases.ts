@@ -6,10 +6,11 @@ import { Letter, Shared } from '@llove/product-domain/backend';
 import { GEMINI_API_KEY } from '../../config';
 import { Repositories } from '..';
 
+type AiService = Letter.Application.AiService;
+type CreateLetterOptionsDto = Letter.Infrastructure.Dtos.CreateLetterOptionsDto;
+type Letter = Letter.Application.Letter;
 type LetterOptionsRepository = ILetter.LetterOptionsRepository;
 type LetterRepository = ILetter.LetterRepository;
-type CreateLetterOptionsDto = Letter.Infrastructure.Dtos.CreateLetterOptionsDto;
-type AiService = Letter.Application.AiService;
 
 const { LetterOptionsRepository, LetterRepository } = Repositories;
 const { makeSaveLetterUseCase: makeCreateLetterUseCase, generateLetter } = Letter.Application;
@@ -24,7 +25,7 @@ export class LetterUseCases {
     @Inject(LetterRepository)
     private readonly letterRepository: LetterRepository
   ) {
-    this.aiService = new Shared.Infrastructure.Gemini.Service(
+    this.aiService = new Shared.Infrastructure.Gemini.Service<Letter>(
       new GoogleGenerativeAI(GEMINI_API_KEY)
     ).generate;
   }

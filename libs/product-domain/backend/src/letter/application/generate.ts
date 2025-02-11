@@ -4,16 +4,14 @@ import type { ILetter, IShared } from '@llove/models';
 
 type CreateLetterOptionsDto = ILetter.Infrastructure.CreateLetterOptionsDto;
 
-type Letter = Omit<ILetter.Infrastructure.CreateLetterDto, 'userId' | ' letterOptionId'>;
-
 type LetterGeneratorResponse = IShared.Infrastructure.SuccessOrError<
   string,
   { letterOptions: CreateLetterOptionsDto; letter: Letter }
 >;
 
-type AiServiceResponse = IShared.Infrastructure.SuccessOrError<string, Letter>;
+export type Letter = Omit<ILetter.Infrastructure.CreateLetterDto, 'userId' | ' letterOptionId'>;
 
-export type AiService = (prompt: string) => Promise<AiServiceResponse>;
+export type AiService = IShared.Infrastructure.AiService<string, Letter>;
 
 export const generateLetter = async (
   letterOptions: CreateLetterOptionsDto,
@@ -37,7 +35,7 @@ export const generateLetter = async (
 
   const result = await aiService(prompt);
 
-  return match<AiServiceResponse>(result)
+  return match(result)
     .returnType<LetterGeneratorResponse>()
     .with({ status: 'success' }, result => ({
       status: 'success',
