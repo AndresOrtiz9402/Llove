@@ -26,9 +26,9 @@ export class SaveLetterTransaction implements ILetter.SaveLetterTransaction.Tran
         return { letterOptions, createdLetter };
       });
 
-      return { status: 'success', data };
+      return { status: 'Transaction committed.', data };
     } catch (error) {
-      return { status: 'error', error: (error as Error).message };
+      return { status: 'Transaction rolled back.', error: (error as Error).message };
     }
   };
 }
