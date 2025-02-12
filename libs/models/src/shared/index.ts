@@ -1,6 +1,8 @@
-export * as Infrastructure from './infrastructure';
+export * from './base.ai-service';
 export * from './base.entity';
 export * from './base.input';
 export * from './base.repository';
 
 export * as DbConnection from './db-connection.interface';
+export * as SuccessOrError from './success-or-error.interface';
+export * as Transactions from './base.transaction';
