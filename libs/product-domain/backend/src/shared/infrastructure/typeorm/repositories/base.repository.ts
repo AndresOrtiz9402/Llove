@@ -14,10 +14,8 @@ export class TypeormBaseRepository<Entity> implements IShared.BaseRepository<Ent
     { status: 'fail'; error: unknown } | { status: 'success'; data: Entity & { id: number } }
   > {
     try {
-      const newLetterOptions = this.repository.create(
-        input as DeepPartial<Entity & { id: number }>
-      );
-      const data = await this.repository.save(newLetterOptions);
+      const newEntity = this.repository.create(input as DeepPartial<Entity & { id: number }>);
+      const data = await this.repository.save(newEntity);
 
       if (!data) return { status: 'fail', error: '404' };
 
