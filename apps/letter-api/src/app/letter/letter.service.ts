@@ -18,7 +18,7 @@ export class LetterService {
   ) {}
 
   saveLetter(createLetterDto: SaveLetterInput) {
-    return this.letterUseCases.createLetter(createLetterDto);
+    return this.letterUseCases.saveLetter(createLetterDto);
   }
 
   generateLetter(createLetterOptionsDto: Letter.Infrastructure.Dtos.CreateLetterOptionsDto) {

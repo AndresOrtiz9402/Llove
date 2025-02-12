@@ -1,23 +1,18 @@
 import { match } from 'ts-pattern';
 
-import type { ILetter, IShared } from '@llove/models';
+import type { ILetter } from '@llove/models';
 
 type CreateLetterOptionsDto = ILetter.Infrastructure.CreateLetterOptionsDto;
 
-type LetterGeneratorResponse = IShared.Infrastructure.SuccessOrError<
-  string,
-  { letterOptions: CreateLetterOptionsDto; letter: Letter }
->;
+type AiService = ILetter.Infrastructure.GenerateLetter.AiService;
 
-export type Letter = Omit<ILetter.Infrastructure.CreateLetterDto, 'userId' | ' letterOptionId'>;
-
-export type AiService = IShared.Infrastructure.AiService<string, Letter>;
+type LetterGeneratorResponse = ILetter.Infrastructure.GenerateLetter.GeneratorResponse;
 
 export const generateLetter = async (
-  letterOptions: CreateLetterOptionsDto,
+  options: CreateLetterOptionsDto,
   aiService: AiService
 ): Promise<LetterGeneratorResponse> => {
-  const letterOptionsStringify = JSON.stringify(letterOptions);
+  const letterOptionsStringify = JSON.stringify(options);
 
   const prompt = `
      ${letterOptionsStringify}
@@ -31,16 +26,19 @@ export const generateLetter = async (
       Debes retornar un JSON usando el siguiente esquema:
       {title: string;
       content: string;}
+
+      Si ocurre algún error devuelve el siguiente mensaje:
+      "Error: No se pudo generar la carta."
     `;
 
-  const result = await aiService(prompt);
+  const result = await aiService.generate(prompt);
 
   return match(result)
     .returnType<LetterGeneratorResponse>()
     .with({ status: 'success' }, result => ({
       status: 'success',
-      data: { letterOptions, letter: result.data },
+      data: { options, letter: result.data },
     }))
-    .with({ status: 'error' }, data => data)
+    .with({ status: 'error' }, result => result)
     .exhaustive();
 };
