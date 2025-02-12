@@ -2,9 +2,7 @@ import { GenerativeModel, GoogleGenerativeAI } from '@google/generative-ai';
 
 import { IShared } from '@llove/models';
 
-type AiService<R> = IShared.Infrastructure.AiService<string, R>;
-
-export class Service<R> {
+export class AiServiceMaker<R> implements IShared.AiServiceMaker<R> {
   private readonly model: GenerativeModel;
 
   constructor(private readonly genAI: GoogleGenerativeAI) {
@@ -13,7 +11,7 @@ export class Service<R> {
     });
   }
 
-  readonly generate: AiService<R> = async prompt => {
+  readonly generate: IShared.AiService<R> = async prompt => {
     try {
       const result = (await this.model.generateContent(prompt)).response.text().slice(7, -4);
 
