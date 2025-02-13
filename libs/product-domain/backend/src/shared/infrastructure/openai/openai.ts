@@ -6,6 +6,8 @@ import {
   type ChatCompletionCreateParamsNonStreaming,
 } from './interface';
 
+const { ERROR, SUCCESS } = IShared.Interfaces.SuccessOrError.STATUS;
+
 const noStreamCompletions: OpenaiNoStreamCompletions = async (openai, body) => {
   return await openai.chat.completions.create(body);
 };
@@ -29,9 +31,9 @@ export class AiServiceMaker<R> implements IShared.AiServiceMaker<R> {
 
       const data = JSON.parse(completions.choices[0].message.content.slice(7, -4));
 
-      return { status: 'success', data };
+      return { status: SUCCESS, data };
     } catch (error) {
-      return { status: 'error', error: (error as Error).message };
+      return { status: ERROR, error: (error as Error).message };
     }
   };
 }

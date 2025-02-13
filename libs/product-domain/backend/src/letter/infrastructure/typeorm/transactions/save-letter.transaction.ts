@@ -1,7 +1,9 @@
 import { DataSource } from 'typeorm';
 
-import { ILetter } from '@llove/models';
+import { ILetter, IShared } from '@llove/models';
 import { LetterEntity, LetterOptionsEntity } from '../entities';
+
+const { COMMITTED, ROLLED_BACK } = IShared.Transactions.TRANSACTION;
 
 type SaveLetterInput = ILetter.Infrastructure.SaveLetterInput;
 
@@ -26,9 +28,9 @@ export class SaveLetterTransaction implements ILetter.SaveLetterTransaction.Tran
         return { letterOptions, createdLetter };
       });
 
-      return { status: 'Transaction committed.', data };
+      return { status: COMMITTED, data };
     } catch (error) {
-      return { status: 'Transaction rolled back.', error: (error as Error).message };
+      return { status: ROLLED_BACK, error: (error as Error).message };
     }
   };
 }

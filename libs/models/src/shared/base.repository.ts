@@ -1,4 +1,5 @@
-import { type OmitBaseEntity, type Id } from '.';
+import type { OmitBaseEntity, Id } from '.';
+import { Interfaces } from '.';
 
 type BaseEntity<Entity, Id> = Entity & { id: Id };
 
@@ -6,23 +7,21 @@ type Input<Entity, OmitBase> = {
   [P in Exclude<keyof Entity, OmitBase>]: Entity[P];
 };
 
-type SuccessfulResult<Entity, Id> = { status: 'success'; data: BaseEntity<Entity, Id> };
-
-type FailureResult = { status: 'fail'; error: unknown };
-
-type EitherResult<Entity, Id> = SuccessfulResult<Entity, Id> | FailureResult;
+type SuccessOrError<L, R> = Interfaces.SuccessOrError.SuccessOrError<L, R>;
 
 export type BaseRepository<Entity> = {
-  create(input: Input<Entity, OmitBaseEntity>): Promise<EitherResult<Entity, Id>>;
+  create<L>(
+    input: Input<Entity, OmitBaseEntity>
+  ): Promise<SuccessOrError<L, BaseEntity<Entity, Id>>>;
 
-  deletedById(input: Id): Promise<{ status: 'success'; data: unknown } | FailureResult>;
+  deletedById(input: Id): Promise<SuccessOrError<unknown, unknown>>;
 
-  getAll(): Promise<{ status: 'success'; data: BaseEntity<Entity, Id>[] } | FailureResult>;
+  getAll<L>(): Promise<SuccessOrError<L, BaseEntity<Entity, Id>[]>>;
 
-  getById(input: Id): Promise<EitherResult<Entity, Id>>;
+  getById<L>(input: Id): Promise<SuccessOrError<L, BaseEntity<Entity, Id>>>;
 
   updateById(
     id: Id,
     updateInput: Partial<Input<Entity, OmitBaseEntity>>
-  ): Promise<{ status: 'success'; data: unknown } | FailureResult>;
+  ): Promise<SuccessOrError<unknown, unknown>>;
 };

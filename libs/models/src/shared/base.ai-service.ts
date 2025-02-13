@@ -1,6 +1,8 @@
-import { SuccessOrError } from '.';
+import { Interfaces } from '.';
 
-export type AiService<R> = (prompt: string) => Promise<SuccessOrError.SuccessOrError<string, R>>;
+type SuccessOrError<L, R> = Interfaces.SuccessOrError.SuccessOrError<L, R>;
+
+export type AiService<R> = (prompt: string) => Promise<SuccessOrError<string, R>>;
 
 export interface AiServiceMaker<R> {
   generate: AiService<R>;

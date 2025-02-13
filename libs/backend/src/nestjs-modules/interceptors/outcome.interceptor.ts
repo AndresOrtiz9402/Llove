@@ -1,3 +1,4 @@
+import { IShared } from '@llove/models';
 import { HttpStatus } from '@nestjs/common';
 import { Response } from 'express';
 
@@ -37,15 +38,13 @@ export class ErrorMapper {
   };
 }
 
-type FailResult<L> = { status: 'fail'; error: L };
-
-type SuccessResult<R> = { status: 'success'; data: R };
-
-type InitialResult<L, R> = FailResult<L> | SuccessResult<R>;
+type InitialResult<L, R> = IShared.Interfaces.SuccessOrError.SuccessOrError<L, R>;
 
 type LeftHandler = <L>(error: L) => string | number;
 
 type RightHandler = <T, R>(data: T) => R;
+
+const { ERROR, SUCCESS } = IShared.Interfaces.SuccessOrError.STATUS;
 
 const makeFail = <L>(error: L, handler: LeftHandler): string | number =>
   handler ? handler(error as L) : (error as string | number);
@@ -89,7 +88,7 @@ export class OutcomeInterceptor {
     const { status } = initialResult;
 
     const adaptedResult =
-      status === 'fail'
+      status === ERROR
         ? {
             status,
             error: makeFail(initialResult.error, options?.leftHandler),
@@ -99,10 +98,10 @@ export class OutcomeInterceptor {
             data: makeSuccess(initialResult.data, options?.rightHandler),
           };
 
-    if (adaptedResult.status === 'success')
+    if (adaptedResult.status === SUCCESS)
       return httpResponseServices.status(httpStatusIfSuccess).json(adaptedResult);
 
-    if (adaptedResult.status === 'fail') {
+    if (adaptedResult.status === ERROR) {
       const { status, errorMessage } = this.getError(adaptedResult.error);
       return httpResponseServices.status(status).json(errorMessage);
     }
@@ -111,4 +110,4 @@ export class OutcomeInterceptor {
   };
 }
 
-//TODO: convert this into an interceptor.
+//TODO: convert this into an nestjs interceptor.

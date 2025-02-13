@@ -1,8 +1,6 @@
-import { SuccessOrError, Transactions } from '../shared';
+import { Transactions } from '../shared';
 import { SaveLetterInput, SaveLetterOutPut } from './infrastructure';
 
-export type TransactionResults =
-  | SuccessOrError.CustomFail<string>
-  | SuccessOrError.CustomSuccess<SaveLetterOutPut>;
+export type TransactionResults = Transactions.RollbackOrCommit<string, SaveLetterOutPut>;
 
-export type Transaction = Transactions.BaseTransaction<SaveLetterInput, SaveLetterOutPut>;
+export type Transaction = Transactions.BaseTransaction<SaveLetterInput, string, SaveLetterOutPut>;

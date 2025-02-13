@@ -16,7 +16,7 @@ Content-Type: application/json
 GET {{url}}/user/all
 
 ### get user by id
-GET {{url}}/user/45
+GET {{url}}/user/47
 
 
 ### delete user by id

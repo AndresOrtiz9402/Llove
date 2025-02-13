@@ -1,91 +1,89 @@
 import { IShared } from '@llove/models';
 import {
   DeepPartial,
-  DeleteResult,
   FindOptionsWhere,
   ObjectLiteral,
   Repository,
   UpdateResult,
+  DeleteResult,
 } from 'typeorm';
+
+type Fail<L> = IShared.Interfaces.SuccessOrError.Fail<L>;
+type Success<R> = IShared.Interfaces.SuccessOrError.Success<R>;
+
+const { SUCCESS, ERROR } = IShared.Interfaces.SuccessOrError.STATUS;
 
 export class TypeormBaseRepository<Entity> implements IShared.BaseRepository<Entity> {
   constructor(private readonly repository: Repository<Entity & { id: number }>) {}
-  async create(input: { [P in Exclude<keyof Entity, IShared.OmitBaseEntity>]: Entity[P] }): Promise<
-    { status: 'fail'; error: unknown } | { status: 'success'; data: Entity & { id: number } }
-  > {
+
+  async create<L>(input: {
+    [P in Exclude<keyof Entity, IShared.OmitBaseEntity>]: Entity[P];
+  }): Promise<Fail<L> | Success<Entity & { id: number }>> {
     try {
       const newEntity = this.repository.create(input as DeepPartial<Entity & { id: number }>);
       const data = await this.repository.save(newEntity);
 
-      if (!data) return { status: 'fail', error: '404' };
+      if (!data) return { status: ERROR, error: '404' as L };
 
-      return { status: 'success', data };
+      return { status: SUCCESS, data };
     } catch (error) {
-      return { status: 'fail', error };
+      return { status: ERROR, error };
     }
   }
 
-  async deletedById(
-    input: IShared.Id
-  ): Promise<{ status: 'success'; data: DeleteResult } | { status: 'fail'; error: unknown }> {
+  async deletedById(input: IShared.Id): Promise<Fail<unknown> | Success<DeleteResult>> {
     try {
       const data = await this.repository.delete(input);
 
-      if (!data) return { status: 'fail', error: '404' };
+      if (!data) return { status: ERROR, error: '404' };
 
-      return { status: 'success', data };
+      return { status: SUCCESS, data: data as DeleteResult };
     } catch (error) {
-      return { status: 'fail', error };
+      return { status: ERROR, error };
     }
   }
 
-  async getAll(): Promise<
-    { status: 'success'; data: (Entity & { id: number })[] } | { status: 'fail'; error: unknown }
-  > {
+  async getAll<L>(): Promise<Fail<L> | Success<(Entity & { id: number })[]>> {
     try {
       const data = await this.repository.find();
 
-      if (!data) return { status: 'fail', error: '404' };
+      if (!data) return { status: ERROR, error: '404' as L };
 
-      return { status: 'success', data };
+      return { status: SUCCESS, data };
     } catch (error) {
-      return { status: 'fail', error };
+      return { status: ERROR, error };
     }
   }
 
-  async getById(
-    input: IShared.Id
-  ): Promise<
-    { status: 'fail'; error: unknown } | { status: 'success'; data: Entity & { id: number } }
-  > {
+  async getById<L>(input: IShared.Id): Promise<Success<Entity & { id: number }> | Fail<L>> {
     try {
       const data = await this.repository.findOne({
         where: { id: input } as FindOptionsWhere<Entity & { id: number }>,
       });
 
-      if (!data) return { status: 'fail', error: '404' };
+      if (!data) return { status: ERROR, error: '404' as L };
 
-      return { status: 'success', data };
+      return { status: SUCCESS, data };
     } catch (error) {
-      return { status: 'fail', error };
+      return { status: ERROR, error };
     }
   }
 
   async updateById(
     id: IShared.Id,
     updateInput: Partial<{ [P in Exclude<keyof Entity, IShared.OmitBaseEntity>]: Entity[P] }>
-  ): Promise<{ status: 'success'; data: UpdateResult } | { status: 'fail'; error: unknown }> {
+  ): Promise<Fail<unknown> | Success<UpdateResult>> {
     try {
       const data = await this.repository.update(
         id,
         updateInput as ObjectLiteral & Entity & { id: number }
       );
 
-      if (!data) return { status: 'fail', error: '404' };
+      if (!data) return { status: ERROR, error: '404' };
 
-      return { status: 'success', data };
+      return { status: SUCCESS, data };
     } catch (error) {
-      return { status: 'fail', error };
+      return { status: ERROR, error };
     }
   }
 }

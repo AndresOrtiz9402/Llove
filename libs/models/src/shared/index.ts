@@ -4,5 +4,5 @@ export * from './base.input';
 export * from './base.repository';
 
 export * as DbConnection from './db-connection.interface';
-export * as SuccessOrError from './success-or-error.interface';
+export * as Interfaces from './interfaces';
 export * as Transactions from './base.transaction';

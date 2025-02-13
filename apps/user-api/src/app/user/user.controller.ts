@@ -15,10 +15,12 @@ import {
 import { UserService } from './user.service';
 
 import { User, Shared } from '@llove/product-domain/backend';
-
 import { NestModules } from '@llove/backend';
+import { IShared } from '@llove/models';
 
 type CreateErrors = Shared.Infrastructure.Typeorm.Errors.CreateErrors;
+
+const { ERROR, SUCCESS } = IShared.Interfaces.SuccessOrError.STATUS;
 
 const { mappedErrors } = Shared.Infrastructure.Typeorm.Errors;
 
@@ -86,8 +88,8 @@ export class UserController {
       httpResponseServices,
       options: {
         inputHandler(value) {
-          return value.status === 'success' && value.data.affected === 0
-            ? { status: 'fail', error: '404' }
+          return value.status === SUCCESS && value.data.affected === 0
+            ? { status: ERROR, error: '404' }
             : value;
         },
         leftHandler: error => (error === '404' ? 404 : 500),
@@ -109,8 +111,8 @@ export class UserController {
       httpResponseServices,
       options: {
         inputHandler(value) {
-          return value.status === 'success' && value.data.affected === 0
-            ? { status: 'fail', error: '404' }
+          return value.status === SUCCESS && value.data.affected === 0
+            ? { status: ERROR, error: '404' }
             : value;
         },
         leftHandler: error => (error === '404' ? 404 : 500),

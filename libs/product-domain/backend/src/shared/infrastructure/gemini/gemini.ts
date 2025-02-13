@@ -2,6 +2,8 @@ import { GenerativeModel, GoogleGenerativeAI } from '@google/generative-ai';
 
 import { IShared } from '@llove/models';
 
+const { ERROR, SUCCESS } = IShared.Interfaces.SuccessOrError.STATUS;
+
 export class AiServiceMaker<R> implements IShared.AiServiceMaker<R> {
   private readonly model: GenerativeModel;
 
@@ -17,9 +19,9 @@ export class AiServiceMaker<R> implements IShared.AiServiceMaker<R> {
 
       const data = JSON.parse(result);
 
-      return { status: 'success', data };
+      return { status: SUCCESS, data };
     } catch (error) {
-      return { status: 'error', error };
+      return { status: ERROR, error };
     }
   };
 }

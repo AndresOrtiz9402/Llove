@@ -1,12 +1,14 @@
 import { match } from 'ts-pattern';
 
-import type { ILetter } from '@llove/models';
+import { ILetter, IShared } from '@llove/models';
 
 type CreateLetterOptionsDto = ILetter.Infrastructure.CreateLetterOptionsDto;
 
 type AiService = ILetter.Infrastructure.GenerateLetter.AiService;
 
 type LetterGeneratorResponse = ILetter.Infrastructure.GenerateLetter.GeneratorResponse;
+
+const { ERROR, SUCCESS } = IShared.Interfaces.SuccessOrError.STATUS;
 
 export const generateLetter = async (
   options: CreateLetterOptionsDto,
@@ -35,10 +37,10 @@ export const generateLetter = async (
 
   return match(result)
     .returnType<LetterGeneratorResponse>()
-    .with({ status: 'success' }, result => ({
-      status: 'success',
+    .with({ status: SUCCESS }, result => ({
+      status: SUCCESS,
       data: { options, letter: result.data },
     }))
-    .with({ status: 'error' }, result => result)
+    .with({ status: ERROR }, result => result)
     .exhaustive();
 };
