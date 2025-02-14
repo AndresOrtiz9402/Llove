@@ -1,14 +1,16 @@
-import { Repository } from 'typeorm';
+import type { Repository } from 'typeorm';
 
-import { type ILetter } from '@llove/models';
-import { type LetterEntity } from '../entities';
+import type { ILetter, IShared } from '@llove/models';
+import type { LetterEntity } from '../entities';
 import { Infrastructure } from '../../../../shared';
+
+export type LetterQueryObj = IShared.DataAccess.Query.QueryObj<LetterEntity>;
 
 export class LetterRepository
   extends Infrastructure.Typeorm.Repositories.TypeormBaseRepository<LetterEntity>
   implements ILetter.LetterRepository
 {
-  constructor(private readonly letterRepository: Repository<LetterEntity>) {
+  constructor(letterRepository: Repository<LetterEntity>) {
     super(letterRepository);
   }
 }

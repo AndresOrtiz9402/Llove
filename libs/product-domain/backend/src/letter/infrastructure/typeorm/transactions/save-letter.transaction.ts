@@ -3,7 +3,7 @@ import { DataSource } from 'typeorm';
 import { ILetter, IShared } from '@llove/models';
 import { LetterEntity, LetterOptionsEntity } from '../entities';
 
-const { COMMITTED, ROLLED_BACK } = IShared.Transactions.TRANSACTION;
+const { COMMITTED, ROLLED_BACK } = IShared.DataAccess.Transactions.TRANSACTION;
 
 type SaveLetterInput = ILetter.Infrastructure.SaveLetterInput;
 
