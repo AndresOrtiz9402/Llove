@@ -1,4 +1,4 @@
-import { type BaseRepository } from '../shared';
-import { type LetterOptions } from '.';
+import type { DataAccess } from '../shared';
+import type { LetterOptions } from '.';
 
-export type LetterOptionsRepository = BaseRepository<LetterOptions>;
+export type LetterOptionsRepository = DataAccess.BaseRepository<LetterOptions>;

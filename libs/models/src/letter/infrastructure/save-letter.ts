@@ -1,6 +1,6 @@
-import { ILetter } from '@llove/models';
-import { CreateLetterOptionInput } from './letter-options-inputs';
-import { CreateLetterInput } from '.';
+import type { CreateLetterOptionInput } from './letter-options-inputs';
+import type { CreateLetterInput } from '.';
+import type { Letter, LetterOptions } from '..';
 
 export type SaveLetterInput = {
   options: CreateLetterOptionInput;
@@ -8,6 +8,6 @@ export type SaveLetterInput = {
 };
 
 export type SaveLetterOutPut = {
-  letterOptions: ILetter.LetterOptions;
-  createdLetter: ILetter.Letter;
+  letterOptions: LetterOptions;
+  createdLetter: Letter;
 };

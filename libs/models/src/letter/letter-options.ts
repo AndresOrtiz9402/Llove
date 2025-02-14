@@ -1,4 +1,4 @@
-import { type BaseEntity } from '../shared';
+import type { BaseEntity } from '../shared';
 
 export enum LetterTone {
   friendly = 'friendly',

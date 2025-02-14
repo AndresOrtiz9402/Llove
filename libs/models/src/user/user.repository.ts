@@ -1,4 +1,4 @@
-import { type BaseRepository } from '../shared';
-import { type User } from '.';
+import type { DataAccess } from '../shared';
+import type { User } from '.';
 
-export type UserRepository = BaseRepository<User>;
+export type UserRepository = DataAccess.BaseRepository<User>;
