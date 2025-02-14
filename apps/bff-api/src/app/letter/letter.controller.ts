@@ -1,20 +1,31 @@
-import { Body, Controller, Get, Param, ParseIntPipe, Post } from '@nestjs/common';
+import { Body, Controller, Get, Headers, Post, Query } from '@nestjs/common';
 import { LetterService } from './letter.service';
 
 import { NestModules } from '@llove/backend';
-import { Letter } from '@llove/product-domain/backend';
+import { Letter, Shared } from '@llove/product-domain/backend';
 
 const SpaceCleanPipe = NestModules.Pipes.SpaceCleanPipe;
 
-// TODO: Change for DTO
+const { QueryObj } = Shared.Infrastructure.Http;
 
 @Controller('letter')
 export class LetterController {
   constructor(private readonly letterService: LetterService) {}
 
-  @Get(':id')
-  getLetterById(@Param('id', ParseIntPipe) id: number) {
-    return this.letterService.getById(id);
+  @Get('')
+  getLetters(
+    @Query() query: { p: 1; l: 10; ft: string; ts: 'a'; ds: 'a' },
+    @Headers('user-id') userId: string
+  ) {
+    const newQuery = QueryObj.makeQuery({
+      p: query?.p ?? 1,
+      l: query?.l ?? 10,
+      ft: query?.ft,
+      ts: query?.ts ?? 'a',
+      ds: query?.ds ?? 'a',
+    });
+
+    return this.letterService.getPage(userId, newQuery);
   }
 
   @Post('')

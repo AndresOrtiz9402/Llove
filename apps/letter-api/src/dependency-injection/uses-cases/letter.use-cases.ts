@@ -3,10 +3,10 @@ import { GoogleGenerativeAI } from '@google/generative-ai';
 
 import { ILetter } from '@llove/models';
 import { Letter, Shared } from '@llove/product-domain/backend';
-import { GEMINI_API_KEY, OPENAI_API_KEY } from '../../config';
+import { GEMINI_API_KEY /* OPENAI_API_KEY */ } from '../../config';
 import { Repositories } from '..';
 import { DataSource } from 'typeorm';
-import OpenAI from 'openai';
+/* import OpenAI from 'openai'; */
 
 //generate letter
 type CreateLetterOptionsDto = Letter.Infrastructure.Dtos.CreateLetterOptionsDto;
@@ -20,6 +20,9 @@ type LetterRepository = ILetter.LetterRepository;
 //save letter
 type SaveLetterInput = ILetter.Infrastructure.SaveLetterInput;
 type SaveLetterTransaction = ILetter.SaveLetterTransaction.Transaction;
+
+//get page
+type LetterQueryObj = Letter.Infrastructure.Typeorm.Repository.LetterQueryObj;
 
 const { SaveLetterTransaction } = Letter.Infrastructure.Typeorm.Transactions;
 const { LetterOptionsRepository, LetterRepository } = Repositories;
@@ -52,6 +55,10 @@ export class LetterUseCases {
     return generateLetter(letterOptions, this.aiService);
   };
 
+  readonly getAll = async () => {
+    return await this.letterRepository.getAll();
+  };
+
   readonly getLetterById = async (id: number) => {
     try {
       const letter = await this.letterRepository.getById(id);
@@ -70,6 +77,9 @@ export class LetterUseCases {
       };
     }
   };
+
+  readonly getLettersPage = async (queryObj: LetterQueryObj) =>
+    await this.letterRepository.getPage(queryObj);
 
   readonly saveLetter = (input: SaveLetterInput) => saveLetter(input, this.saveLetterTransaction);
 }

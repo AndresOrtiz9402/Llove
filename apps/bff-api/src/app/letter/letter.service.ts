@@ -5,8 +5,8 @@ import { Shared, Letter } from '@llove/product-domain/backend';
 
 import { Config } from '../..';
 
-type CreateLetterOptionsDto = Letter.Infrastructure.Dtos.CreateLetterOptionsDto;
 type BFF_ENV = Config.BFF_ENV;
+type CreateLetterOptionsDto = Letter.Infrastructure.Dtos.CreateLetterOptionsDto;
 
 @Injectable()
 export class LetterService {
@@ -25,5 +25,15 @@ export class LetterService {
 
   async getById(id: number) {
     return (await fetch(this.BFF_ENV.LETTER_API_URL + `/letter/${id}`)).json();
+  }
+
+  async getPage(userId: string, query: string) {
+    return (
+      await fetch(this.BFF_ENV.LETTER_API_URL + '/letter' + query, {
+        headers: {
+          'user-id': userId,
+        },
+      })
+    ).json();
   }
 }
