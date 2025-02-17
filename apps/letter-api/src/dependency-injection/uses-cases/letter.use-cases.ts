@@ -1,21 +1,17 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { GoogleGenerativeAI } from '@google/generative-ai';
+import { DataSource } from 'typeorm';
 
-import { ILetter } from '@llove/models';
+import { ILetter, IShared } from '@llove/models';
 import { Letter, Shared } from '@llove/product-domain/backend';
 import { GEMINI_API_KEY /* OPENAI_API_KEY */ } from '../../config';
 import { Repositories } from '..';
-import { DataSource } from 'typeorm';
 /* import OpenAI from 'openai'; */
 
 //generate letter
-type CreateLetterOptionsDto = Letter.Infrastructure.Dtos.CreateLetterOptionsDto;
 type AiService = ILetter.Infrastructure.GenerateLetter.AiService;
+type CreateLetterOptionsDto = Letter.Infrastructure.Dtos.CreateLetterOptionsDto;
 type GeneratedLetter = ILetter.Infrastructure.GenerateLetter.GeneratedLetter;
-
-//get letter by id
-type LetterOptionsRepository = ILetter.LetterOptionsRepository;
-type LetterRepository = ILetter.LetterRepository;
 
 //save letter
 type SaveLetterInput = ILetter.Infrastructure.SaveLetterInput;
@@ -24,8 +20,8 @@ type SaveLetterTransaction = ILetter.SaveLetterTransaction.Transaction;
 //get page
 type LetterQueryObj = Letter.Infrastructure.Typeorm.Repository.LetterQueryObj;
 
+const { ERROR, SUCCESS } = IShared.Interfaces.SuccessOrError.STATUS;
 const { SaveLetterTransaction } = Letter.Infrastructure.Typeorm.Transactions;
-const { LetterOptionsRepository, LetterRepository } = Repositories;
 const { generateLetter, saveLetter } = Letter.Application;
 
 @Injectable()
@@ -34,11 +30,8 @@ export class LetterUseCases {
   private readonly saveLetterTransaction: SaveLetterTransaction;
 
   constructor(
-    @Inject(LetterOptionsRepository)
-    private readonly letterOptionsRepository: LetterOptionsRepository,
-
-    @Inject(LetterRepository)
-    private readonly letterRepository: LetterRepository,
+    private readonly letterOptionsRepository: Repositories.LetterOptionsRepository,
+    private readonly letterRepository: Repositories.LetterRepository,
     private readonly dataSource: DataSource
   ) {
     this.aiService = new Shared.Infrastructure.Gemini.AiServiceMaker<GeneratedLetter>(
@@ -63,7 +56,7 @@ export class LetterUseCases {
     try {
       const letter = await this.letterRepository.getById(id);
       const options = await this.letterOptionsRepository.getById(
-        letter.status === 'success' ? letter.data.letterOptionId : null
+        letter.status === SUCCESS ? letter.data.letterOptionId : null
       );
 
       return {
@@ -72,14 +65,14 @@ export class LetterUseCases {
       };
     } catch (error) {
       return {
-        status: 'fail',
+        status: ERROR,
         error: (error as Error).message,
       };
     }
   };
 
   readonly getLettersPage = async (queryObj: LetterQueryObj) =>
-    await this.letterRepository.getPage(queryObj);
+    await this.letterRepository.getMany(queryObj);
 
   readonly saveLetter = (input: SaveLetterInput) => saveLetter(input, this.saveLetterTransaction);
 }

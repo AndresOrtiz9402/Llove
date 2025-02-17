@@ -8,7 +8,7 @@ export class LetterOptionsRepository
   extends Infrastructure.Typeorm.Repositories.TypeormBaseRepository<LetterOptionsEntity>
   implements ILetter.LetterOptionsRepository
 {
-  constructor(private readonly letterOptionsRepository: Repository<LetterOptionsEntity>) {
+  constructor(letterOptionsRepository: Repository<LetterOptionsEntity>) {
     super(letterOptionsRepository);
   }
 }

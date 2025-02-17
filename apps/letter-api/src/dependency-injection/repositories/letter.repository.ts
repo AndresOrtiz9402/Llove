@@ -9,11 +9,10 @@ type LetterEntity = Letter.Infrastructure.Typeorm.Entities.LetterEntity;
 export const { LetterEntity } = Letter.Infrastructure.Typeorm.Entities;
 
 @Injectable()
-export class LetterRepository extends Letter.Infrastructure.Typeorm.Repository
-  .LetterRepository {
+export class LetterRepository extends Letter.Infrastructure.Typeorm.Repository.LetterRepository {
   constructor(
     @InjectRepository(LetterEntity)
-    private readonly injectedRepository: Repository<LetterEntity>
+    injectedRepository: Repository<LetterEntity>
   ) {
     super(injectedRepository);
   }

@@ -6,7 +6,9 @@ import { NestModules } from '@llove/backend';
 import { USER_DB_ENV } from '../../config';
 import { UserController } from './user.controller';
 import { UserService } from './user.service';
-import { UserEntity, UserRepository } from '../../dependency-injection';
+import { Repositories } from '../../dependency-injection';
+
+const { UserEntity, UserRepository } = Repositories;
 
 const { database, host, password, port, username, migrations } = USER_DB_ENV;
 

@@ -24,5 +24,5 @@ export type BaseRepository<Entity> = {
     updateInput: Partial<Input<Entity, OmitBaseEntity>>
   ): Promise<SuccessOrError<unknown>>;
 
-  getPage(queryObj: Query.QueryObj<Entity>): Promise<SuccessOrError<BaseEntity<Entity, Id>[]>>;
+  getMany(queryObj: Query.QueryObj<Entity>): Promise<SuccessOrError<BaseEntity<Entity, Id>[]>>;
 };

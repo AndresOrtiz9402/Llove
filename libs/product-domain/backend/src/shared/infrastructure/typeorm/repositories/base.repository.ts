@@ -72,7 +72,7 @@ export class TypeormBaseRepository<Entity> implements BaseRepository<Entity> {
     }
   }
 
-  async getPage(
+  async getMany(
     queryObj: QueryObj<Entity>
   ): Promise<Fail<unknown> | Success<(Entity & { id: number })[]>> {
     try {

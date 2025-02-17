@@ -9,11 +9,10 @@ type UserEntity = User.Infrastructure.Typeorm.Entities.UserEntity;
 export const { UserEntity } = User.Infrastructure.Typeorm.Entities;
 
 @Injectable()
-export class UserRepository extends User.Infrastructure.Typeorm.Repository
-  .UserRepository {
+export class UserRepository extends User.Infrastructure.Typeorm.Repository.UserRepository {
   constructor(
     @InjectRepository(UserEntity)
-    private readonly injectedRepository: Repository<UserEntity>
+    injectedRepository: Repository<UserEntity>
   ) {
     super(injectedRepository);
   }
