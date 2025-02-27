@@ -10,104 +10,57 @@ import {
 } from 'typeorm';
 
 type BaseRepository<Entity> = IShared.DataAccess.BaseRepository<Entity>;
-type Fail<L> = IShared.Interfaces.SuccessOrError.Fail<L>;
 type QueryObj<Entity> = IShared.DataAccess.Query.QueryObj<Entity>;
-type Success<R> = IShared.Interfaces.SuccessOrError.Success<R>;
-
-const { SUCCESS, ERROR } = IShared.Interfaces.SuccessOrError.STATUS;
 
 export class TypeormBaseRepository<Entity> implements BaseRepository<Entity> {
   constructor(private readonly repository: Repository<Entity & { id: number }>) {}
 
   async create(input: {
     [P in Exclude<keyof Entity, IShared.OmitBaseEntity>]: Entity[P];
-  }): Promise<Fail<unknown> | Success<Entity & { id: number }>> {
-    try {
-      const newEntity = this.repository.create(input as DeepPartial<Entity & { id: number }>);
-      const data = await this.repository.save(newEntity);
-
-      if (!data) return { status: ERROR, error: '404' };
-
-      return { status: SUCCESS, data };
-    } catch (error) {
-      return { status: ERROR, error };
-    }
+  }): Promise<Entity & { id: number }> {
+    const newEntity = this.repository.create(input as DeepPartial<Entity & { id: number }>);
+    return await this.repository.save(newEntity);
   }
 
-  async deletedById(input: IShared.Id): Promise<Fail<unknown> | Success<DeleteResult>> {
-    try {
-      const data = await this.repository.delete(input);
-
-      if (!data) return { status: ERROR, error: '404' };
-
-      return { status: SUCCESS, data: data as DeleteResult };
-    } catch (error) {
-      return { status: ERROR, error };
-    }
+  async deletedById(input: IShared.Id): Promise<DeleteResult> {
+    return await this.repository.delete(input);
   }
 
-  async getAll(): Promise<Fail<unknown> | Success<(Entity & { id: number })[]>> {
-    try {
-      const data = await this.repository.find();
-
-      if (!data) return { status: ERROR, error: '404' };
-
-      return { status: SUCCESS, data };
-    } catch (error) {
-      return { status: ERROR, error };
-    }
+  async findOne(
+    input: Partial<{ [P in Exclude<keyof Entity, IShared.OmitBaseEntity>]: Entity[P] }>
+  ): Promise<Entity & { id: number }> {
+    return await this.repository.findOne({
+      where: input as FindOptionsWhere<Entity & { id: number }>,
+    });
   }
 
-  async getById(input: IShared.Id): Promise<Success<Entity & { id: number }> | Fail<unknown>> {
-    try {
-      const data = await this.repository.findOne({
-        where: { id: input } as FindOptionsWhere<Entity & { id: number }>,
-      });
-
-      if (!data) return { status: ERROR, error: '404' };
-
-      return { status: SUCCESS, data };
-    } catch (error) {
-      return { status: ERROR, error };
-    }
+  async getAll(): Promise<(Entity & { id: number })[]> {
+    return await this.repository.find();
   }
 
-  async getMany(
-    queryObj: QueryObj<Entity>
-  ): Promise<Fail<unknown> | Success<(Entity & { id: number })[]>> {
-    try {
-      const { page, limit, sort, filter } = queryObj;
+  async getById(input: IShared.Id): Promise<Entity & { id: number }> {
+    return await this.repository.findOne({
+      where: { id: input } as FindOptionsWhere<Entity & { id: number }>,
+    });
+  }
 
-      const skip = (page - 1) * limit;
+  async getMany(queryObj: QueryObj<Entity>): Promise<(Entity & { id: number })[]> {
+    const { page, limit, sort, filter } = queryObj;
 
-      const data = await this.repository.find({
-        order: sort as FindOptionsOrder<Entity & { id: number }>,
-        skip,
-        take: limit,
-        where: filter as FindOptionsWhere<Entity & { id: number }>,
-      });
+    const skip = (page - 1) * limit;
 
-      return { status: SUCCESS, data };
-    } catch (error) {
-      return { status: ERROR, error };
-    }
+    return await this.repository.find({
+      order: sort as FindOptionsOrder<Entity & { id: number }>,
+      skip,
+      take: limit,
+      where: filter as FindOptionsWhere<Entity & { id: number }>,
+    });
   }
 
   async updateById(
     id: IShared.Id,
     updateInput: Partial<{ [P in Exclude<keyof Entity, IShared.OmitBaseEntity>]: Entity[P] }>
-  ): Promise<Fail<unknown> | Success<UpdateResult>> {
-    try {
-      const data = await this.repository.update(
-        id,
-        updateInput as ObjectLiteral & Entity & { id: number }
-      );
-
-      if (!data) return { status: ERROR, error: '404' };
-
-      return { status: SUCCESS, data };
-    } catch (error) {
-      return { status: ERROR, error };
-    }
+  ): Promise<UpdateResult> {
+    return await this.repository.update(id, updateInput as ObjectLiteral & Entity & { id: number });
   }
 }
