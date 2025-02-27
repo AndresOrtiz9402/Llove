@@ -1,13 +1,9 @@
-interface QueryMap {
-  [key: string]: unknown;
-}
-
 export class QueryObj {
   private static makeQueryParameter = (propertyName: string, value: unknown) => {
     return `${propertyName}=${value}`;
   };
 
-  static makeQuery(queryObj: QueryMap) {
+  static makeQuery(queryObj: object) {
     const newQueryArray = ['?'];
     const newQueryObj = Object.entries(queryObj);
 
