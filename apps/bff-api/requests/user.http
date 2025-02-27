@@ -1,32 +1,49 @@
 @url = http://localhost:3003/bff-api
+@user_api_url = http://localhost:3001/user-api
 
 ### BFF-API Health
 Get {{url}}/health
 
 ### Create user
-Post {{url}}/user
+Post {{url}}/user/register
 Content-Type: application/json
 
 {
-    "name":"Example name",
-    "email": "example@email.com"
+    "name":"Example name IV",
+    "email": "exampleIV@email.com"
 }
-
-### get users
-GET {{url}}/user/all
-
-### get user by id
-GET {{url}}/user/47
 
 
 ### delete user by id
-DELETE {{url}}/user/45
+DELETE {{user_api_url}}/user/59
+
+### get users
+GET {{user_api_url}}/user/all
+
+
+### login
+GET {{url}}/user/login
+email: marco@exmaple.com
 
 
 ### update user by id
-PATCH {{url}}/user/47
+PATCH {{url}}/user/59
 Content-Type: application/json
 
 {
-    "name":"Another example name"
+    "name":"Example name II"
 }
+
+### login 2
+Post {{url}}/user/login
+Content-Type: application/json
+
+{
+    "greet": "Hola mundo "
+}
+
+### Example Method
+# Query Options:
+#   cat_fact=""
+#   throw_me_an_error=ERROR_TYPE  <-- can be: NOT_FOUND | INTERNAL_SERVER_ERROR | FORBIDDEN | ... See the @llove/models/shared/interfaces/service-manager for more.
+Get {{url}}/user/example-method?cat_fact=""

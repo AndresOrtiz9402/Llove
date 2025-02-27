@@ -1,8 +1,10 @@
+import { GoogleGenerativeAI } from '@google/generative-ai';
 import { NestModules } from '@llove/backend';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { LETTER_DB_ENV } from '../../config';
+import { Shared } from '@llove/product-domain/backend';
+import { LETTER_DB_ENV, GEMINI_API_KEY } from '../../config';
 import { UseCases, Repositories } from '../../dependency-injection';
 import { LetterController } from './letter.controller';
 import { LetterService } from './letter.service';
@@ -29,6 +31,17 @@ const { AsyncTypeOrmModule } = NestModules.Typeorm;
     TypeOrmModule.forFeature([LetterEntity, LetterOptionsEntity]),
   ],
   controllers: [LetterController],
-  providers: [LetterRepository, LetterOptionsRepository, LetterUseCases, LetterService],
+  providers: [
+    {
+      provide: 'AiService',
+      useFactory: () => {
+        return new Shared.Application.Gemini.AiServiceMaker(new GoogleGenerativeAI(GEMINI_API_KEY));
+      },
+    },
+    LetterRepository,
+    LetterOptionsRepository,
+    LetterUseCases,
+    LetterService,
+  ],
 })
 export class LetterModule {}

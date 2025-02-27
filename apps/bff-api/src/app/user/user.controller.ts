@@ -1,36 +1,57 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post } from '@nestjs/common';
-import { UserService } from './user.service';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Headers,
+  Param,
+  ParseIntPipe,
+  Patch,
+  Post,
+  Query,
+  UseInterceptors,
+} from '@nestjs/common';
 
 import { NestModules } from '@llove/backend';
 import { User } from '@llove/product-domain/backend';
+import { UserService } from './user.service';
 
-const SpaceCleanPipe = NestModules.Pipes.SpaceCleanPipe;
+const { SpaceCleanPipe } = NestModules.Pipes;
+const { StatusCodeInterceptor } = NestModules.Interceptors;
 
+@UseInterceptors(StatusCodeInterceptor)
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Post('')
-  createUser(
-    @Body(SpaceCleanPipe)
-    createUserDto: User.Infrastructure.Dtos.CreateUserDto
-  ) {
-    return this.userService.create(createUserDto);
-  }
-
-  @Get('all')
-  getAll() {
-    return this.userService.getAll();
-  }
-
-  @Get(':id')
-  getById(@Param('id', ParseIntPipe) id: number) {
-    return this.userService.getById(id);
+  @Get('/example-method')
+  geExampleMethod(@Query() query: unknown) {
+    return this.userService.exampleMethod(query);
   }
 
   @Delete(':id')
   deleteById(@Param('id', ParseIntPipe) id: number) {
     return this.userService.deleteById(id);
+  }
+
+  //TODO: completar el login endpoint.
+  @Get('/login')
+  login(@Headers('email') email: string) {
+    const loginDto: User.Infrastructure.Dtos.UserAuthenticationDto = { email };
+    return loginDto;
+    /* return this.userService.login(loginDto); */
+  }
+
+  //TODO: completar el logout endpoint.
+  @Post('/logout')
+  logout(logoutDto: any /* TODO: User.Infrastructure.Dtos.LogoutDto */) {
+    return logoutDto;
+  }
+
+  //TODO: completar el register endpoint.
+  @Post('/register')
+  register(@Body() registerDto: User.Infrastructure.Dtos.CreateUserDto) {
+    return this.userService.register({ registerDto });
   }
 
   @Patch(':id')

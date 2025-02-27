@@ -1,35 +1,41 @@
-import { Body, Controller, Get, Headers, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  DefaultValuePipe,
+  Get,
+  Headers,
+  ParseIntPipe,
+  Post,
+  Query,
+  UseInterceptors,
+} from '@nestjs/common';
 import { LetterService } from './letter.service';
 
 import { NestModules } from '@llove/backend';
-import { Letter, Shared } from '@llove/product-domain/backend';
+import { Letter } from '@llove/product-domain/backend';
+
+const { StatusCodeInterceptor } = NestModules.Interceptors;
 
 const SpaceCleanPipe = NestModules.Pipes.SpaceCleanPipe;
 
-const { QueryObj } = Shared.Infrastructure.Http;
-
+@UseInterceptors(StatusCodeInterceptor)
 @Controller('letter')
 export class LetterController {
   constructor(private readonly letterService: LetterService) {}
 
   @Get('')
-  getLetters(
-    @Query() query: { p: 1; l: 10; ft: string; ts: 'a'; ds: 'a' },
+  getPage(
+    @Query('l', new DefaultValuePipe(1), ParseIntPipe) limit = 10,
+    @Query('p', new DefaultValuePipe(1), ParseIntPipe) page = 1,
+    @Query('ds', new DefaultValuePipe('a')) dateSort = 'a',
+    @Query('ts', new DefaultValuePipe('a')) titleSort = 'a',
     @Headers('user-id') userId: string
   ) {
-    const newQuery = QueryObj.makeQuery({
-      p: query?.p ?? 1,
-      l: query?.l ?? 10,
-      ft: query?.ft,
-      ts: query?.ts ?? 'a',
-      ds: query?.ds ?? 'a',
-    });
-
-    return this.letterService.getPage(userId, newQuery);
+    return this.letterService.getManyLetters(userId, { limit, page, dateSort, titleSort });
   }
 
   @Post('')
-  saveLetter(
+  save(
     @Body(SpaceCleanPipe)
     createLetterOptionsDto: Letter.Infrastructure.Dtos.SaveLetterDto
   ) {
@@ -37,7 +43,7 @@ export class LetterController {
   }
 
   @Post('generate')
-  generateLetter(
+  generate(
     @Body(SpaceCleanPipe)
     createLetterOptionsDto: Letter.Infrastructure.Dtos.CreateLetterOptionsDto
   ) {
