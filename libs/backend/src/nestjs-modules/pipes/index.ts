@@ -1,1 +1,1 @@
-export * from './nest.pipe';
+export * from './space-clean.pipe';

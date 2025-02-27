@@ -1,1 +1,1 @@
-export * from './outcome.interceptor';
+export * from './status-code.interceptor';
