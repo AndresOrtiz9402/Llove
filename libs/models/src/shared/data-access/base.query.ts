@@ -8,7 +8,7 @@ type Filter<Entity> = {
 };
 type Limit = number;
 type Page = number;
-type Sort<Entity> = { [P in keyof Partial<Entity>]: string | OrderValues };
+type Sort<Entity> = { [P in keyof Partial<Entity>]: OrderValues };
 
 export interface QueryObj<Entity> {
   filter: Filter<Entity>;

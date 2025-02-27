@@ -1,5 +1,4 @@
 import type { OmitBaseEntity, Id } from '..';
-import { Interfaces } from '..';
 import { Query } from '.';
 
 type BaseEntity<Entity, Id> = Entity & { id: Id };
@@ -8,21 +7,18 @@ type Input<Entity, OmitBase> = {
   [P in Exclude<keyof Entity, OmitBase>]: Entity[P];
 };
 
-type SuccessOrError<R> = Interfaces.SuccessOrError.SuccessOrError<unknown, R>;
-
 export type BaseRepository<Entity> = {
-  create(input: Input<Entity, OmitBaseEntity>): Promise<SuccessOrError<BaseEntity<Entity, Id>>>;
+  create(input: Input<Entity, OmitBaseEntity>): Promise<BaseEntity<Entity, Id>>;
 
-  deletedById(input: Id): Promise<SuccessOrError<unknown>>;
+  deletedById(input: Id): Promise<unknown>;
 
-  getAll(): Promise<SuccessOrError<BaseEntity<Entity, Id>[]>>;
+  getAll(): Promise<BaseEntity<Entity, Id>[]>;
 
-  getById(input: Id): Promise<SuccessOrError<BaseEntity<Entity, Id>>>;
+  findOne(input: Partial<Input<Entity, OmitBaseEntity>>): Promise<BaseEntity<Entity, Id>>;
 
-  updateById(
-    id: Id,
-    updateInput: Partial<Input<Entity, OmitBaseEntity>>
-  ): Promise<SuccessOrError<unknown>>;
+  getById(input: Id): Promise<BaseEntity<Entity, Id>>;
 
-  getMany(queryObj: Query.QueryObj<Entity>): Promise<SuccessOrError<BaseEntity<Entity, Id>[]>>;
+  updateById(id: Id, updateInput: Partial<Input<Entity, OmitBaseEntity>>): Promise<unknown>;
+
+  getMany(queryObj: Query.QueryObj<Entity>): Promise<BaseEntity<Entity, Id>[]>;
 };

@@ -3,12 +3,13 @@ export enum TRANSACTION {
   ROLLED_BACK = 'Transaction rolled back.',
 }
 
-export type Rollback<L> = { status: TRANSACTION.ROLLED_BACK; error: L };
-
-export type Committed<R> = { status: TRANSACTION.COMMITTED; data: R };
-
-export type RollbackOrCommit<L, R> = Rollback<L> | Committed<R>;
-
-export interface BaseTransaction<T, L, R> {
-  execute(input: T): Promise<RollbackOrCommit<L, R>>;
+export interface Rollback extends Error {
+  status: TRANSACTION.ROLLED_BACK;
 }
+
+export interface Committed<R> {
+  status: TRANSACTION.COMMITTED;
+  data: R;
+}
+
+export type RollbackOrCommit<R> = Rollback | Committed<R>;
