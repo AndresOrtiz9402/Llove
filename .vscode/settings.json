@@ -5,6 +5,7 @@
     "ÁÉÍÓ",
     "dtos",
     "Dtos",
+    "EARLYHINTS",
     "FSLP",
     "gemini",
     "initdb",
@@ -19,5 +20,6 @@
     "spanish",
     "Záéíóú"
   ],
-  "cSpell.language": "en,es"
+  "cSpell.language": "en,es",
+  "nxConsole.nxWorkspacePath": ""
 }
