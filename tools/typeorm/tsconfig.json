@@ -1,18 +1,4 @@
 {
-  "compileOnSave": false,
-  "compilerOptions": {
-    "target": "es2015",
-    "module": "CommonJS",
-    "outDir": ".",
-    "rootDir": ".",
-    "moduleResolution": "node",
-    "strict": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "skipDefaultLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "importHelpers": true
-  },
-  "include": ["./make-new-migration-file.script.ts"],
-  "exclude": ["node_modules", "**/*.spec.ts", "**/*.test.ts"]
+  "extends": "../tsconfig.json",
+  "include": ["./make-new-migration-file.script.ts"]
 }
