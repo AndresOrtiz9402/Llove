@@ -6,15 +6,11 @@ import { User } from '@llove/product-domain/backend';
 
 import { Config } from '../..';
 
-type CreateUserDto = User.Infrastructure.Dtos.CreateUserDto;
-type UserAuthenticationDto = User.Infrastructure.Dtos.UserAuthenticationDto;
 type UpdateUserDto = User.Infrastructure.Dtos.UpdateUserDto;
 type BFF_ENV = Config.BFF_ENV;
 
 const {
-  CreateUser: { BFF_REGISTER_USER },
   DeleteUser: { BFF_DELETE_USER },
-  GetUser: { BFF_USER_AUTHENTICATION },
   UpdateUser: { BFF_UPDATE_USER },
   ExampleService: { BFF_EXAMPLE_METHOD },
 } = User.Application;
@@ -31,30 +27,6 @@ export class UserService {
   @HandleService(BFF_DELETE_USER)
   async deleteById(id: number) {
     return (await this.httpService.axiosRef.delete(this.BFF_ENV.USER_API_URL + `/user/${id}`)).data;
-  }
-
-  //TODO: completar el login service.
-  @HandleService(BFF_USER_AUTHENTICATION)
-  async login(input: UserAuthenticationDto) {
-    return (
-      await this.httpService.axiosRef.get(this.BFF_ENV.USER_API_URL + `/user/findOne`, {
-        headers: {
-          ...input,
-        },
-      })
-    ).data;
-
-    //TODO: add the token generation algorithm / session.
-  }
-
-  //TODO: crear el logout service.
-
-  //TODO: completar el register service
-  @HandleService(BFF_REGISTER_USER)
-  async register(input: { registerDto: CreateUserDto }) {
-    const { registerDto } = input;
-    return (await this.httpService.axiosRef.post(this.BFF_ENV.USER_API_URL + '/user', registerDto))
-      .data;
   }
 
   @HandleService(BFF_UPDATE_USER)

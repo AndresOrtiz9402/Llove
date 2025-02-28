@@ -34,6 +34,7 @@ export class LetterController {
     return this.letterService.getManyLetters(userId, { limit, page, dateSort, titleSort });
   }
 
+  //TODO: put the user ID into the header.
   @Post('')
   save(
     @Body(SpaceCleanPipe)

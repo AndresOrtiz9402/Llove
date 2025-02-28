@@ -4,42 +4,16 @@
 ### BFF-API Health
 Get {{url}}/health
 
-### Create user
-Post {{url}}/user/register
-Content-Type: application/json
-
-{
-    "name":"Example name IV",
-    "email": "exampleIV@email.com"
-}
-
-
+### BFF-API User
 ### delete user by id
-DELETE {{user_api_url}}/user/59
-
-### get users
-GET {{user_api_url}}/user/all
-
-
-### login
-GET {{url}}/user/login
-email: marco@exmaple.com
-
+DELETE {{url}}/user/59
 
 ### update user by id
-PATCH {{url}}/user/59
+PATCH {{url}}/user/70
 Content-Type: application/json
 
 {
-    "name":"Example name II"
-}
-
-### login 2
-Post {{url}}/user/login
-Content-Type: application/json
-
-{
-    "greet": "Hola mundo "
+    "name":"Example name IV"
 }
 
 ### Example Method
@@ -47,3 +21,7 @@ Content-Type: application/json
 #   cat_fact=""
 #   throw_me_an_error=ERROR_TYPE  <-- can be: NOT_FOUND | INTERNAL_SERVER_ERROR | FORBIDDEN | ... See the @llove/models/shared/interfaces/service-manager for more.
 Get {{url}}/user/example-method?cat_fact=""
+
+### USER-API
+### get users
+GET {{user_api_url}}/user/all

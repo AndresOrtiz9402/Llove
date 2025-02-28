@@ -1,0 +1,31 @@
+
+@url = http://localhost:3003/bff-api
+
+### BFF-API Health
+Get {{url}}/health
+
+### Register
+Post {{url}}/auth/register
+Content-Type: application/json
+
+{
+    "name":"Example name V",
+    "email": "exampleV@email.com"
+}
+
+### Login
+Post {{url}}/auth/login
+Content-Type: application/json
+
+{
+    "email": "exampleV@email.com"
+}
+
+
+### Logout
+Post {{url}}/auth/logout
+Content-Type: application/json
+
+{
+    "greet": "hello world"
+}

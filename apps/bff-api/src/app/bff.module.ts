@@ -2,6 +2,7 @@ import { HttpModule } from '@nestjs/axios';
 import { Global, Module } from '@nestjs/common';
 import { AxiosRequestConfig } from 'axios';
 
+import { AuthModule } from './auth/auth.module';
 import { LetterModule } from './letter/letter.module';
 import { UserModule } from './user/user.module';
 import { NestModules } from '@llove/backend';
@@ -12,6 +13,8 @@ const { HealthModule } = NestModules.Api;
 @Global()
 @Module({
   imports: [
+    AuthModule,
+    HealthModule,
     HttpModule.registerAsync({
       useFactory: () => {
         const axiosConfig: AxiosRequestConfig = {
@@ -22,7 +25,6 @@ const { HealthModule } = NestModules.Api;
         };
       },
     }),
-    HealthModule,
     LetterModule,
     UserModule,
   ],

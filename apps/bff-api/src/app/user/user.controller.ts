@@ -3,11 +3,9 @@ import {
   Controller,
   Delete,
   Get,
-  Headers,
   Param,
   ParseIntPipe,
   Patch,
-  Post,
   Query,
   UseInterceptors,
 } from '@nestjs/common';
@@ -29,31 +27,13 @@ export class UserController {
     return this.userService.exampleMethod(query);
   }
 
+  //TODO: put the user ID into the header.
   @Delete(':id')
   deleteById(@Param('id', ParseIntPipe) id: number) {
     return this.userService.deleteById(id);
   }
 
-  //TODO: completar el login endpoint.
-  @Get('/login')
-  login(@Headers('email') email: string) {
-    const loginDto: User.Infrastructure.Dtos.UserAuthenticationDto = { email };
-    return loginDto;
-    /* return this.userService.login(loginDto); */
-  }
-
-  //TODO: completar el logout endpoint.
-  @Post('/logout')
-  logout(logoutDto: any /* TODO: User.Infrastructure.Dtos.LogoutDto */) {
-    return logoutDto;
-  }
-
-  //TODO: completar el register endpoint.
-  @Post('/register')
-  register(@Body() registerDto: User.Infrastructure.Dtos.CreateUserDto) {
-    return this.userService.register({ registerDto });
-  }
-
+  //TODO: put the user ID into the header.
   @Patch(':id')
   updateById(
     @Param('id', ParseIntPipe) id: number,

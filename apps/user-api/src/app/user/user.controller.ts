@@ -42,8 +42,10 @@ export class UserController {
   }
 
   @Get('/findOne')
-  async findOne(@Headers('email') email: string) {
-    return await this.userService.findOne({ email });
+  async findOne(@Headers() headers: { email: string }) {
+    const findUserDto: User.Infrastructure.Dtos.UserAuthenticationDto = { email: headers.email };
+
+    return this.userService.findOne(findUserDto);
   }
 
   @Patch(':id')
