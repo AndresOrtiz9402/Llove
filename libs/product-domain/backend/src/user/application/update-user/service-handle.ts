@@ -18,7 +18,14 @@ const handleTypeormUpdateOutput = (result: UpdateResult) => {
     });
 };
 
-const handlerUserApiUpdateOutput = (
+const handleTypeormUpdateError = (error: unknown) => {
+  return match(error)
+    .with({ code: '23505' }, () => new Error(HttpStatus[409]))
+    .with({ message: 'NOT_FOUND' }, () => new Error(HttpStatus[404]))
+    .otherwise(() => new Error(HttpStatus[500]));
+};
+
+const handleBffApiUserUpdateServiceOutput = (
   result: IShared.Services.ServiceHandle.Result<UpdateResult>
 ) => {
   return match(result)
@@ -26,15 +33,12 @@ const handlerUserApiUpdateOutput = (
     .with({ statusCode: 409 }, () => {
       throw new Error(HttpStatus[409]);
     })
+    .with({ statusCode: 404 }, () => {
+      throw new Error(HttpStatus[404]);
+    })
     .otherwise(() => {
       throw new Error(HttpStatus[500]);
     });
-};
-
-const handleTypeormSaveError = (error: unknown) => {
-  return match(error)
-    .with({ code: '23505' }, () => new Error(HttpStatus[400]))
-    .otherwise(() => new Error(HttpStatus[500]));
 };
 
 export const UPDATE_USER = new ServiceHandleConfig({
@@ -42,14 +46,14 @@ export const UPDATE_USER = new ServiceHandleConfig({
     handleOutput: handleTypeormUpdateOutput,
     errorHandling: {
       errorOptions: 'getHttpException',
-      handleError: handleTypeormSaveError,
+      handleError: handleTypeormUpdateError,
     },
   },
 });
 
 export const BFF_UPDATE_USER = new ServiceHandleConfig({
   options: {
-    handleOutput: handlerUserApiUpdateOutput,
+    handleOutput: handleBffApiUserUpdateServiceOutput,
     errorHandling: {
       errorOptions: 'getHttpException',
     },

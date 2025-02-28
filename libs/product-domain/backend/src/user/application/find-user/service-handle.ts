@@ -30,6 +30,7 @@ const handleTypeormFindOneOutput = (result: IUser.User) => {
     });
 };
 
+//TODO: Update the output of  the user Bff-Api FindOne service with the token deliver.
 const handleUserBffApiFindOneOutput = (
   result: IShared.Services.ServiceHandle.Result<IUser.User>
 ) => {

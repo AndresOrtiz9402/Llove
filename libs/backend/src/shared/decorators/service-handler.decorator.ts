@@ -9,7 +9,7 @@ class HttpException implements IShared.Services.ServiceHandle.HttpException {
   readonly statusCode: number;
   readonly message: string;
 
-  constructor(readonly error: Error) {
+  constructor(error: Error) {
     const errorKey = (error as Error)?.message ?? HttpStatus.INTERNAL_SERVER_ERROR;
 
     const newErrorKey = typeof errorKey !== 'number' ? errorKey : HttpStatus[errorKey];
