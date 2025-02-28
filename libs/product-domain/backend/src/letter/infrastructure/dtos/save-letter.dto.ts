@@ -13,3 +13,5 @@ export class SaveLetterDto implements ILetter.Infrastructure.SaveLetterInput {
   @Type(() => CreateLetterDto)
   letter: CreateLetterDto;
 }
+
+//TODO: created the BffSaveLetterDto.
