@@ -1,14 +1,17 @@
 import { HttpModule } from '@nestjs/axios';
-import { Global, Module } from '@nestjs/common';
+import { Global, MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AxiosRequestConfig } from 'axios';
+import { JwtModule } from '@nestjs/jwt';
+import { PassportModule } from '@nestjs/passport';
 
+import { NestModules } from '@llove/backend';
+import { BFF_ENV } from '../config';
 import { AuthModule } from './auth/auth.module';
 import { LetterModule } from './letter/letter.module';
 import { UserModule } from './user/user.module';
-import { NestModules } from '@llove/backend';
-import { BFF_ENV } from '../config';
 
 const { HealthModule } = NestModules.Api;
+const { UserAuthentication } = NestModules.Middlewares;
 
 @Global()
 @Module({
@@ -25,11 +28,23 @@ const { HealthModule } = NestModules.Api;
         };
       },
     }),
+    JwtModule.register({
+      global: true,
+      secret: BFF_ENV.SECRET_JWT_KEY,
+      signOptions: { expiresIn: '1h' },
+    }),
     LetterModule,
+    PassportModule,
     UserModule,
   ],
   controllers: [],
   providers: [{ provide: 'BFF_ENV', useValue: BFF_ENV }],
-  exports: [HttpModule, { provide: 'BFF_ENV', useValue: BFF_ENV }],
+  exports: [{ provide: 'BFF_ENV', useValue: BFF_ENV }, HttpModule],
 })
-export class BffModule {}
+export class BffModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(UserAuthentication).exclude('auth/register').forRoutes('*');
+  }
+}
+
+//TODO: Determine if the csurf middleware will be used.

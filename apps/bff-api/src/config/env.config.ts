@@ -3,13 +3,9 @@ import { z } from 'zod';
 const bffEnv = z.object({
   LETTER_API_URL: z.string(),
   USER_API_URL: z.string(),
+  SECRET_JWT_KEY: z.string(),
 });
 
-const env = bffEnv.parse(process.env);
-
-export const BFF_ENV = {
-  LETTER_API_URL: env.LETTER_API_URL,
-  USER_API_URL: env.USER_API_URL,
-};
+export const BFF_ENV = { ...bffEnv.parse(process.env) };
 
 export type BFF_ENV = z.infer<typeof bffEnv>;

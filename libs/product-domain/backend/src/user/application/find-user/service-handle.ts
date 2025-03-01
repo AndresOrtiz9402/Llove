@@ -5,6 +5,7 @@ import { Application } from '../../../shared';
 
 type UserAuthenticationDto = IUser.Infrastructure.UserAuthenticationDto;
 type HandleTypeormFindOneInput = IShared.Services.ServiceHandle.InputHandler;
+type AccessToken = IShared.Interfaces.AccessToken.AccessToken;
 
 const { ServiceHandleConfig } = Application.ServiceHandle;
 const { HttpStatus } = IShared.Services.ServiceHandle;
@@ -30,15 +31,10 @@ const handleTypeormFindOneOutput = (result: IUser.User) => {
     });
 };
 
-//TODO: Update the output of  the user Bff-Api FindOne service with the token deliver.
-const handleUserBffApiFindOneOutput = (
-  result: IShared.Services.ServiceHandle.Result<IUser.User>
-) => {
+//TODO: Update the output of  the user Bff-Api login service.
+const handleUserBffApiLoginOutput = (result: AccessToken) => {
   return match(result)
-    .with({ statusCode: 302 }, () => result.data)
-    .with({ statusCode: 404 }, () => {
-      throw new Error(HttpStatus[404]);
-    })
+    .with({ access_token: P.string }, () => result)
     .otherwise(() => {
       throw new Error(HttpStatus[500]);
     });
@@ -56,9 +52,8 @@ export const FIND_USER = new ServiceHandleConfig({
 });
 
 export const BFF_USER_AUTHENTICATION = new ServiceHandleConfig({
-  successCode: HttpStatus.FOUND,
   options: {
-    handleOutput: handleUserBffApiFindOneOutput,
+    handleOutput: handleUserBffApiLoginOutput,
     errorHandling: {
       errorOptions: 'getHttpException',
     },

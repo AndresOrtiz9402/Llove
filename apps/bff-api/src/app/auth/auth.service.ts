@@ -1,14 +1,20 @@
 import { HttpService } from '@nestjs/axios';
 import { Inject, Injectable } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 
 import { Shared } from '@llove/backend';
+import { IShared, type IUser } from '@llove/models';
 import { User } from '@llove/product-domain/backend';
-
 import { Config } from '../..';
 
-type CreateUserDto = User.Infrastructure.Dtos.CreateUserDto;
-type UserAuthenticationDto = User.Infrastructure.Dtos.UserAuthenticationDto;
+type AccessToken = IShared.Interfaces.AccessToken.AccessToken;
 type BFF_ENV = Config.BFF_ENV;
+type CreateUserDto = User.Infrastructure.Dtos.CreateUserDto;
+type Result<R> = IShared.Services.ServiceHandle.Result<R>;
+type User = IUser.User;
+type UserAuthenticationDto = User.Infrastructure.Dtos.UserAuthenticationDto;
+
+const HttpStatus = IShared.Services.ServiceHandle.HttpStatus;
 
 const {
   CreateUser: { BFF_REGISTER_USER },
@@ -21,13 +27,15 @@ const { HandleService } = Shared.Decorators.ServiceHandle;
 export class AuthenticationService {
   constructor(
     @Inject('BFF_ENV') private readonly BFF_ENV: BFF_ENV,
-    private readonly httpService: HttpService
+    private readonly httpService: HttpService,
+    private readonly jwtService: JwtService
   ) {}
 
   //TODO: completar el login service.
+  //TODO: add the third party authentication case.
   @HandleService(BFF_USER_AUTHENTICATION)
-  async login(loginDto: UserAuthenticationDto) {
-    const user = (
+  async login(loginDto: UserAuthenticationDto): Promise<AccessToken> {
+    const user: Result<User> = (
       await this.httpService.axiosRef.get(this.BFF_ENV.USER_API_URL + `/user/findOne`, {
         headers: {
           ...loginDto,
@@ -37,15 +45,17 @@ export class AuthenticationService {
 
     const isRegistered = user.statusCode === 302;
 
-    //TODO: create the dispatch method for the 401 (Unauthorized) error.
+    if (!isRegistered) throw new Error(HttpStatus[401]);
 
-    //TODO: add the token generation step. The token must contain the session information and the user ID.
+    const { id, name } = user.data;
 
-    //TODO: add the step to retrieve the token for the user.
+    const payload = { sub: id, username: name };
 
-    //TODO: add the success return message.
+    const access_token = await this.jwtService.signAsync(payload);
 
-    return { ...user, isRegistered };
+    return {
+      access_token,
+    };
   }
 
   //TODO: crear el logout service.

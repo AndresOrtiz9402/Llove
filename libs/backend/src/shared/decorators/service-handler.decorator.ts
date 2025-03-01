@@ -10,9 +10,9 @@ class HttpException implements IShared.Services.ServiceHandle.HttpException {
   readonly message: string;
 
   constructor(error: Error) {
-    const errorKey = (error as Error)?.message ?? HttpStatus.INTERNAL_SERVER_ERROR;
+    const errorKey = (error as Error)?.message ?? HttpStatus[500];
 
-    const newErrorKey = typeof errorKey !== 'number' ? errorKey : HttpStatus[errorKey];
+    const newErrorKey = typeof errorKey === 'string' ? errorKey : HttpStatus[500];
 
     this.statusCode = HttpStatus[newErrorKey] ?? HttpStatus.INTERNAL_SERVER_ERROR;
 
@@ -67,7 +67,8 @@ type Options<R> = IShared.Services.ServiceHandle.Options<R>;
 const evaluate: IShared.Services.ServiceHandle.Evaluate =
   <R>(inputs: Inputs<R>, options?: Options<R>) =>
   async (value: [unknown]) => {
-    const { getFullError } = options?.errorHandling || {};
+    const { getFullError } =
+      (process.env.NODE_ENV === 'development' && options?.errorHandling) || {};
 
     if (getFullError === true) {
       console.log(' ');
@@ -94,7 +95,12 @@ const evaluate: IShared.Services.ServiceHandle.Evaluate =
         },
       });
     } catch (error) {
-      const { errorOptions, getFullError, handleError } = options?.errorHandling || {};
+      const {
+        errorOptions,
+        getFullError,
+        handleError,
+        defaultErrorStatusCode = HttpStatus.INTERNAL_SERVER_ERROR,
+      } = options?.errorHandling || {};
 
       const newError = makeError({
         error: handleError?.(error) ?? error,
@@ -102,7 +108,7 @@ const evaluate: IShared.Services.ServiceHandle.Evaluate =
       });
 
       return new Result<R>({
-        statusCode: (newError as HttpException)?.statusCode ?? 500,
+        statusCode: (newError as HttpException)?.statusCode ?? defaultErrorStatusCode,
         errorHandling: {
           error: newError,
           getFullError,

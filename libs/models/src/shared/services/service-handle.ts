@@ -72,10 +72,11 @@ export type InputHandler = (input: [unknown]) => [unknown];
 
 export type OutputHandler<R> = (result: R) => unknown;
 
-export type ErrorHandler = <L>(error: L) => Error;
+export type ErrorHandler = (error: unknown) => Error;
 
 interface ErrorHandling {
   errorOptions?: keyof ErrorOptions;
+  defaultErrorStatusCode?: number | 500;
   getFullError?: boolean;
   handleError?: ErrorHandler;
 }
