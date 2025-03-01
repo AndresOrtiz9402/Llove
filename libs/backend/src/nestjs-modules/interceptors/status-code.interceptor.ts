@@ -2,18 +2,21 @@ import { Injectable, NestInterceptor, ExecutionContext, CallHandler } from '@nes
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { Decorators } from '../../shared';
+import { IShared } from '@llove/models';
 
+type Result = IShared.Services.ServiceHandle.Result<unknown>;
 @Injectable()
 export class StatusCodeInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     return next.handle().pipe(
-      map(data => {
-        if (data instanceof Decorators.ServiceHandle.Result) {
+      map((result: Result) => {
+        const { statusCode } = result;
+
+        if (statusCode) {
           const response = context.switchToHttp().getResponse();
-          response.status(data.statusCode);
+          response.status(statusCode);
         }
-        return data;
+        return result;
       })
     );
   }

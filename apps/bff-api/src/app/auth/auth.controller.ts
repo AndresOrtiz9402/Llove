@@ -4,7 +4,7 @@ import { NestModules } from '@llove/backend';
 import { User } from '@llove/product-domain/backend';
 import { AuthenticationService } from './auth.service';
 
-const { StatusCodeInterceptor } = NestModules.Interceptors;
+const { StatusCodeInterceptor, CookieInterceptor } = NestModules.Interceptors;
 
 @UseInterceptors(StatusCodeInterceptor)
 @Controller('auth')
@@ -12,6 +12,7 @@ export class AuthenticationController {
   constructor(private readonly authenticationService: AuthenticationService) {}
 
   //TODO: completar el login endpoint.
+  @UseInterceptors(CookieInterceptor)
   @Post('/login')
   login(@Body() loginDto: User.Infrastructure.Dtos.UserAuthenticationDto) {
     return this.authenticationService.login(loginDto);
