@@ -32,3 +32,18 @@ export class CreateLetterDto implements ICreateLetterDto {
   @IsInt()
   readonly userId: number;
 }
+
+export class BffCreateLetterDto implements ICreateLetterDto {
+  letterOptionId: number;
+  @IsNotEmpty(title.isNotEmptyMessage)
+  @IsString(title.isStringMessage)
+  @Matches(title.matches.pattern, title.matches.message)
+  readonly title: string;
+
+  @IsNotEmpty(content.isNotEmptyMessage)
+  @IsString(content.isStringMessage)
+  @Matches(contentPattern, { message: contentMatchMessage })
+  readonly content: string;
+
+  userId: number;
+}
