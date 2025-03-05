@@ -20,19 +20,18 @@ POST {{url}}/letter
 Content-Type: application/json
 
 {
-    "options":{
-        "isFor":"Pepe grillo",
-        "occasion": "Cumpleaños",
-        "relationship": "Amigo",
-        "tone": "friendly"
-    }, 
-    "letter":{
-        "title": "Querido Pepe",
-        "content": "Querido Pepe,\n\n¡Feliz cumpleaños, amigo! Espero que tengas un día increíble lleno de alegría, risas y buenos momentos. Que este nuevo año de vida te traiga muchas bendiciones, salud y éxito en todo lo que te propongas.  ¡Pásala genial!\n\nSaludos,",
-        "userId": 1
+    "options": {
+      "isFor": "Pepe",
+      "occasion": "Cumpleaños",
+      "relationship": "Amigo",
+      "tone": "friendly"
+    },
+    "letter": {
+      "title": "Feliz Cumpleaños, Pepe",
+      "content": "Querido Pepe,\n\n¡Feliz cumpleaños, amigo! Espero que tengas un día increíble lleno de alegría, risas y buenos momentos.  Que todos tus deseos se cumplan y que este nuevo año te traiga mucha felicidad y éxito. \n\n¡Un abrazo fuerte! \n\nAtentamente,"
     }
 }
 
 ### Get letters page
 GET {{url}}/letter?l=10&p=1&&ds=a&ts=a
-user-id: 1
+

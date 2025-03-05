@@ -43,7 +43,7 @@ const { UserAuthentication } = NestModules.Middlewares;
 })
 export class BffModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(UserAuthentication).exclude('auth/register').forRoutes('*');
+    consumer.apply(UserAuthentication).exclude('auth/login', 'auth/register').forRoutes('*');
   }
 }
 

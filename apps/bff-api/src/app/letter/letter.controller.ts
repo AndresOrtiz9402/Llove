@@ -3,15 +3,16 @@ import {
   Controller,
   DefaultValuePipe,
   Get,
-  Headers,
   ParseIntPipe,
   Post,
   Query,
+  Session,
   UseInterceptors,
 } from '@nestjs/common';
 import { LetterService } from './letter.service';
 
 import { NestModules } from '@llove/backend';
+import { IAuth } from '@llove/models';
 import { Letter } from '@llove/product-domain/backend';
 
 const { StatusCodeInterceptor } = NestModules.Interceptors;
@@ -29,18 +30,25 @@ export class LetterController {
     @Query('p', new DefaultValuePipe(1), ParseIntPipe) page = 1,
     @Query('ds', new DefaultValuePipe('a')) dateSort = 'a',
     @Query('ts', new DefaultValuePipe('a')) titleSort = 'a',
-    @Headers('user-id') userId: string
+    @Session() session: IAuth.Session
   ) {
+    const userId = session.user.sub.toString();
+
     return this.letterService.getManyLetters(userId, { limit, page, dateSort, titleSort });
   }
 
-  //TODO: put the user ID into the header.
   @Post('')
   save(
     @Body(SpaceCleanPipe)
-    createLetterOptionsDto: Letter.Infrastructure.Dtos.SaveLetterDto
+    createLetterOptionsDto: Letter.Infrastructure.Dtos.BffSaveLetterDto,
+    @Session() session: IAuth.Session
   ) {
-    return this.letterService.saveLetter(createLetterOptionsDto);
+    const newSaveLetterDto = {
+      options: { ...createLetterOptionsDto.options },
+      letter: { ...createLetterOptionsDto.letter, userId: session.user.sub },
+    };
+
+    return this.letterService.saveLetter(newSaveLetterDto);
   }
 
   @Post('generate')

@@ -25,7 +25,3 @@ Content-Type: application/json
 ### Logout
 Post {{url}}/auth/logout
 Content-Type: application/json
-
-{
-    "greet": "hello world"
-}

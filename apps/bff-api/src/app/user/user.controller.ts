@@ -3,16 +3,16 @@ import {
   Controller,
   Delete,
   Get,
-  Param,
-  ParseIntPipe,
   Patch,
   Query,
+  Session,
   UseInterceptors,
 } from '@nestjs/common';
 
 import { NestModules } from '@llove/backend';
 import { User } from '@llove/product-domain/backend';
 import { UserService } from './user.service';
+import { IAuth } from '@llove/models';
 
 const { SpaceCleanPipe } = NestModules.Pipes;
 const { StatusCodeInterceptor } = NestModules.Interceptors;
@@ -27,19 +27,21 @@ export class UserController {
     return this.userService.exampleMethod(query);
   }
 
-  //TODO: put the user ID into the header.
-  @Delete(':id')
-  deleteById(@Param('id', ParseIntPipe) id: number) {
+  @Delete()
+  deleteById(@Session() session: IAuth.Session) {
+    const id = session.user.sub;
+
     return this.userService.deleteById(id);
   }
 
-  //TODO: put the user ID into the header.
   @Patch(':id')
   updateById(
-    @Param('id', ParseIntPipe) id: number,
+    @Session() session: IAuth.Session,
     @Body(SpaceCleanPipe)
     updateInput: User.Infrastructure.Dtos.UpdateUserDto
   ) {
+    const id = session.user.sub;
+
     return this.userService.updateById(id, updateInput);
   }
 }

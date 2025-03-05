@@ -3,11 +3,12 @@ import { Inject, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 
 import { Shared } from '@llove/backend';
-import { IShared, type IUser } from '@llove/models';
+import type { IAuth, IUser } from '@llove/models';
+import { IShared } from '@llove/models';
 import { User } from '@llove/product-domain/backend';
 import { Config } from '../..';
 
-type AccessToken = IShared.Interfaces.AccessToken.AccessToken;
+type AccessToken = IAuth.AccessToken;
 type BFF_ENV = Config.BFF_ENV;
 type CreateUserDto = User.Infrastructure.Dtos.CreateUserDto;
 type Result<R> = IShared.Services.ServiceHandle.Result<R>;
@@ -17,7 +18,6 @@ type UserAuthenticationDto = User.Infrastructure.Dtos.UserAuthenticationDto;
 const HttpStatus = IShared.Services.ServiceHandle.HttpStatus;
 
 const {
-  CreateUser: { BFF_REGISTER_USER },
   GetUser: { BFF_USER_AUTHENTICATION },
 } = User.Application;
 
@@ -31,7 +31,6 @@ export class AuthenticationService {
     private readonly jwtService: JwtService
   ) {}
 
-  //TODO: completar el login service.
   //TODO: add the third party authentication case.
   @HandleService(BFF_USER_AUTHENTICATION)
   async login(loginDto: UserAuthenticationDto): Promise<AccessToken> {
@@ -53,23 +52,30 @@ export class AuthenticationService {
 
     const access_token = await this.jwtService.signAsync(payload);
 
+    //TODO: add the refresh token step.
+
     return {
       access_token,
     };
   }
 
-  //TODO: crear el logout service.
+  //TODO: add the third party logout case.
+  logout(session: IAuth.Session): IAuth.Session {
+    return session;
+  }
 
-  //TODO: completar el register service
-  @HandleService(BFF_REGISTER_USER)
-  async register(input: { registerDto: CreateUserDto }) {
+  //TODO: add the third party registration case.
+  @HandleService(BFF_USER_AUTHENTICATION)
+  async register(input: { registerDto: CreateUserDto }): Promise<AccessToken> {
     const { registerDto } = input;
     const user = (
       await this.httpService.axiosRef.post(this.BFF_ENV.USER_API_URL + '/user', registerDto)
-    ).data;
+    ).data as Result<User>;
 
-    //TODO: Add the login step after the user registers.
+    const { data } = user;
 
-    return user;
+    const { email } = data;
+
+    return await this.login({ email });
   }
 }
