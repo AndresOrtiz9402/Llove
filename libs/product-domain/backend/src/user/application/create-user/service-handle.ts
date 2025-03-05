@@ -20,19 +20,6 @@ const handleTypeormSaveError = (error: unknown) => {
     .otherwise(() => new Error(HttpStatus[500]));
 };
 
-const UserBffApiCreatedOutput = (
-  result: IShared.Services.ServiceHandle.Result<IUser.User>
-): IUser.User => {
-  return match(result)
-    .with({ statusCode: 201 }, () => result.data)
-    .with({ statusCode: 409 }, () => {
-      throw new Error(HttpStatus[409]);
-    })
-    .otherwise(() => {
-      throw new Error(HttpStatus[500]);
-    });
-};
-
 export const CREATE_USER = new ServiceHandleConfig({
   successCode: HttpStatus.CREATED,
   options: {
@@ -40,16 +27,6 @@ export const CREATE_USER = new ServiceHandleConfig({
     errorHandling: {
       errorOptions: 'getHttpException',
       handleError: handleTypeormSaveError,
-    },
-  },
-});
-
-export const BFF_REGISTER_USER = new ServiceHandleConfig({
-  successCode: HttpStatus.CREATED,
-  options: {
-    handleOutput: UserBffApiCreatedOutput,
-    errorHandling: {
-      errorOptions: 'getHttpException',
     },
   },
 });
