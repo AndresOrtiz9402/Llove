@@ -1,11 +1,11 @@
 import { match, P } from 'ts-pattern';
 
-import { IShared, IUser } from '@llove/models';
+import { IAuth, IShared, IUser } from '@llove/models';
 import { Application } from '../../../shared';
 
 type UserAuthenticationDto = IUser.Infrastructure.UserAuthenticationDto;
 type HandleTypeormFindOneInput = IShared.Services.ServiceHandle.InputHandler;
-type AccessToken = IShared.Interfaces.AccessToken.AccessToken;
+type AccessToken = IAuth.AccessToken;
 
 const { ServiceHandleConfig } = Application.ServiceHandle;
 const { HttpStatus } = IShared.Services.ServiceHandle;
@@ -31,7 +31,6 @@ const handleTypeormFindOneOutput = (result: IUser.User) => {
     });
 };
 
-//TODO: Update the output of  the user Bff-Api login service.
 const handleUserBffApiLoginOutput = (result: AccessToken) => {
   return match(result)
     .with({ access_token: P.string }, () => result)

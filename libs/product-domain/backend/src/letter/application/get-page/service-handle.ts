@@ -33,10 +33,10 @@ export const makeLetterApiGetManyInput = (input: {
 
 const handleLetterApiGetManyOutput = (result: ILetter.Letter[]) => {
   return match(result)
-    .with(P.array(P.not(null)), () => result)
-    .with(P.array(P.nullish), () => {
+    .with(P.array(null), () => {
       throw new Error(HttpStatus[404]);
     })
+    .with(P.array(P.not(null)), () => result)
     .otherwise(() => {
       throw new Error(HttpStatus[500]);
     });

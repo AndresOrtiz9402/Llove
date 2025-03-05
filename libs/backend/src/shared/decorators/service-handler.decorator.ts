@@ -47,16 +47,16 @@ export class Result<R> implements IShared.Services.ServiceHandle.Result<R> {
   constructor(input: {
     statusCode: number;
     data?: R;
-    errorHandling?: { error?: ErrorOptionsOutputs; getFullError?: boolean };
+    errorHandling?: { error?: ErrorOptionsOutputs; getFullLog?: boolean };
   }) {
     const { statusCode, data, errorHandling } = input;
-    const { error, getFullError } = errorHandling || {};
+    const { error, getFullLog } = errorHandling || {};
 
     this.statusCode = statusCode;
     this.data = data;
     this.error = error;
 
-    if (getFullError === true) {
+    if (getFullLog === true) {
       console.log('INSTANCE OF RESULT: ', this);
     }
   }
@@ -67,10 +67,9 @@ type Options<R> = IShared.Services.ServiceHandle.Options<R>;
 const evaluate: IShared.Services.ServiceHandle.Evaluate =
   <R>(inputs: Inputs<R>, options?: Options<R>) =>
   async (value: [unknown]) => {
-    const { getFullError } =
-      (process.env.NODE_ENV === 'development' && options?.errorHandling) || {};
+    const { getFullLog } = (process.env.NODE_ENV === 'development' && options?.errorHandling) || {};
 
-    if (getFullError === true) {
+    if (getFullLog === true) {
       console.log(' ');
       console.log(`\n############ LOG: ${new Date().getTime()} ############`);
       console.log('INPUTS: ', value);
@@ -81,23 +80,23 @@ const evaluate: IShared.Services.ServiceHandle.Evaluate =
 
       const result = await serviceToHandle(options?.handleInput?.(value) ?? value);
 
-      if (getFullError === true) console.log('RESULT BEFORE HANDLE: ', result);
+      if (getFullLog === true) console.log('RESULT BEFORE HANDLE: ', result);
 
       const data = await makeSuccess(result, options?.handleOutput);
 
-      if (getFullError === true) console.log('RESULT AFTER HANDLE: ', data);
+      if (getFullLog === true) console.log('RESULT AFTER HANDLE: ', data);
 
       return new Result<R>({
         statusCode: successCode,
         data: data as R,
         errorHandling: {
-          getFullError,
+          getFullLog,
         },
       });
     } catch (error) {
       const {
         errorOptions,
-        getFullError,
+        getFullLog,
         handleError,
         defaultErrorStatusCode = HttpStatus.INTERNAL_SERVER_ERROR,
       } = options?.errorHandling || {};
@@ -111,7 +110,7 @@ const evaluate: IShared.Services.ServiceHandle.Evaluate =
         statusCode: (newError as HttpException)?.statusCode ?? defaultErrorStatusCode,
         errorHandling: {
           error: newError,
-          getFullError,
+          getFullLog,
         },
       });
     }

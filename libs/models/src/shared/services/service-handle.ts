@@ -77,7 +77,7 @@ export type ErrorHandler = (error: unknown) => Error;
 interface ErrorHandling {
   errorOptions?: keyof ErrorOptions;
   defaultErrorStatusCode?: number | 500;
-  getFullError?: boolean;
+  getFullLog?: boolean;
   handleError?: ErrorHandler;
 }
 
