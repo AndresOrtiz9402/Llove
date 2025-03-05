@@ -10,7 +10,7 @@ export class StatusCodeInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     return next.handle().pipe(
       map((result: Result) => {
-        const { statusCode } = result;
+        const { statusCode } = result ?? {};
 
         if (statusCode) {
           const response = context.switchToHttp().getResponse();

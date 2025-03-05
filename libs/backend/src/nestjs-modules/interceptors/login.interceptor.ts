@@ -1,16 +1,13 @@
-import { IShared } from '@llove/models';
+import { IAuth, IShared } from '@llove/models';
 import { CallHandler, ExecutionContext, NestInterceptor } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-type AccessToken = IShared.Interfaces.AccessToken.AccessToken;
+type AccessToken = IAuth.AccessToken;
 type Result = IShared.Services.ServiceHandle.Result<AccessToken>;
 
-export class CookieInterceptor implements NestInterceptor {
+export class LoginInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
-    const ctx = context.switchToHttp();
-    const response = ctx.getResponse();
-
     return next.handle().pipe(
       map((result: Result) => {
         const { data, statusCode, error } = result;
@@ -18,6 +15,8 @@ export class CookieInterceptor implements NestInterceptor {
         const { access_token } = data;
 
         if (access_token) {
+          const response = context.switchToHttp().getResponse();
+
           response.cookie('access_token', access_token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
