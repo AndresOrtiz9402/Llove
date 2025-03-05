@@ -1,4 +1,4 @@
-import { IsInt, IsNotEmpty, IsString, Matches } from 'class-validator';
+import { IsInt, IsNotEmpty, IsString, Matches, MaxLength } from 'class-validator';
 
 import type { ILetter } from '@llove/models';
 import { Infrastructure } from '../../../shared';
@@ -9,11 +9,9 @@ const contentPattern = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ][a-zA-ZáéíóúÁÉÍ
 const contentMatchMessage = `Invalid input: The 'content' should start with a letter and only contain letters, 
 accented characters, spaces, backslashes, semicolons, commas, periods, exclamation marks, and question marks.`;
 
-const titlePattern = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ][a-zA-ZáéíóúÁÉÍÓÚñÑ\s]*$/;
-
 const { title, content } = new Infrastructure.ClassValidator.Helpers.MultiIsStringDecoratorParams(
   ['title', 'content'],
-  titlePattern,
+  contentPattern,
   'field cannot contain special characters or start empty'
 );
 
@@ -26,7 +24,8 @@ export class CreateLetterDto implements ICreateLetterDto {
 
   @IsNotEmpty(content.isNotEmptyMessage)
   @IsString(content.isStringMessage)
-  @Matches(contentPattern, { message: contentMatchMessage })
+  @MaxLength(100)
+  @Matches(content.matches.pattern, content.matches.message)
   readonly content: string;
 
   @IsNotEmpty()
