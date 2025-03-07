@@ -6,7 +6,7 @@ export const BFF_EXAMPLE_METHOD = new ServiceHandleConfig({
   options: {
     errorHandling: {
       getFullLog: true,
-      errorOptions: 'getHttpException',
+      errorOutputOption: 'getHttpException',
     },
   },
 });

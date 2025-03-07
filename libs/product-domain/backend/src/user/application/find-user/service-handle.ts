@@ -5,7 +5,7 @@ import { Application } from '../../../shared';
 
 type UserAuthenticationDto = IUser.Infrastructure.UserAuthenticationDto;
 type HandleTypeormFindOneInput = IShared.Services.ServiceHandle.InputHandler;
-type AccessToken = IAuth.AccessToken;
+type Credentials = IAuth.Credentials;
 
 const { ServiceHandleConfig } = Application.ServiceHandle;
 const { HttpStatus } = IShared.Services.ServiceHandle;
@@ -31,30 +31,37 @@ const handleTypeormFindOneOutput = (result: IUser.User) => {
     });
 };
 
-const handleUserBffApiLoginOutput = (result: AccessToken) => {
+const handleUserBffApiLoginOutput = (result: Credentials) => {
   return match(result)
-    .with({ access_token: P.string }, () => result)
+    .with({ accessToken: P.string, refreshToken: P.string, session: P.not(null) }, () => result)
     .otherwise(() => {
       throw new Error(HttpStatus[500]);
     });
 };
 
+/**
+ * The config object for the User findOne handle service decorator.
+ */
 export const FIND_USER = new ServiceHandleConfig({
   successCode: HttpStatus.FOUND,
   options: {
     handleInput: handleTypeormFindOneInput,
     handleOutput: handleTypeormFindOneOutput,
     errorHandling: {
-      errorOptions: 'getHttpException',
+      errorOutputOption: 'getHttpException',
     },
   },
 });
 
+/**
+ * The config object for the Bff User login and register handle service decorator.
+ */
 export const BFF_USER_AUTHENTICATION = new ServiceHandleConfig({
+  successCode: HttpStatus.OK,
   options: {
     handleOutput: handleUserBffApiLoginOutput,
     errorHandling: {
-      errorOptions: 'getHttpException',
+      errorOutputOption: 'getHttpException',
     },
   },
 });

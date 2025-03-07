@@ -45,7 +45,7 @@ export const UPDATE_USER = new ServiceHandleConfig({
   options: {
     handleOutput: handleTypeormUpdateOutput,
     errorHandling: {
-      errorOptions: 'getHttpException',
+      errorOutputOption: 'getHttpException',
       handleError: handleTypeormUpdateError,
     },
   },
@@ -55,7 +55,7 @@ export const BFF_UPDATE_USER = new ServiceHandleConfig({
   options: {
     handleOutput: handleBffApiUserUpdateServiceOutput,
     errorHandling: {
-      errorOptions: 'getHttpException',
+      errorOutputOption: 'getHttpException',
     },
   },
 });

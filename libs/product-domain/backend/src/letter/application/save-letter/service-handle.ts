@@ -55,7 +55,7 @@ export const SAVE_LETTER = new ServiceHandleConfig({
   options: {
     handleOutput: handleLetterApiSaveOutput,
     errorHandling: {
-      errorOptions: 'getErrorData',
+      errorOutputOption: 'getErrorData',
     },
   },
 });
@@ -65,7 +65,7 @@ export const BFF_SAVE_LETTER = new ServiceHandleConfig({
   options: {
     handleOutput: handleLetterBffApiSaveLetterOutput,
     errorHandling: {
-      errorOptions: 'getErrorData',
+      errorOutputOption: 'getErrorData',
     },
   },
 });

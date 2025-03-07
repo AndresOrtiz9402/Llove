@@ -1,13 +1,31 @@
 import { IShared } from '@llove/models';
 
+/**
+ * The class that represents the configuration of the service handle.
+ */
 export class ServiceHandleConfig<R>
   implements IShared.Services.ServiceHandle.ServiceHandleConfig<R>
 {
   readonly successCode: number | 200;
   readonly options: IShared.Services.ServiceHandle.Options<R>;
 
+  /**
+   * @param successCode The success code of the service handle. It defaults to 200 if not provided.
+   *
+   * @param options The options of the service handle.
+   */
   constructor(inputs?: {
+    /**
+     * The success code of the service handle. It defaults to 200 if not provided.
+     *
+     *  @default successCode 200
+     */
     successCode?: number;
+    /**
+     * The options of the service handle.
+     *
+     * @default options {}
+     */
     options?: IShared.Services.ServiceHandle.Options<R>;
   }) {
     const { successCode = 200, options = {} } = inputs || {};

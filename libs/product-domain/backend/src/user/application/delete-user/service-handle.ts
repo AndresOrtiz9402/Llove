@@ -35,7 +35,7 @@ export const DELETE_USER = new ServiceHandleConfig({
   options: {
     handleOutput: handleTypeormDeleteOutput,
     errorHandling: {
-      errorOptions: 'getHttpException',
+      errorOutputOption: 'getHttpException',
     },
   },
 });
@@ -44,7 +44,7 @@ export const BFF_DELETE_USER = new ServiceHandleConfig({
   options: {
     handleOutput: handlerUserApiDeleteOutput,
     errorHandling: {
-      errorOptions: 'getHttpException',
+      errorOutputOption: 'getHttpException',
     },
   },
 });

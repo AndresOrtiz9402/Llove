@@ -21,23 +21,28 @@ class HttpException implements IShared.Services.ServiceHandle.HttpException {
   stack?: string;
 }
 
-type ErrorOptions = IShared.Services.ServiceHandle.ErrorOptions;
-const ErrorOptions = {
+type ErrorOutputOptions = IShared.Services.ServiceHandle.ErrorOutputOptions;
+
+const errorOutputOptions: ErrorOutputOptions = {
   getErrorData: (error: Error) => error,
   getErrorMessage: (error: Error) => error.message,
   getHttpException: (error: Error) => new HttpException(error),
   omitError: () => undefined,
 };
 
-const makeError: IShared.Services.ServiceHandle.MakeError = ({ error, errorOptions }) => {
-  return ErrorOptions[errorOptions]?.(error) ?? error;
+type MakeError = IShared.Services.ServiceHandle.MakeError;
+
+const makeError: MakeError = ({ error, errorOutputOption }) => {
+  return errorOutputOptions[errorOutputOption]?.(error) ?? error;
 };
 
-const makeSuccess: IShared.Services.ServiceHandle.MakeSuccess = (result, handler?) => {
+type MakeSuccess = IShared.Services.ServiceHandle.MakeSuccess;
+
+const makeSuccess: MakeSuccess = (result, handler?) => {
   return handler ? handler(result) : result;
 };
 
-type ErrorOptionsOutputs = IShared.Services.ServiceHandle.ErrorOptionsOutputs;
+type ErrorOptionsOutputs = IShared.Services.ServiceHandle.HandleServiceError;
 
 export class Result<R> implements IShared.Services.ServiceHandle.Result<R> {
   readonly statusCode: number;
@@ -64,7 +69,9 @@ export class Result<R> implements IShared.Services.ServiceHandle.Result<R> {
 
 type Options<R> = IShared.Services.ServiceHandle.Options<R>;
 
-const evaluate: IShared.Services.ServiceHandle.Evaluate =
+type Evaluate = IShared.Services.ServiceHandle.Evaluate;
+
+const evaluate: Evaluate =
   <R>(inputs: Inputs<R>, options?: Options<R>) =>
   async (value: [unknown]) => {
     const { getFullLog } = (process.env.NODE_ENV === 'development' && options?.errorHandling) || {};
@@ -95,7 +102,7 @@ const evaluate: IShared.Services.ServiceHandle.Evaluate =
       });
     } catch (error) {
       const {
-        errorOptions,
+        errorOutputOption,
         getFullLog,
         handleError,
         defaultErrorStatusCode = HttpStatus.INTERNAL_SERVER_ERROR,
@@ -103,7 +110,7 @@ const evaluate: IShared.Services.ServiceHandle.Evaluate =
 
       const newError = makeError({
         error: handleError?.(error) ?? error,
-        errorOptions: errorOptions,
+        errorOutputOption,
       });
 
       return new Result<R>({
@@ -124,15 +131,26 @@ class EvaluateWithHandlers<R> implements IShared.Services.ServiceHandle.Evaluate
   };
 }
 
-const makeHandler: IShared.Services.ServiceHandle.MakeHandler = (inputs, options) => {
+type MakeHandler = IShared.Services.ServiceHandle.MakeHandler;
+
+const makeHandler: MakeHandler = (inputs, options) => {
   return new EvaluateWithHandlers(inputs, options);
 };
 
 type ServiceHandleConfig<R> = IShared.Services.ServiceHandle.ServiceHandleConfig<R>;
 
 type HandleService = IShared.Services.ServiceHandle.HandleService;
-export function HandleService<R>(config: ServiceHandleConfig<R>): MethodDecorator {
-  const { successCode, options } = config;
+
+/**
+ * Decorator to handle the inputs, outputs, and errors of a service.
+ *
+ * @param config - Configuration object with the success code and the handlers options.
+ *
+ * @return {Result} - Return a function that wraps the result of the decorated method in an instance of the Result class
+ * and pipes handler functions for the input, output, and error handling.
+ */
+export function HandleService<R>(config?: ServiceHandleConfig<R>): MethodDecorator {
+  const { successCode, options } = config ?? { successCode: HttpStatus.OK, options: {} };
 
   const { handleInput, handleOutput, errorHandling } = options;
 

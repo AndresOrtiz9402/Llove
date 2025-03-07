@@ -60,7 +60,7 @@ export const GET_MANY_LETTERS = new ServiceHandleConfig({
   options: {
     handleOutput: handleLetterApiGetManyOutput,
     errorHandling: {
-      errorOptions: 'getHttpException',
+      errorOutputOption: 'getHttpException',
     },
   },
 });
@@ -70,7 +70,7 @@ export const BFF_GET_MANY_LETTERS = new ServiceHandleConfig({
   options: {
     handleOutput: handleLetterBffApiGetManyOutput,
     errorHandling: {
-      errorOptions: 'getHttpException',
+      errorOutputOption: 'getHttpException',
     },
   },
 });

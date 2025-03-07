@@ -28,7 +28,7 @@ export const GET_ALL_USERS = new ServiceHandleConfig({
   options: {
     handleOutput: handleTypeormFindAllOutput,
     errorHandling: {
-      errorOptions: 'getHttpException',
+      errorOutputOption: 'getHttpException',
     },
   },
 });

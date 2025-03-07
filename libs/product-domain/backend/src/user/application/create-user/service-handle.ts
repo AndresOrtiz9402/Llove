@@ -25,7 +25,7 @@ export const CREATE_USER = new ServiceHandleConfig({
   options: {
     handleOutput: handleTypeormCreateOutput,
     errorHandling: {
-      errorOptions: 'getHttpException',
+      errorOutputOption: 'getHttpException',
       handleError: handleTypeormSaveError,
     },
   },

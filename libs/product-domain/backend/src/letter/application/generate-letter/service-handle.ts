@@ -32,7 +32,7 @@ export const GENERATE_LETTER = new ServiceHandleConfig({
   options: {
     handleOutput: handleLetterApiGenerationOutput,
     errorHandling: {
-      errorOptions: 'getHttpException',
+      errorOutputOption: 'getHttpException',
     },
   },
 });
@@ -42,7 +42,7 @@ export const BFF_GENERATE_LETTER = new ServiceHandleConfig({
   options: {
     handleOutput: handleLetterBffGenerateOutput,
     errorHandling: {
-      errorOptions: 'getHttpException',
+      errorOutputOption: 'getHttpException',
     },
   },
 });
