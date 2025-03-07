@@ -1,12 +1,11 @@
 import { HttpService } from '@nestjs/axios';
-import { Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 
 import { Shared } from '@llove/backend';
 import type { ILetter } from '@llove/models';
 import { Letter } from '@llove/product-domain/backend';
 import { Config } from '../..';
 
-type BFF_ENV = Config.BFF_ENV;
 type CreateLetterOptionsDto = Letter.Infrastructure.Dtos.CreateLetterOptionsDto;
 
 const { HandleService } = Shared.Decorators.ServiceHandle;
@@ -19,10 +18,7 @@ const {
 
 @Injectable()
 export class LetterService {
-  constructor(
-    @Inject('BFF_ENV') private BFF_ENV: BFF_ENV,
-    private readonly httpService: HttpService
-  ) {}
+  constructor(private readonly BFF_ENV: Config.BffEnv, private readonly httpService: HttpService) {}
 
   @HandleService(BFF_SAVE_LETTER)
   async saveLetter(saveLetter: ILetter.Infrastructure.SaveLetterInput) {

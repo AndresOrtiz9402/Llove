@@ -1,5 +1,5 @@
 import { HttpService } from '@nestjs/axios';
-import { Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 
 import { Shared } from '@llove/backend';
 import { User } from '@llove/product-domain/backend';
@@ -7,7 +7,6 @@ import { User } from '@llove/product-domain/backend';
 import { Config } from '../..';
 
 type UpdateUserDto = User.Infrastructure.Dtos.UpdateUserDto;
-type BFF_ENV = Config.BFF_ENV;
 
 const {
   DeleteUser: { BFF_DELETE_USER },
@@ -19,10 +18,7 @@ const { HandleService, HttpStatus } = Shared.Decorators.ServiceHandle;
 
 @Injectable()
 export class UserService {
-  constructor(
-    @Inject('BFF_ENV') private readonly BFF_ENV: BFF_ENV,
-    private readonly httpService: HttpService
-  ) {}
+  constructor(private readonly BFF_ENV: Config.BffEnv, private readonly httpService: HttpService) {}
 
   @HandleService(BFF_DELETE_USER)
   async deleteById(id: number) {
