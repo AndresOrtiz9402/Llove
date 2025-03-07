@@ -1,7 +1,6 @@
-import { Body, Controller, Post, Session, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Post, UseInterceptors } from '@nestjs/common';
 
 import { NestModules } from '@llove/backend';
-import { IAuth } from '@llove/models';
 import { User } from '@llove/product-domain/backend';
 import { AuthenticationService } from './auth.service';
 
@@ -22,13 +21,13 @@ export class AuthenticationController {
   //TODO: completed the logout endpoint.
   @UseInterceptors(LogoutInterceptor)
   @Post('/logout')
-  logout(@Session() session: IAuth.Session) {
-    return this.authenticationService.logout(session);
+  logout() {
+    return this.authenticationService.logout();
   }
 
   //TODO: completar el register endpoint.
   @Post('/register')
   register(@Body() registerDto: User.Infrastructure.Dtos.CreateUserDto) {
-    return this.authenticationService.register({ registerDto });
+    return this.authenticationService.register(registerDto);
   }
 }

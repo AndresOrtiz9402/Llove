@@ -12,7 +12,6 @@ import {
 import { LetterService } from './letter.service';
 
 import { NestModules } from '@llove/backend';
-import { IAuth } from '@llove/models';
 import { Letter } from '@llove/product-domain/backend';
 
 const { StatusCodeInterceptor } = NestModules.Interceptors;
@@ -30,9 +29,9 @@ export class LetterController {
     @Query('p', new DefaultValuePipe(1), ParseIntPipe) page = 1,
     @Query('ds', new DefaultValuePipe('a')) dateSort = 'a',
     @Query('ts', new DefaultValuePipe('a')) titleSort = 'a',
-    @Session() session: IAuth.Session
+    @Session() session: { sub: number }
   ) {
-    const userId = session.user.sub.toString();
+    const userId = session.sub.toString();
 
     return this.letterService.getManyLetters(userId, { limit, page, dateSort, titleSort });
   }
@@ -41,11 +40,11 @@ export class LetterController {
   save(
     @Body(SpaceCleanPipe)
     createLetterOptionsDto: Letter.Infrastructure.Dtos.BffSaveLetterDto,
-    @Session() session: IAuth.Session
+    @Session() session: { sub: number }
   ) {
     const newSaveLetterDto = {
       options: { ...createLetterOptionsDto.options },
-      letter: { ...createLetterOptionsDto.letter, userId: session.user.sub },
+      letter: { ...createLetterOptionsDto.letter, userId: session.sub },
     };
 
     return this.letterService.saveLetter(newSaveLetterDto);

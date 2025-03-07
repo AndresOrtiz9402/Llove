@@ -12,7 +12,6 @@ import {
 import { NestModules } from '@llove/backend';
 import { User } from '@llove/product-domain/backend';
 import { UserService } from './user.service';
-import { IAuth } from '@llove/models';
 
 const { SpaceCleanPipe } = NestModules.Pipes;
 const { StatusCodeInterceptor } = NestModules.Interceptors;
@@ -28,19 +27,19 @@ export class UserController {
   }
 
   @Delete()
-  deleteById(@Session() session: IAuth.Session) {
-    const id = session.user.sub;
+  deleteById(@Session() session: { sub: number }) {
+    const id = session.sub;
 
     return this.userService.deleteById(id);
   }
 
   @Patch(':id')
   updateById(
-    @Session() session: IAuth.Session,
+    @Session() session: { sub: number },
     @Body(SpaceCleanPipe)
     updateInput: User.Infrastructure.Dtos.UpdateUserDto
   ) {
-    const id = session.user.sub;
+    const id = session.sub;
 
     return this.userService.updateById(id, updateInput);
   }

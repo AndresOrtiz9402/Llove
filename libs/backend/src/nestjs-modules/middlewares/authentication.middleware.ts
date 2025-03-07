@@ -4,19 +4,17 @@ import { JwtService } from '@nestjs/jwt';
 
 import { IAuth } from '@llove/models';
 
-type Session = IAuth.Session;
-
 @Injectable()
 export class UserAuthentication implements NestMiddleware {
   constructor(private readonly jwtService: JwtService) {}
 
-  async use(req: Request & { session: Session }, res: Response, next: NextFunction) {
+  async use(req: Request & { session: { sub: number } }, res: Response, next: NextFunction) {
     try {
       const { access_token } = req.cookies;
 
-      const user = this.jwtService.verify(access_token);
+      const accessToken: IAuth.AccessTokenPayload = this.jwtService.verify(access_token);
 
-      req.session = { user };
+      req.session = { sub: accessToken.sub };
 
       next();
     } catch {
@@ -24,3 +22,5 @@ export class UserAuthentication implements NestMiddleware {
     }
   }
 }
+
+//TODO: Add the refresh token step.

@@ -7,7 +7,7 @@ import { BffModule } from './app/bff.module';
 async function bootstrap() {
   const app = await NestFactory.create(BffModule);
 
-  /* app.enableCors(); */
+  app.enableCors();
 
   app.use(cookieParser());
 
