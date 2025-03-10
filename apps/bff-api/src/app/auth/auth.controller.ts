@@ -1,33 +1,72 @@
-import { Body, Controller, Post, UseInterceptors } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  UseFilters,
+  UseGuards,
+  UseInterceptors,
+} from '@nestjs/common';
 
+//libs
 import { NestModules } from '@llove/backend';
+import { IAuth } from '@llove/models';
 import { User } from '@llove/product-domain/backend';
-import { AuthenticationService } from './auth.service';
 
-const { StatusCodeInterceptor, LoginInterceptor, LogoutInterceptor } = NestModules.Interceptors;
+//modules
+import { AuthService } from './auth.service';
 
+//types
+type UserAuthenticationDto = User.Infrastructure.Dtos.UserAuthenticationDto;
+type LoginOrRegisterDto = IAuth.LoginOrRegisterDto;
+
+//constants
+const {
+  Interceptors: { StatusCodeInterceptor, LoginInterceptor, LogoutInterceptor },
+  Decorators: { GetUser },
+  Guards: { GoogleAuthGuard },
+  Api: {
+    Auth: {
+      Strategies: { TokenErrorFilter },
+    },
+  },
+} = NestModules;
+
+//controller
 @UseInterceptors(StatusCodeInterceptor)
 @Controller('auth')
-export class AuthenticationController {
-  constructor(private readonly authenticationService: AuthenticationService) {}
+export class AuthController {
+  constructor(private readonly authService: AuthService) {}
 
-  //TODO: completar el login endpoint.
-  @UseInterceptors(LoginInterceptor)
-  @Post('/login')
-  login(@Body() loginDto: User.Infrastructure.Dtos.UserAuthenticationDto) {
-    return this.authenticationService.login(loginDto);
+  @Get('google')
+  @UseGuards(GoogleAuthGuard)
+  async googleAuth() {
+    return; // Passport automatically redirects to Google.
   }
 
-  //TODO: completed the logout endpoint.
+  @UseFilters(TokenErrorFilter)
+  @UseInterceptors(LoginInterceptor)
+  @Get('google/callback')
+  @UseGuards(GoogleAuthGuard) // Handle the redirection of Google
+  async googleAuthRedirect(@GetUser() user: LoginOrRegisterDto) {
+    return this.authService.loginOrRegister(user);
+  }
+
+  @UseInterceptors(LoginInterceptor)
+  @Post('/login')
+  login(@Body() loginDto: UserAuthenticationDto) {
+    return this.authService.login(loginDto);
+  }
+
   @UseInterceptors(LogoutInterceptor)
   @Post('/logout')
   logout() {
-    return this.authenticationService.logout();
+    return this.authService.logout();
   }
 
-  //TODO: completar el register endpoint.
+  @UseInterceptors(LoginInterceptor)
   @Post('/register')
   register(@Body() registerDto: User.Infrastructure.Dtos.CreateUserDto) {
-    return this.authenticationService.register(registerDto);
+    return this.authService.register(registerDto);
   }
 }

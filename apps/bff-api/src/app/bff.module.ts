@@ -1,24 +1,24 @@
-import { Global, MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 
 //Libs
 import { NestModules } from '@llove/backend';
 
 //Modules
 import { AuthModule } from './auth/auth.module';
-import { HttpSetupModule } from './http/http.module';
 import { LetterModule } from './letter/letter.module';
 import { UserModule } from './user/user.module';
-import { EnvModule } from './env/env.module';
+import { BffEnv } from '../config';
 
-const { HealthModule } = NestModules.Api;
-const { UserAuthentication } = NestModules.Middlewares;
+const { HealthModule, GlobalProvidersModule, HttpSetupModule } = NestModules.Api;
 
-@Global()
 @Module({
-  imports: [AuthModule, EnvModule, HealthModule, HttpSetupModule, LetterModule, UserModule],
+  imports: [
+    AuthModule,
+    GlobalProvidersModule.register(BffEnv),
+    HealthModule,
+    HttpSetupModule,
+    LetterModule,
+    UserModule,
+  ],
 })
-export class BffModule implements NestModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer.apply(UserAuthentication).exclude('auth/login', 'auth/register').forRoutes('*');
-  }
-}
+export class BffModule {}

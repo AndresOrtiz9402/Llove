@@ -8,8 +8,7 @@ export class LogoutInterceptor implements NestInterceptor {
       tap(() => {
         const response = context.switchToHttp().getResponse();
 
-        response.clearCookie('access_token');
-        response.clearCookie('refresh_token');
+        response.clearCookie('authorization');
         response.clearCookie('session');
       })
     );

@@ -3,55 +3,113 @@ import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 
 //libs
-import type { IAuth, IUser } from '@llove/models';
+import { IAuth, IUser } from '@llove/models';
 import { Shared } from '@llove/backend';
 import { IShared } from '@llove/models';
-import { User } from '@llove/product-domain/backend';
+import { User, Auth } from '@llove/product-domain/backend';
 
 //modules
 import { Config } from '../..';
+import { unknown } from 'zod';
 
 //types
 type Credentials = IAuth.Credentials;
 type CreateUserDto = User.Infrastructure.Dtos.CreateUserDto;
-type Email = string;
+type LoginDto = IAuth.LoginDto;
+type LoginOrRegisterDto = IAuth.LoginOrRegisterDto;
 type Result<R> = IShared.Services.ServiceHandle.Result<R>;
 type User = IUser.User;
+type AuthenticatedUser = IAuth.AuthenticatedUser;
 
 //constants
 const HttpStatus = IShared.Services.ServiceHandle.HttpStatus;
+const { JWT_ACCESS_TOKEN_EXPIRATION, SESSION_EXPIRATION } = IAuth.AuthConstants;
 
 const {
-  GetUser: { BFF_USER_AUTHENTICATION },
-} = User.Application;
+  Login: { LOGIN },
+  Register: { REGISTER },
+  LoginOrRegister: { LOGIN_OR_REGISTER },
+} = Auth.Application;
 
 const { HandleService } = Shared.Decorators.ServiceHandle;
 
 @Injectable()
-export class AuthenticationService implements IAuth.AuthServiceInterface {
+export class AuthService implements IAuth.AuthServiceInterface {
   constructor(
     private readonly BFF_ENV: Config.BffEnv,
     private readonly httpService: HttpService,
     private readonly jwtService: JwtService
   ) {}
 
-  //TODO: add the third party registration case.
-  @HandleService(BFF_USER_AUTHENTICATION)
+  //controller services
+  @HandleService(LOGIN)
+  async login(loginDto: LoginDto): Promise<Credentials> {
+    const { id, username } = await this.validateUser(loginDto);
+
+    const accessToken = await this.jwtService.signAsync(
+      { sub: id },
+      { expiresIn: JWT_ACCESS_TOKEN_EXPIRATION }
+    );
+
+    const session = this.getSession(username);
+
+    return {
+      accessToken,
+      session,
+    };
+  }
+
+  @HandleService<string>()
+  async logout(): Promise<string> {
+    return 'logout';
+  }
+
+  @HandleService(REGISTER)
   async register(registerDto: CreateUserDto): Promise<Credentials> {
     const user = (
       await this.httpService.axiosRef.post(this.BFF_ENV.USER_API_URL + '/user', registerDto)
     ).data as Result<User>;
 
-    const { data } = user;
+    if (user.statusCode === 409) throw new Error(HttpStatus[409]);
 
-    const { email } = data;
-
-    return await this.login({ email });
+    return await this.login({ email: user.data.email });
   }
 
-  //TODO: add the third party authentication case.
-  @HandleService(BFF_USER_AUTHENTICATION)
-  async login(loginDto: { email: Email }): Promise<Credentials> {
+  //third party service
+  @HandleService(LOGIN_OR_REGISTER)
+  async loginOrRegister(loginOrRegisterDto: LoginOrRegisterDto): Promise<Credentials> {
+    const result = (await this.login({
+      email: loginOrRegisterDto.email,
+    })) as unknown as Result<Credentials>;
+
+    if (result.statusCode === 401) {
+      const registerResult = (await this.register({
+        email: loginOrRegisterDto.email,
+        name: loginOrRegisterDto.username,
+      })) as unknown as Result<Credentials>;
+
+      if (registerResult.statusCode === 409) throw new Error(HttpStatus[409]);
+
+      return registerResult.data;
+    } else return result.data;
+  }
+
+  //Utility methods
+  private getSession(username: string): IAuth.Session {
+    const now = Date.now();
+
+    const createAt = new Date(now);
+
+    const expiresAt = new Date(now + SESSION_EXPIRATION); // expire in 1 day
+
+    return {
+      username: username,
+      createAt,
+      expiresAt,
+    };
+  }
+
+  private async validateUser(loginDto: LoginDto): Promise<AuthenticatedUser> {
     const user: Result<User> = (
       await this.httpService.axiosRef.get(this.BFF_ENV.USER_API_URL + `/user/findOne`, {
         headers: {
@@ -59,40 +117,12 @@ export class AuthenticationService implements IAuth.AuthServiceInterface {
         },
       })
     ).data;
-
     const isRegistered = user.statusCode === 302;
 
     if (!isRegistered) throw new Error(HttpStatus[401]);
 
     const { id, name } = user.data;
 
-    const payload = { sub: id };
-
-    const accessToken = await this.jwtService.signAsync(payload);
-
-    const refreshToken = await this.jwtService.signAsync(payload, { expiresIn: '7d' });
-
-    const now = Date.now();
-
-    const createAt = new Date(now);
-
-    const expiresAt = new Date(now + 7 * 24 * 60 * 60 * 1000); // expire in 7 days
-
-    //TODO: add the refresh token step.
-
-    return {
-      accessToken,
-      refreshToken,
-      session: {
-        username: name,
-        createAt,
-        expiresAt,
-      },
-    };
-  }
-
-  @HandleService<string>()
-  async logout(): Promise<string> {
-    return 'logout';
+    return { id, username: name };
   }
 }

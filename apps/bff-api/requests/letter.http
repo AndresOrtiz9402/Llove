@@ -11,7 +11,7 @@ Content-Type: application/json
     "isFor":"Pepe",
     "occasion": "Cumpleaños",
     "relationship": "Amigo",
-    "tone": "friendly"
+    "tone": "friendly"  // 'friendly' | 'romantic' | 'family'
 }
 
 
@@ -34,4 +34,5 @@ Content-Type: application/json
 
 ### Get letters page
 GET {{url}}/letter?l=10&p=1&&ds=a&ts=a
+
 

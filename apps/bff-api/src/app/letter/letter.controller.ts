@@ -6,19 +6,28 @@ import {
   ParseIntPipe,
   Post,
   Query,
-  Session,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import { LetterService } from './letter.service';
 
+//libs
 import { NestModules } from '@llove/backend';
 import { Letter } from '@llove/product-domain/backend';
 
-const { StatusCodeInterceptor } = NestModules.Interceptors;
+//modules
+import { LetterService } from './letter.service';
 
-const SpaceCleanPipe = NestModules.Pipes.SpaceCleanPipe;
+//constants
+const {
+  Decorators: { GetUser },
+  Guards: { JwtAuthGuard },
+  Interceptors: { StatusCodeInterceptor },
+  Pipes: { SpaceCleanPipe },
+} = NestModules;
 
+//controller
 @UseInterceptors(StatusCodeInterceptor)
+@UseGuards(JwtAuthGuard)
 @Controller('letter')
 export class LetterController {
   constructor(private readonly letterService: LetterService) {}
@@ -29,22 +38,25 @@ export class LetterController {
     @Query('p', new DefaultValuePipe(1), ParseIntPipe) page = 1,
     @Query('ds', new DefaultValuePipe('a')) dateSort = 'a',
     @Query('ts', new DefaultValuePipe('a')) titleSort = 'a',
-    @Session() session: { sub: number }
+    @GetUser('sub') userId: number
   ) {
-    const userId = session.sub.toString();
-
-    return this.letterService.getManyLetters(userId, { limit, page, dateSort, titleSort });
+    return this.letterService.getManyLetters(userId.toString(), {
+      limit,
+      page,
+      dateSort,
+      titleSort,
+    });
   }
 
   @Post('')
   save(
     @Body(SpaceCleanPipe)
     createLetterOptionsDto: Letter.Infrastructure.Dtos.BffSaveLetterDto,
-    @Session() session: { sub: number }
+    @GetUser('sub') userId: number
   ) {
     const newSaveLetterDto = {
       options: { ...createLetterOptionsDto.options },
-      letter: { ...createLetterOptionsDto.letter, userId: session.sub },
+      letter: { ...createLetterOptionsDto.letter, userId },
     };
 
     return this.letterService.saveLetter(newSaveLetterDto);

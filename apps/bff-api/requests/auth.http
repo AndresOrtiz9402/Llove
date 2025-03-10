@@ -4,6 +4,9 @@
 ### BFF-API Health
 Get {{url}}/health
 
+### Google Auth
+GET {{url}}/auth/google
+
 ### Register
 Post {{url}}/auth/register
 Content-Type: application/json

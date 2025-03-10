@@ -3,9 +3,19 @@ import { CallHandler, ExecutionContext, NestInterceptor } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
+//types
 type Credentials = IAuth.Credentials;
 type Result = IShared.Services.ServiceHandle.Result<Credentials>;
 
+//constants
+const { ACCESS_TOKEN_EXPIRATION, SESSION_EXPIRATION } = IAuth.AuthConstants;
+
+/**
+ * The login interceptor.
+ *
+ * It gets the accessToken and the session from the returned instance
+ * of the Result class and sets them in the cookies.
+ */
 export class LoginInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     return next.handle().pipe(
@@ -13,11 +23,11 @@ export class LoginInterceptor implements NestInterceptor {
         const { data, statusCode, error } = result;
 
         if (statusCode === 200) {
-          const { accessToken, refreshToken, session } = data;
+          const response = context.switchToHttp().getResponse();
+
+          const { accessToken, session } = data;
 
           const setCookie = (name: string, value: unknown, maxAge: number) => {
-            const response = context.switchToHttp().getResponse();
-
             response.cookie(name, value, {
               httpOnly: true,
               secure: process.env.NODE_ENV === 'production',
@@ -26,13 +36,8 @@ export class LoginInterceptor implements NestInterceptor {
             });
           };
 
-          const longMaxAge = 7 * 24 * 60 * 60 * 1000; // 7 days
-
-          const shortMaxAge = 60 * 60 * 1000; // 1 hour
-
-          setCookie('access_token', accessToken, shortMaxAge);
-          setCookie('refresh_token', refreshToken, longMaxAge);
-          setCookie('session', session, longMaxAge);
+          setCookie('authorization', accessToken, ACCESS_TOKEN_EXPIRATION);
+          setCookie('session', session, SESSION_EXPIRATION);
         }
 
         if (error) return { statusCode, error };

@@ -5,18 +5,28 @@ import {
   Get,
   Patch,
   Query,
-  Session,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 
+//libs
 import { NestModules } from '@llove/backend';
 import { User } from '@llove/product-domain/backend';
+
+//modules
 import { UserService } from './user.service';
 
-const { SpaceCleanPipe } = NestModules.Pipes;
-const { StatusCodeInterceptor } = NestModules.Interceptors;
+//constants
+const {
+  Decorators: { GetUser },
+  Guards: { JwtAuthGuard },
+  Interceptors: { StatusCodeInterceptor },
+  Pipes: { SpaceCleanPipe },
+} = NestModules;
 
+//controller
 @UseInterceptors(StatusCodeInterceptor)
+@UseGuards(JwtAuthGuard)
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
@@ -27,20 +37,16 @@ export class UserController {
   }
 
   @Delete()
-  deleteById(@Session() session: { sub: number }) {
-    const id = session.sub;
-
-    return this.userService.deleteById(id);
+  deleteById(@GetUser('sub') userId: number) {
+    return this.userService.deleteById(userId);
   }
 
   @Patch(':id')
   updateById(
-    @Session() session: { sub: number },
+    @GetUser('sub') userId: number,
     @Body(SpaceCleanPipe)
     updateInput: User.Infrastructure.Dtos.UpdateUserDto
   ) {
-    const id = session.sub;
-
-    return this.userService.updateById(id, updateInput);
+    return this.userService.updateById(userId, updateInput);
   }
 }

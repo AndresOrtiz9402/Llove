@@ -25,3 +25,6 @@ Get {{url}}/user/example-method?cat_fact=""
 ### USER-API
 ### get users
 GET {{user_api_url}}/user/all
+
+### delete user
+DELETE {{user_api_url}}/user/76
