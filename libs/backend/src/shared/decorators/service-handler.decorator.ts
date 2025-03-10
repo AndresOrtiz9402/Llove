@@ -1,6 +1,6 @@
 import { IShared } from '@llove/models';
 
-type Inputs<R> = IShared.Services.ServiceHandle.Inputs<R>;
+type Inputs<R = unknown> = IShared.Services.ServiceHandle.Inputs<R>;
 
 export const { HttpStatus } = IShared.Services.ServiceHandle;
 
@@ -24,7 +24,7 @@ class HttpException implements IShared.Services.ServiceHandle.HttpException {
 type ErrorOutputOptions = IShared.Services.ServiceHandle.ErrorOutputOptions;
 
 const errorOutputOptions: ErrorOutputOptions = {
-  getErrorData: (error: Error) => error,
+  getError: (error: Error) => error,
   getErrorMessage: (error: Error) => error.message,
   getHttpException: (error: Error) => new HttpException(error),
   omitError: () => undefined,
@@ -39,7 +39,7 @@ const makeError: MakeError = ({ error, errorOutputOption }) => {
 type MakeSuccess = IShared.Services.ServiceHandle.MakeSuccess;
 
 const makeSuccess: MakeSuccess = (result, handler?) => {
-  return handler ? handler(result) : result;
+  return handler?.(result) || result;
 };
 
 type ErrorOptionsOutputs = IShared.Services.ServiceHandle.HandleServiceError;
@@ -52,7 +52,7 @@ export class Result<R> implements IShared.Services.ServiceHandle.Result<R> {
   constructor(input: {
     statusCode: number;
     data?: R;
-    errorHandling?: { error?: ErrorOptionsOutputs; getFullLog?: boolean };
+    errorHandling?: { error?: ErrorOptionsOutputs; getFullLog?: boolean; propertyKey?: string };
   }) {
     const { statusCode, data, errorHandling } = input;
     const { error, getFullLog } = errorHandling || {};
@@ -62,23 +62,25 @@ export class Result<R> implements IShared.Services.ServiceHandle.Result<R> {
     this.error = error;
 
     if (getFullLog === true) {
-      console.log('INSTANCE OF RESULT: ', this);
+      console.log(`INSTANCE OF RESULT(${errorHandling.propertyKey}): `, this);
     }
   }
 }
 
-type Options<R> = IShared.Services.ServiceHandle.Options<R>;
+type Options<T = unknown, U = T, R = unknown> = IShared.Services.ServiceHandle.Options<T, U, R>;
 
 type Evaluate = IShared.Services.ServiceHandle.Evaluate;
 
 const evaluate: Evaluate =
-  <R>(inputs: Inputs<R>, options?: Options<R>) =>
-  async (value: [unknown]) => {
+  <R>(inputs: Inputs<R>, options?: Options<unknown, unknown, R>) =>
+  async value => {
     const { getFullLog } = (process.env.NODE_ENV === 'development' && options?.errorHandling) || {};
+
+    const propertyKey = String(options?.errorHandling?.propertyKey || 'unknown');
 
     if (getFullLog === true) {
       console.log(' ');
-      console.log(`\n############ LOG: ${new Date().getTime()} ############`);
+      console.log(`\n############ LOG(${propertyKey}): ${new Date().getTime()} ############`);
       console.log('INPUTS: ', value);
     }
 
@@ -87,17 +89,18 @@ const evaluate: Evaluate =
 
       const result = await serviceToHandle(options?.handleInput?.(value) ?? value);
 
-      if (getFullLog === true) console.log('RESULT BEFORE HANDLE: ', result);
+      if (getFullLog === true) console.log(`RESULT BEFORE HANDLE(${propertyKey}): `, result);
 
       const data = await makeSuccess(result, options?.handleOutput);
 
-      if (getFullLog === true) console.log('RESULT AFTER HANDLE: ', data);
+      if (getFullLog === true) console.log(`RESULT AFTER HANDLE(${propertyKey}): `, data);
 
       return new Result<R>({
         statusCode: successCode,
         data: data as R,
         errorHandling: {
           getFullLog,
+          propertyKey,
         },
       });
     } catch (error) {
@@ -118,15 +121,16 @@ const evaluate: Evaluate =
         errorHandling: {
           error: newError,
           getFullLog,
+          propertyKey,
         },
       });
     }
   };
 
-class EvaluateWithHandlers<R> implements IShared.Services.ServiceHandle.EvaluateWithHandlers<R> {
-  constructor(private readonly inputs: Inputs<R>, private options?: Options<R>) {}
+class EvaluateWithHandlers implements IShared.Services.ServiceHandle.EvaluateWithHandlers {
+  constructor(private readonly inputs: Inputs, private options?: Options) {}
 
-  readonly evaluate = (value?: [unknown]) => {
+  readonly evaluate = <T>(value?: T[]) => {
     return evaluate(this.inputs, this.options)(value);
   };
 }
@@ -148,6 +152,10 @@ type HandleService = IShared.Services.ServiceHandle.HandleService;
  *
  * @return {Result} - Return a function that wraps the result of the decorated method in an instance of the Result class
  * and pipes handler functions for the input, output, and error handling.
+ *
+ * @defaultReturn
+ * * Result: { statusCode: 200, data: any, error: undefined }
+ * * Result: { statusCode: 500, error: Error,  data: undefined }
  */
 export function HandleService<R>(config?: ServiceHandleConfig<R>): MethodDecorator {
   const { successCode, options } = config ?? { successCode: HttpStatus.OK, options: {} };
@@ -155,10 +163,12 @@ export function HandleService<R>(config?: ServiceHandleConfig<R>): MethodDecorat
   const { handleInput, handleOutput, errorHandling } = options;
 
   return (target, propertyKey, descriptor: PropertyDescriptor) => {
+    if (errorHandling?.getFullLog === true) errorHandling.propertyKey = propertyKey;
+
     const originalMethod = descriptor.value;
 
     descriptor.value = async function (...args: [unknown]) {
-      return await makeHandler<unknown>(
+      return await makeHandler(
         {
           serviceToHandle: async args => await originalMethod.apply(this, args),
           successCode,

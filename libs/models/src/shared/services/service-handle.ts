@@ -68,8 +68,8 @@ type SuccessCode = number;
 /**
  * The inputs of the HandleService.
  */
-export interface Inputs<R> {
-  serviceToHandle: (value: [unknown]) => R;
+export interface Inputs<R = unknown> {
+  serviceToHandle: (value: unknown[]) => R;
   successCode?: SuccessCode;
 }
 
@@ -82,7 +82,7 @@ export interface ErrorOutputOptions {
    *
    * @returns Returns the error.
    */
-  getErrorData: (error: Error) => Error;
+  getError: (error: Error) => Error;
 
   /**
    * @param error Any instance of Error with a message.
@@ -113,7 +113,7 @@ export type HandleServiceError = Error | HttpException | string | undefined;
 /**
  * The input handler.
  */
-export type InputHandler = (input: [unknown]) => [unknown];
+export type InputHandler<T, U = T> = (input: T[]) => U[];
 
 /**
  * The output handler.
@@ -162,12 +162,19 @@ interface ErrorHandling {
   /**
    * The 'getFullLog' option.
    *
-   * If true, it returns a complete log of the inputs, the result before and after being handled,
-   * and the instance of the Result class, whether it contains the data or an error.
+   * If true, it returns a complete log of the property name, the inputs, the result before and after being
+   * handled, and the instance of the Result class, whether it contains the data or an error.
    *
    * @default getFullLog false
    */
   getFullLog?: boolean;
+
+  /**
+   * The 'propertyKey' option.
+   *
+   * If getFullLog is true, it returns the name of the service that is being handled in the full log.
+   */
+  propertyKey?: string | symbol;
 
   /**
    * Pipe a function to handle the cached error.
@@ -178,7 +185,7 @@ interface ErrorHandling {
 /**
  * Options for the HandleService.
  */
-export interface Options<R> {
+export interface Options<T = unknown, U = T, R = unknown> {
   /**
    * The error handling options.
    */
@@ -186,7 +193,7 @@ export interface Options<R> {
   /**
    * The input handler.
    */
-  handleInput?: InputHandler;
+  handleInput?: InputHandler<T, U>;
   /**
    * The output handler.
    */
@@ -223,22 +230,22 @@ export interface Result<R> {
 /**
  * The Evaluate function.
  */
-export type Evaluate = <R>(
+export type Evaluate = <T, U, R>(
   inputs: Inputs<R>,
-  options?: Options<R>
-) => (value: unknown) => Promise<Result<R>>;
+  options?: Options<T, U, R>
+) => (value: T[]) => Promise<Result<R>>;
 
 /**
  * The EvaluateWithHandlers class interface.
  */
-export interface EvaluateWithHandlers<R> {
-  evaluate: (value?: [unknown]) => Promise<Result<R>>;
+export interface EvaluateWithHandlers {
+  evaluate: <T>(value?: T[]) => Promise<Result<unknown>>;
 }
 
 /**
  * The MakeHandler function.
  */
-export type MakeHandler = <R>(inputs: Inputs<R>, options?: Options<R>) => EvaluateWithHandlers<R>;
+export type MakeHandler = (inputs: Inputs, options?: Options) => EvaluateWithHandlers;
 
 /**
  * The HandleServiceConfig class interface.
@@ -255,7 +262,7 @@ export interface ServiceHandleConfig<R> {
    *
    * @default options {}
    */
-  options: Options<R>;
+  options: Options<unknown, unknown, R>;
 }
 
 /**
@@ -265,5 +272,9 @@ export interface ServiceHandleConfig<R> {
  *
  * @return {Result} - Returns a function that wraps the result of the decorated method in an instance of the Result class
  * and pipes handler functions for the input, output, and error handling.
+ *
+ * @defaultReturn
+ * * Result: { statusCode: 200, data: any, error: undefined }
+ * * Result: { statusCode: 500, error: Error,  data: ´R´ }
  */
 export type HandleService = <R>(config?: ServiceHandleConfig<R>) => MethodDecorator;
