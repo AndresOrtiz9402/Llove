@@ -24,6 +24,7 @@ export const makeLetterApiGetManyInput = (input: {
     },
     limit: limit < 50 ? limit : 10,
     page,
+    relations: ['letterOption'],
     sort: {
       title: titleSort === 'd' ? DESC : ASC,
       createdAt: dateSort === 'd' ? DESC : ASC,

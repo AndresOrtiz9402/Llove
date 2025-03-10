@@ -45,12 +45,13 @@ export class TypeormBaseRepository<Entity> implements BaseRepository<Entity> {
   }
 
   async getMany(queryObj: QueryObj<Entity>): Promise<(Entity & { id: number })[]> {
-    const { page, limit, sort, filter } = queryObj;
+    const { filter, limit, page, relations, sort } = queryObj;
 
     const skip = (page - 1) * limit;
 
     return await this.repository.find({
       order: sort as FindOptionsOrder<Entity & { id: number }>,
+      relations,
       skip,
       take: limit,
       where: filter as FindOptionsWhere<Entity & { id: number }>,

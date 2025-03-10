@@ -15,7 +15,7 @@ export class LetterEntity
   @Column({ name: 'content', type: 'varchar' })
   content: string;
 
-  @Column({ name: 'user_id', type: 'int' })
+  @Column({ name: 'user_id', type: 'int', select: false })
   userId: number;
 
   // Relation
@@ -24,6 +24,6 @@ export class LetterEntity
   letterOption: LetterOptionsEntity;
 
   @RelationId((letter: LetterEntity) => letter.letterOption)
-  @Column({ name: 'letter_options_id' })
+  @Column({ name: 'letter_options_id', type: 'int', select: false })
   letterOptionId: number;
 }

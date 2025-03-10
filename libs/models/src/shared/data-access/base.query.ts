@@ -14,5 +14,6 @@ export interface QueryObj<Entity> {
   filter: Filter<Entity>;
   limit: Limit;
   page: Page;
+  relations: string[];
   sort: Sort<Entity>;
 }

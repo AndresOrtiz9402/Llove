@@ -19,6 +19,7 @@ export abstract class TypeormBaseEntity implements IShared.BaseEntity {
     type: 'timestamp',
     nullable: true,
     default: null,
+    select: false,
   })
   deletedAt: Date | null;
 }
