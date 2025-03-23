@@ -10,7 +10,6 @@ import { User, Auth } from '@llove/product-domain/backend';
 
 //modules
 import { Config } from '../..';
-import { unknown } from 'zod';
 
 //types
 type Credentials = IAuth.Credentials;

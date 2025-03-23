@@ -35,7 +35,9 @@ const { AsyncTypeOrmModule } = NestModules.Typeorm;
     {
       provide: 'AiService',
       useFactory: () => {
-        return new Shared.Application.Gemini.AiServiceMaker(new GoogleGenerativeAI(GEMINI_API_KEY));
+        return new Shared.Infrastructure.AiServices.Gemini.AiServiceMaker(
+          new GoogleGenerativeAI(GEMINI_API_KEY)
+        );
       },
     },
     LetterRepository,
