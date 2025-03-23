@@ -16,10 +16,8 @@
     "baseUrl": ".",
     "paths": {
       "@llove/backend": ["libs/backend/src/index.ts"],
-      "@llove/product-domain/backend": [
-        "libs/product-domain/backend/src/index.ts"
-      ],
-      "@llove/models": ["libs/models/src/index.ts"]
+      "@llove/models": ["libs/models/src/index.ts"],
+      "@llove/product-domain/backend": ["libs/product-domain/backend/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
