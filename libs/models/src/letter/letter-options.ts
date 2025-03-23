@@ -6,7 +6,7 @@ export enum LetterTone {
   family = 'family',
 }
 
-export type LetterToneOptions = typeof LetterTone;
+export type LetterToneOptions = (typeof LetterTone)[keyof typeof LetterTone];
 
 export interface LetterOptions extends BaseEntity {
   isFor: string;

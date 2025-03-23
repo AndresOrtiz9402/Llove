@@ -26,6 +26,10 @@ export class AiServiceMaker<R> implements IShared.Services.AiService.AiServiceMa
 
     const completions = await noStreamCompletions(this.openai, noStreamParams);
 
-    return JSON.parse(completions.choices[0].message.content.slice(7, -4));
+    const initialResult = completions.choices[0].message.content;
+
+    const result = initialResult.startsWith('```json') ? initialResult.slice(7, -4) : initialResult;
+
+    return JSON.parse(result);
   };
 }

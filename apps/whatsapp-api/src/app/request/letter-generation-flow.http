@@ -1,0 +1,294 @@
+@url = http://localhost:3004/whatsapp-api
+
+
+### WHATSAPP-API Health
+Get {{url}}/health
+
+### Generate Letter
+Post http://localhost:3002/letter-api/letter/generate
+Content-Type: application/json
+
+{
+    "isFor": "Pepe",
+    "occasion": "Cumpleaños de Pepe.",
+    "relationship": "Amigos",
+    "tone": "friendly"
+}
+
+### ACTION: The user greets
+Post {{url}}/webhook
+Content-Type: application/json
+
+{
+  "object": "whatsapp_business_account",
+  "entry": [
+    {
+      "id": "example-entry-id",
+      "changes": [
+        {
+          "value": {
+            "messaging_product": "whatsapp",
+            "metadata": {
+              "display_phone_number": "123456789012",
+              "phone_number_id": "123456789012"
+            },
+            "contacts": [
+              {
+                "profile": {
+                  "name": "John Doe"
+                },
+                "wa_id": "123456789012"
+              }
+            ],
+            "messages": [
+              {
+                "from": "123456789012",
+                "id": "example-message-id",
+                "timestamp": "example-timestamp",
+                "text": {
+                  "body": "Hola"
+                },
+                "type": "text"
+              }
+            ]
+          },
+          "field": "messages"
+        }
+      ]
+    }
+  ]
+}
+
+
+### ACTION: The user hits the generate button
+Post {{url}}/webhook
+Content-Type: application/json
+
+{
+  "object": "whatsapp_business_account",
+  "entry": [
+    {
+      "id": "example-entry-id",
+      "changes": [
+        {
+          "value": {
+            "messaging_product": "whatsapp",
+            "metadata": {
+              "display_phone_number": "123456789012",
+              "phone_number_id": "123456789012"
+            },
+            "contacts": [
+              {
+                "profile": {
+                  "name": "John Doe"
+                },
+                "wa_id": "123456789012"
+              }
+            ],
+            "messages": [
+              {
+                "from": "123456789012",
+                "id": "example-message-id",
+                "timestamp": "example-timestamp",
+                "interactive": {
+                  "type": "button_reply",
+                  "button_reply": {
+                    "id": "generate",
+                    "title": "Generar carta"
+                  }
+                },
+                "type": "interactive"
+              }
+            ]
+          },
+          "field": "messages"
+        }
+      ]
+    }
+  ]
+}
+
+
+### ACTION: The user enters the recipient's name
+Post {{url}}/webhook
+Content-Type: application/json
+
+{
+  "object": "whatsapp_business_account",
+  "entry": [
+    {
+      "id": "example-entry-id",
+      "changes": [
+        {
+          "value": {
+            "messaging_product": "whatsapp",
+            "metadata": {
+              "display_phone_number": "123456789012",
+              "phone_number_id": "123456789012"
+            },
+            "contacts": [
+              {
+                "profile": {
+                  "name": "John Doe"
+                },
+                "wa_id": "123456789012"
+              }
+            ],
+            "messages": [
+              {
+                "from": "123456789012",
+                "id": "example-message-id",
+                "timestamp": "example-timestamp",
+                "text": {
+                  "body": "Pepe"
+                },
+                "type": "text"
+              }
+            ]
+          },
+          "field": "messages"
+        }
+      ]
+    }
+  ]
+}
+
+
+### ACTION: The user writes the occasion of the letter.
+Post {{url}}/webhook
+Content-Type: application/json
+
+{
+  "object": "whatsapp_business_account",
+  "entry": [
+    {
+      "id": "example-entry-id",
+      "changes": [
+        {
+          "value": {
+            "messaging_product": "whatsapp",
+            "metadata": {
+              "display_phone_number": "123456789012",
+              "phone_number_id": "123456789012"
+            },
+            "contacts": [
+              {
+                "profile": {
+                  "name": "John Doe"
+                },
+                "wa_id": "123456789012"
+              }
+            ],
+            "messages": [
+              {
+                "from": "123456789012",
+                "id": "example-message-id",
+                "timestamp": "example-timestamp",
+                "text": {
+                  "body": "Cumpleaños de Pepe."
+                },
+                "type": "text"
+              }
+            ]
+          },
+          "field": "messages"
+        }
+      ]
+    }
+  ]
+}
+
+
+### ACTION: The user indicates the relationship.
+Post {{url}}/webhook
+Content-Type: application/json
+
+{
+  "object": "whatsapp_business_account",
+  "entry": [
+    {
+      "id": "example-entry-id",
+      "changes": [
+        {
+          "value": {
+            "messaging_product": "whatsapp",
+            "metadata": {
+              "display_phone_number": "123456789012",
+              "phone_number_id": "123456789012"
+            },
+            "contacts": [
+              {
+                "profile": {
+                  "name": "John Doe"
+                },
+                "wa_id": "123456789012"
+              }
+            ],
+            "messages": [
+              {
+                "from": "123456789012",
+                "id": "example-message-id",
+                "timestamp": "example-timestamp",
+                "text": {
+                  "body": "Amigos"
+                },
+                "type": "text"
+              }
+            ]
+          },
+          "field": "messages"
+        }
+      ]
+    }
+  ]
+}
+
+
+### ACTION: The user selects a tone from the provided list.
+Post {{url}}/webhook
+Content-Type: application/json
+
+{
+  "object": "whatsapp_business_account",
+  "entry": [
+    {
+      "id": "example-entry-id",
+      "changes": [
+        {
+          "value": {
+            "messaging_product": "whatsapp",
+            "metadata": {
+              "display_phone_number": "123456789012",
+              "phone_number_id": "123456789012"
+            },
+            "contacts": [
+              {
+                "profile": {
+                  "name": "John Doe"
+                },
+                "wa_id": "123456789012"
+              }
+            ],
+            "messages": [
+              {
+                "from": "123456789012",
+                "id": "example-message-id",
+                "timestamp": "example-timestamp",
+                "interactive": {
+                  "type": "list_reply",
+                  "list_reply": {
+                    "id": "friendly",
+                    "title": "friendly"
+                  }
+                },
+                "type": "interactive"
+              }
+            ]
+          },
+          "field": "messages"
+        }
+      ]
+    }
+  ]
+}
+

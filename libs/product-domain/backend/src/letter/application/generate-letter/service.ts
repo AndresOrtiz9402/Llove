@@ -4,7 +4,7 @@ type AiService = ILetter.Infrastructure.GenerateLetter.AiService;
 type AiServiceError = IShared.Services.AiService.AiServiceError;
 type CreateLetterOptionsDto = ILetter.Infrastructure.CreateLetterOptionsDto;
 type GeneratedLetter = ILetter.Infrastructure.GenerateLetter.GeneratedLetter;
-type LetterGeneratorResponse = ILetter.Infrastructure.GenerateLetter.GeneratorResponse;
+type LetterGenerationResponse = ILetter.Infrastructure.GenerateLetter.LetterGenerationResponse;
 
 const contentPattern = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ][a-zA-ZáéíóúÁÉÍÓÚñÑ\s\\;,.!¡¿?]*$/;
 
@@ -13,7 +13,7 @@ const titlePattern = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ][a-zA-ZáéíóúÁÉÍÓ
 export const generateLetter = async (
   options: CreateLetterOptionsDto,
   aiService: AiService
-): Promise<LetterGeneratorResponse> => {
+): Promise<LetterGenerationResponse> => {
   const letterOptionsStringify = JSON.stringify(options);
 
   const prompt = `

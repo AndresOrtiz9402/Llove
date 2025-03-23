@@ -3,7 +3,7 @@ import { match, P } from 'ts-pattern';
 import { IShared, type ILetter } from '@llove/models';
 import { Application } from '../../../shared';
 
-type LetterGeneratorResponse = ILetter.Infrastructure.GenerateLetter.GeneratorResponse;
+type LetterGeneratorResponse = ILetter.Infrastructure.GenerateLetter.LetterGenerationResponse;
 
 const { ServiceHandleConfig } = Application.ServiceHandle;
 const { HttpStatus } = IShared.Services.ServiceHandle;

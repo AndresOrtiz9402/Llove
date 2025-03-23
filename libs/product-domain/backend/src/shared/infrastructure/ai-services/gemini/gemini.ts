@@ -12,7 +12,9 @@ export class AiServiceMaker<R> implements IShared.Services.AiService.AiServiceMa
   }
 
   readonly generate: IShared.Services.AiService.AiService<R> = async prompt => {
-    const result = (await this.model.generateContent(prompt)).response.text().slice(7, -4);
+    const initialResult = (await this.model.generateContent(prompt)).response.text();
+
+    const result = initialResult.startsWith('```json') ? initialResult.slice(7, -4) : initialResult;
 
     return JSON.parse(result);
   };

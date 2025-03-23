@@ -7,7 +7,7 @@ const { isEnumMessage, isNotEmptyMessage } = Infrastructure.ClassValidator.Helpe
 
 const { LetterTone } = ILetter;
 
-const stringPattern = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ][a-zA-ZáéíóúÁÉÍÓÚñÑ\s]*$/;
+const stringPattern = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ][a-zA-ZáéíóúÁÉÍÓÚñÑ\s.,!?¡¿]*$/;
 
 const { isFor, occasion, relationship } =
   new Infrastructure.ClassValidator.Helpers.MultiIsStringDecoratorParams(

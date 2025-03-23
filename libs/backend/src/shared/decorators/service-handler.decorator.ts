@@ -128,7 +128,10 @@ const evaluate: Evaluate =
   };
 
 class EvaluateWithHandlers implements IShared.Services.ServiceHandle.EvaluateWithHandlers {
-  constructor(private readonly inputs: Inputs, private options?: Options) {}
+  constructor(
+    private readonly inputs: Inputs,
+    private options?: Options
+  ) {}
 
   readonly evaluate = <T>(value?: T[]) => {
     return evaluate(this.inputs, this.options)(value);
